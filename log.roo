@@ -1,0 +1,6 @@
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-07-30 13:28:30
+project --topLevelPackage kr.swmaestro.hsb --projectName HSB --java 6
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-07-30 13:28:33
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-07-30 13:31:42
+persistence setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
+entity --class ~.domain.TempModel
