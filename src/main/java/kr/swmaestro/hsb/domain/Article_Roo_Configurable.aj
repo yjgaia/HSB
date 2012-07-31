@@ -5,8 +5,8 @@ package kr.swmaestro.hsb.domain;
 
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect TempModel_Roo_Configurable {
+privileged aspect Article_Roo_Configurable {
     
-    declare @type: TempModel: @Configurable;
+    declare @type: Article: @Configurable;
     
 }

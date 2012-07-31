@@ -4,3 +4,9 @@ project --topLevelPackage kr.swmaestro.hsb --projectName HSB --java 6
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-07-30 13:31:42
 persistence setup --provider HIBERNATE --database HYPERSONIC_IN_MEMORY
 entity --class ~.domain.TempModel
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-07-31 17:33:09
+entity --class ~.domain.UserInfo
+entity --class ~.domain.FriendRelation
+entity --class ~.domain.FriendRequest
+entity --class ~.domain.Article
+entity --class ~.domain.Comment

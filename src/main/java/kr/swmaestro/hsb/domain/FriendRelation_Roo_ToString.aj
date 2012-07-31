@@ -5,11 +5,14 @@ package kr.swmaestro.hsb.domain;
 
 import java.lang.String;
 
-privileged aspect TempModel_Roo_ToString {
+privileged aspect FriendRelation_Roo_ToString {
     
-    public String TempModel.toString() {
+    public String FriendRelation.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Id: ").append(getId()).append(", ");
+        sb.append("RelateDate: ").append(getRelateDate()).append(", ");
+        sb.append("Username1: ").append(getUsername1()).append(", ");
+        sb.append("Username2: ").append(getUsername2()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

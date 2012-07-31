@@ -9,104 +9,88 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Version;
-import kr.swmaestro.hsb.domain.TempModel;
+import kr.swmaestro.hsb.domain.Article;
 import org.springframework.transaction.annotation.Transactional;
 
-privileged aspect TempModel_Roo_Entity {
+privileged aspect Article_Roo_Entity {
     
-    declare @type: TempModel: @Entity;
+    declare @type: Article: @Entity;
     
     @PersistenceContext
-    transient EntityManager TempModel.entityManager;
-    
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id")
-    private Long TempModel.id;
+    transient EntityManager Article.entityManager;
     
     @Version
     @Column(name = "version")
-    private Integer TempModel.version;
+    private Integer Article.version;
     
-    public Long TempModel.getId() {
-        return this.id;
-    }
-    
-    public void TempModel.setId(Long id) {
-        this.id = id;
-    }
-    
-    public Integer TempModel.getVersion() {
+    public Integer Article.getVersion() {
         return this.version;
     }
     
-    public void TempModel.setVersion(Integer version) {
+    public void Article.setVersion(Integer version) {
         this.version = version;
     }
     
     @Transactional
-    public void TempModel.persist() {
+    public void Article.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
     
     @Transactional
-    public void TempModel.remove() {
+    public void Article.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            TempModel attached = TempModel.findTempModel(this.id);
+            Article attached = Article.findArticle(this.id);
             this.entityManager.remove(attached);
         }
     }
     
     @Transactional
-    public void TempModel.flush() {
+    public void Article.flush() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
     
     @Transactional
-    public void TempModel.clear() {
+    public void Article.clear() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
     
     @Transactional
-    public TempModel TempModel.merge() {
+    public Article Article.merge() {
         if (this.entityManager == null) this.entityManager = entityManager();
-        TempModel merged = this.entityManager.merge(this);
+        Article merged = this.entityManager.merge(this);
         this.entityManager.flush();
         return merged;
     }
     
-    public static final EntityManager TempModel.entityManager() {
-        EntityManager em = new TempModel().entityManager;
+    public static final EntityManager Article.entityManager() {
+        EntityManager em = new Article().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
     
-    public static long TempModel.countTempModels() {
-        return entityManager().createQuery("SELECT COUNT(o) FROM TempModel o", Long.class).getSingleResult();
+    public static long Article.countArticles() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Article o", Long.class).getSingleResult();
     }
     
-    public static List<TempModel> TempModel.findAllTempModels() {
-        return entityManager().createQuery("SELECT o FROM TempModel o", TempModel.class).getResultList();
+    public static List<Article> Article.findAllArticles() {
+        return entityManager().createQuery("SELECT o FROM Article o", Article.class).getResultList();
     }
     
-    public static TempModel TempModel.findTempModel(Long id) {
+    public static Article Article.findArticle(Long id) {
         if (id == null) return null;
-        return entityManager().find(TempModel.class, id);
+        return entityManager().find(Article.class, id);
     }
     
-    public static List<TempModel> TempModel.findTempModelEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM TempModel o", TempModel.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<Article> Article.findArticleEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Article o", Article.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
 }
