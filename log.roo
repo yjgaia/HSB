@@ -10,3 +10,6 @@ entity --class ~.domain.FriendRelation
 entity --class ~.domain.FriendRequest
 entity --class ~.domain.Article
 entity --class ~.domain.Comment
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-02 10:04:55
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-02 11:13:12
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-02 16:20:36
