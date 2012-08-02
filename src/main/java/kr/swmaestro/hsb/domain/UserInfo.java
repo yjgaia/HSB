@@ -17,6 +17,9 @@ import org.springframework.roo.addon.tostring.RooToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * @author 심영재
+ */
 @RooJavaBean
 @RooToString
 @RooEntity
