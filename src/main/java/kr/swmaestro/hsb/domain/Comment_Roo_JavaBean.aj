@@ -3,20 +3,12 @@
 
 package kr.swmaestro.hsb.domain;
 
-import java.lang.Long;
 import java.lang.String;
 import java.util.Date;
 import kr.swmaestro.hsb.domain.Article;
+import kr.swmaestro.hsb.domain.UserInfo;
 
 privileged aspect Comment_Roo_JavaBean {
-    
-    public Long Comment.getId() {
-        return this.id;
-    }
-    
-    public void Comment.setId(Long id) {
-        this.id = id;
-    }
     
     public Article Comment.getArticle() {
         return this.article;
@@ -34,12 +26,12 @@ privileged aspect Comment_Roo_JavaBean {
         this.content = content;
     }
     
-    public String Comment.getWriterUsername() {
-        return this.writerUsername;
+    public UserInfo Comment.getWriterUser() {
+        return this.writerUser;
     }
     
-    public void Comment.setWriterUsername(String writerUsername) {
-        this.writerUsername = writerUsername;
+    public void Comment.setWriterUser(UserInfo writerUser) {
+        this.writerUser = writerUser;
     }
     
     public Date Comment.getWriteDate() {

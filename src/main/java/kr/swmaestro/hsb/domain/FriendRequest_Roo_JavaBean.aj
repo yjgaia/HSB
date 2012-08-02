@@ -3,34 +3,25 @@
 
 package kr.swmaestro.hsb.domain;
 
-import java.lang.Long;
-import java.lang.String;
 import java.util.Date;
+import kr.swmaestro.hsb.domain.UserInfo;
 
 privileged aspect FriendRequest_Roo_JavaBean {
     
-    public Long FriendRequest.getId() {
-        return this.id;
+    public UserInfo FriendRequest.getRequestUser() {
+        return this.requestUser;
     }
     
-    public void FriendRequest.setId(Long id) {
-        this.id = id;
+    public void FriendRequest.setRequestUser(UserInfo requestUser) {
+        this.requestUser = requestUser;
     }
     
-    public String FriendRequest.getRequestUsername() {
-        return this.requestUsername;
+    public UserInfo FriendRequest.getTargetUser() {
+        return this.targetUser;
     }
     
-    public void FriendRequest.setRequestUsername(String requestUsername) {
-        this.requestUsername = requestUsername;
-    }
-    
-    public String FriendRequest.getTargetUsername() {
-        return this.targetUsername;
-    }
-    
-    public void FriendRequest.setTargetUsername(String targetUsername) {
-        this.targetUsername = targetUsername;
+    public void FriendRequest.setTargetUser(UserInfo targetUser) {
+        this.targetUser = targetUser;
     }
     
     public Date FriendRequest.getRequestDate() {

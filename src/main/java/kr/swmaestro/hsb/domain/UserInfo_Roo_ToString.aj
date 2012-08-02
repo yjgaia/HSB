@@ -9,12 +9,20 @@ privileged aspect UserInfo_Roo_ToString {
     
     public String UserInfo.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Authorities: ").append(getAuthorities() == null ? "null" : getAuthorities().size()).append(", ");
         sb.append("Email: ").append(getEmail()).append(", ");
         sb.append("JoinDate: ").append(getJoinDate()).append(", ");
+        sb.append("LoginCount: ").append(getLoginCount()).append(", ");
         sb.append("Nickname: ").append(getNickname()).append(", ");
         sb.append("Password: ").append(getPassword()).append(", ");
+        sb.append("PasswordConfirm: ").append(getPasswordConfirm()).append(", ");
         sb.append("Username: ").append(getUsername()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("WriteCount: ").append(getWriteCount()).append(", ");
+        sb.append("AccountNonExpired: ").append(isAccountNonExpired()).append(", ");
+        sb.append("AccountNonLocked: ").append(isAccountNonLocked()).append(", ");
+        sb.append("CredentialsNonExpired: ").append(isCredentialsNonExpired()).append(", ");
+        sb.append("Enabled: ").append(isEnabled());
         return sb.toString();
     }
     

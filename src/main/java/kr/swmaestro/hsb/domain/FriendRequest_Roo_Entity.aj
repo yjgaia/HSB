@@ -9,6 +9,9 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityManager;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Version;
 import kr.swmaestro.hsb.domain.FriendRequest;
@@ -21,9 +24,22 @@ privileged aspect FriendRequest_Roo_Entity {
     @PersistenceContext
     transient EntityManager FriendRequest.entityManager;
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private Long FriendRequest.id;
+    
     @Version
     @Column(name = "version")
     private Integer FriendRequest.version;
+    
+    public Long FriendRequest.getId() {
+        return this.id;
+    }
+    
+    public void FriendRequest.setId(Long id) {
+        this.id = id;
+    }
     
     public Integer FriendRequest.getVersion() {
         return this.version;

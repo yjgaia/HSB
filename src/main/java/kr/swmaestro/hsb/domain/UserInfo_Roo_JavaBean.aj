@@ -24,6 +24,14 @@ privileged aspect UserInfo_Roo_JavaBean {
         this.password = password;
     }
     
+    public String UserInfo.getPasswordConfirm() {
+        return this.passwordConfirm;
+    }
+    
+    public void UserInfo.setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
+    
     public String UserInfo.getNickname() {
         return this.nickname;
     }
@@ -46,6 +54,22 @@ privileged aspect UserInfo_Roo_JavaBean {
     
     public void UserInfo.setJoinDate(Date joinDate) {
         this.joinDate = joinDate;
+    }
+    
+    public int UserInfo.getLoginCount() {
+        return this.loginCount;
+    }
+    
+    public void UserInfo.setLoginCount(int loginCount) {
+        this.loginCount = loginCount;
+    }
+    
+    public int UserInfo.getWriteCount() {
+        return this.writeCount;
+    }
+    
+    public void UserInfo.setWriteCount(int writeCount) {
+        this.writeCount = writeCount;
     }
     
 }

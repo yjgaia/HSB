@@ -14,99 +14,99 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Version;
-import kr.swmaestro.hsb.domain.Article;
+import kr.swmaestro.hsb.domain.Subject;
 import org.springframework.transaction.annotation.Transactional;
 
-privileged aspect Article_Roo_Entity {
+privileged aspect Subject_Roo_Entity {
     
-    declare @type: Article: @Entity;
+    declare @type: Subject: @Entity;
     
     @PersistenceContext
-    transient EntityManager Article.entityManager;
+    transient EntityManager Subject.entityManager;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long Article.id;
+    private Long Subject.id;
     
     @Version
     @Column(name = "version")
-    private Integer Article.version;
+    private Integer Subject.version;
     
-    public Long Article.getId() {
+    public Long Subject.getId() {
         return this.id;
     }
     
-    public void Article.setId(Long id) {
+    public void Subject.setId(Long id) {
         this.id = id;
     }
     
-    public Integer Article.getVersion() {
+    public Integer Subject.getVersion() {
         return this.version;
     }
     
-    public void Article.setVersion(Integer version) {
+    public void Subject.setVersion(Integer version) {
         this.version = version;
     }
     
     @Transactional
-    public void Article.persist() {
+    public void Subject.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
     
     @Transactional
-    public void Article.remove() {
+    public void Subject.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Article attached = Article.findArticle(this.id);
+            Subject attached = Subject.findSubject(this.id);
             this.entityManager.remove(attached);
         }
     }
     
     @Transactional
-    public void Article.flush() {
+    public void Subject.flush() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
     
     @Transactional
-    public void Article.clear() {
+    public void Subject.clear() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
     
     @Transactional
-    public Article Article.merge() {
+    public Subject Subject.merge() {
         if (this.entityManager == null) this.entityManager = entityManager();
-        Article merged = this.entityManager.merge(this);
+        Subject merged = this.entityManager.merge(this);
         this.entityManager.flush();
         return merged;
     }
     
-    public static final EntityManager Article.entityManager() {
-        EntityManager em = new Article().entityManager;
+    public static final EntityManager Subject.entityManager() {
+        EntityManager em = new Subject().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
     
-    public static long Article.countArticles() {
-        return entityManager().createQuery("SELECT COUNT(o) FROM Article o", Long.class).getSingleResult();
+    public static long Subject.countSubjects() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Subject o", Long.class).getSingleResult();
     }
     
-    public static List<Article> Article.findAllArticles() {
-        return entityManager().createQuery("SELECT o FROM Article o", Article.class).getResultList();
+    public static List<Subject> Subject.findAllSubjects() {
+        return entityManager().createQuery("SELECT o FROM Subject o", Subject.class).getResultList();
     }
     
-    public static Article Article.findArticle(Long id) {
+    public static Subject Subject.findSubject(Long id) {
         if (id == null) return null;
-        return entityManager().find(Article.class, id);
+        return entityManager().find(Subject.class, id);
     }
     
-    public static List<Article> Article.findArticleEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Article o", Article.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<Subject> Subject.findSubjectEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Subject o", Subject.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
 }

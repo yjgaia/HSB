@@ -2,11 +2,10 @@ package kr.swmaestro.hsb.domain;
 
 import java.util.Date;
 
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -16,19 +15,15 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class FriendRelation {
 	
-	@Id
-	@NotNull
-	private Long id;
-	
-	@NotEmpty
-	@Size(max = 20)
-	private String username1;
-	
-	@NotEmpty
-	@Size(max = 20)
-	private String username2;
-	
-	@NotNull
+	@ManyToOne
+	@JoinColumn(name = "username1", nullable = false)
+	private UserInfo user1;
+
+	@ManyToOne
+	@JoinColumn(name = "username2", nullable = false)
+	private UserInfo user2;
+
+	@Column(nullable = false)
 	private Date relateDate;
 	
 }

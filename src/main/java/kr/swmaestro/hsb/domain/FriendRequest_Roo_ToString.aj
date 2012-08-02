@@ -11,8 +11,8 @@ privileged aspect FriendRequest_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("RequestDate: ").append(getRequestDate()).append(", ");
-        sb.append("RequestUsername: ").append(getRequestUsername()).append(", ");
-        sb.append("TargetUsername: ").append(getTargetUsername()).append(", ");
+        sb.append("RequestUser: ").append(getRequestUser()).append(", ");
+        sb.append("TargetUser: ").append(getTargetUser()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

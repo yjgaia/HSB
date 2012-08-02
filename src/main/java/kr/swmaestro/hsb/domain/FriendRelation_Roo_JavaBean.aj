@@ -3,34 +3,25 @@
 
 package kr.swmaestro.hsb.domain;
 
-import java.lang.Long;
-import java.lang.String;
 import java.util.Date;
+import kr.swmaestro.hsb.domain.UserInfo;
 
 privileged aspect FriendRelation_Roo_JavaBean {
     
-    public Long FriendRelation.getId() {
-        return this.id;
+    public UserInfo FriendRelation.getUser1() {
+        return this.user1;
     }
     
-    public void FriendRelation.setId(Long id) {
-        this.id = id;
+    public void FriendRelation.setUser1(UserInfo user1) {
+        this.user1 = user1;
     }
     
-    public String FriendRelation.getUsername1() {
-        return this.username1;
+    public UserInfo FriendRelation.getUser2() {
+        return this.user2;
     }
     
-    public void FriendRelation.setUsername1(String username1) {
-        this.username1 = username1;
-    }
-    
-    public String FriendRelation.getUsername2() {
-        return this.username2;
-    }
-    
-    public void FriendRelation.setUsername2(String username2) {
-        this.username2 = username2;
+    public void FriendRelation.setUser2(UserInfo user2) {
+        this.user2 = user2;
     }
     
     public Date FriendRelation.getRelateDate() {

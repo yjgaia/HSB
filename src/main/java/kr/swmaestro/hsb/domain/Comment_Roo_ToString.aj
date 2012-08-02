@@ -14,7 +14,7 @@ privileged aspect Comment_Roo_ToString {
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
-        sb.append("WriterUsername: ").append(getWriterUsername());
+        sb.append("WriterUser: ").append(getWriterUser());
         return sb.toString();
     }
     
