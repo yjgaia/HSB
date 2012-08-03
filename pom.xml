@@ -29,7 +29,7 @@
             <name>Spring Roo Repository</name>
             <url>http://spring-roo-repository.springsource.org/release</url>
         </repository>
-    <repository>
+   		<repository>
             <id>JBoss Repo</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases</url>
             <name>JBoss Repo</name>
