@@ -1,9 +1,11 @@
 package kr.swmaestro.hsb.couchbase;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -35,7 +37,7 @@ public class Tutorial {
      */
     public static void main(String[] args) {
 
-    	String serverAddress="192.168.85.128";
+    	String serverAddress="localhost";
 
         try {
 
@@ -305,7 +307,12 @@ public class Tutorial {
 
         try {
         do {
-            String input = System.console().readLine();
+        	InputStreamReader insr = new InputStreamReader(System.in);
+        	BufferedReader inbr = new BufferedReader(insr);
+
+
+            String input = inbr.readLine();
+
             System.out.println(input);
             if (input.startsWith("/quit")) {
                 quit = true;
