@@ -12,6 +12,9 @@
         <aspectj.version>1.6.11</aspectj.version>
         <slf4j.version>1.6.1</slf4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-social.version>1.0.2.RELEASE</spring-social.version>
+        <spring-social-facebook.version>1.0.1.RELEASE</spring-social-facebook.version>
+        <spring-social-twitter.version>1.0.2.RELEASE</spring-social-twitter.version>
     </properties>
     <repositories>
         <repository>
@@ -53,6 +56,27 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
+    	<!-- Social -->
+    	<dependency>
+		    <groupId>org.springframework.social</groupId>
+		    <artifactId>spring-social-core</artifactId>
+		    <version>${spring-social.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.social</groupId>
+		    <artifactId>spring-social-web</artifactId>
+		    <version>${spring-social.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.social</groupId>
+		    <artifactId>spring-social-facebook</artifactId>
+		    <version>${spring-social-facebook.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework.social</groupId>
+		    <artifactId>spring-social-twitter</artifactId>
+		    <version>${spring-social-twitter.version}</version>
+		</dependency>
     	<!-- ADD -->
     	<dependency>
 			<groupId>opensymphony</groupId>
