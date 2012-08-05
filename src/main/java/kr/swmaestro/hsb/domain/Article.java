@@ -24,10 +24,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooEntity
 public class Article {
 	
-	@ManyToOne
-	@JoinColumn(name = "subjectId", nullable = false)
-	private Subject subject;
-	
 	@NotEmpty
 	@Size(max = 500)
 	@Column(length = 500, nullable = false)
