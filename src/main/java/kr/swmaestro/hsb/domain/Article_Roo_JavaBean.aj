@@ -7,18 +7,9 @@ import java.lang.String;
 import java.util.Date;
 import java.util.List;
 import kr.swmaestro.hsb.domain.Comment;
-import kr.swmaestro.hsb.domain.Subject;
 import kr.swmaestro.hsb.domain.UserInfo;
 
 privileged aspect Article_Roo_JavaBean {
-    
-    public Subject Article.getSubject() {
-        return this.subject;
-    }
-    
-    public void Article.setSubject(Subject subject) {
-        this.subject = subject;
-    }
     
     public String Article.getTitle() {
         return this.title;
