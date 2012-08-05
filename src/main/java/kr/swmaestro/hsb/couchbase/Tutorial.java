@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import javax.annotation.Resource;
 import javax.naming.ConfigurationException;
 
 import net.spy.memcached.CASMutation;
@@ -30,6 +31,7 @@ public class Tutorial {
     private long userId = 0;
     private long userCount = 0;
     private Thread messageThread;
+    
 
     /**
      * Main Program for a Couchbase chat room application using
@@ -81,10 +83,11 @@ public class Tutorial {
 
         URI base = new URI(
                 String.format("http://%s:8091/pools",serverAddress));
+        
         List<URI> baseURIs = new ArrayList<URI>();
         baseURIs.add(base);
         CouchbaseConnectionFactory cf = new
-                CouchbaseConnectionFactory(baseURIs, "default", "");
+                CouchbaseConnectionFactory(baseURIs, "private", "private");
 
         client = new CouchbaseClient((CouchbaseConnectionFactory) cf);
 
