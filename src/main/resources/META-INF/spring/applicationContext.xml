@@ -47,6 +47,12 @@
         <context:exclude-filter expression=".*_Roo_.*" type="regex"/>
         <context:exclude-filter expression="org.springframework.stereotype.Controller" type="annotation"/>
     </context:component-scan>
+    
+    <!-- AOP 클래스 자동 프록시화 -->
+	<aop:aspectj-autoproxy />		
+	
+	<bean id="userAuthAOP" class="kr.swmaestro.hsb.auth.UserAuthAOP" factory-method="aspectOf"/>
+    
     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
         <property name="driverClassName" value="${database.driverClassName}"/>
         <property name="url" value="${database.url}"/>
@@ -68,7 +74,8 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <!-- Couchbase server connector 세팅  -->
-  
+  	
+
     <bean class="java.net.URI" id="mainServerURI">
     	<constructor-arg index="0" value="http://couchbase.hanul.co:8091/pools"/>
     </bean>

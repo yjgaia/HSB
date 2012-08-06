@@ -4,6 +4,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import kr.swmaestro.hsb.annotation.NeedAuth;
+
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,10 +22,10 @@ public class HomeController {
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
 	@RequestMapping("/")
-	public String home(HttpSession session) {
+	@NeedAuth
+	public String home(HttpServletRequest request) {
 		// just view
-		System.out.println("sessionId:"+session.getId());
-		client.set("sessionId:"+session.getId(), 60, 1);
+		System.out.println("home");
 		return "home";
 	}
 
