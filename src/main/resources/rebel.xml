@@ -2,15 +2,15 @@
 <application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.zeroturnaround.com" xsi:schemaLocation="http://www.zeroturnaround.com http://www.zeroturnaround.com/alderaan/rebel-2_0.xsd">
 
 	<classpath>
-		<dir name="/Users/hanul/git/HSB/target/classes">
+		<dir name="C:/Users/H/git/HSB/target/classes">
 		</dir>
-		<dir name="/Users/hanul/git/HSB/target/test-classes">
+		<dir name="C:/Users/H/git/HSB/target/test-classes">
 		</dir>
 	</classpath>
 
 	<web>
 		<link target="/">
-			<dir name="/Users/hanul/git/HSB/src/main/webapp">
+			<dir name="C:/Users/H/git/HSB/src/main/webapp">
 			</dir>
 		</link>
 	</web>
