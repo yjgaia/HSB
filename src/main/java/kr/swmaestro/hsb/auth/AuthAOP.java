@@ -6,7 +6,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import kr.swmaestro.hsb.annotation.NeedAuth;
 import kr.swmaestro.hsb.util.ArgsUtil;
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -17,7 +16,7 @@ import org.aspectj.lang.annotation.Aspect;
 import com.couchbase.client.CouchbaseClient;
 
 @Aspect
-public class UserAuthAOP {
+public class AuthAOP {
 	
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
@@ -43,8 +42,8 @@ public class UserAuthAOP {
 		
 		for (Annotation annotation : annotations) {
 			// Secured 어노테이션의 값을 가져와 인증 시 권한 비교
-			if (annotation.annotationType() == NeedAuth.class) {
-				NeedAuth a = (NeedAuth) annotation;
+			if (annotation.annotationType() == Auth.class) {
+				Auth a = (Auth) annotation;
 				for (String s : a.value()) {
 					System.out.println(s);
 				}

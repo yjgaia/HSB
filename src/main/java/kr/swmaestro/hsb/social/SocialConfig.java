@@ -3,6 +3,9 @@ package kr.swmaestro.hsb.social;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import kr.devin.social.SocialSignInAdapter;
+import kr.swmaestro.hsb.domain.UserInfo;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -28,7 +31,7 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 @Configuration
-@PropertySource("classpath:kr/swmaestro/hsb/social/config.properties")
+@PropertySource("classpath:kr/devin/social/config.properties")
 public class SocialConfig {
 
 	@Bean
@@ -53,7 +56,7 @@ public class SocialConfig {
 	public UsersConnectionRepository usersConnectionRepository() {
 		JdbcUsersConnectionRepository repository = new JdbcUsersConnectionRepository(
 				dataSource, connectionFactoryLocator(), Encryptors.noOpText());
-		repository.setConnectionSignUp(new SimpleConnectionSignUp());
+		repository.setConnectionSignUp(new SocialConnectionSignUp());
 		return repository;
 	}
 
@@ -67,7 +70,12 @@ public class SocialConfig {
 		if (authentication == null) {
 			throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
 		}
-		return usersConnectionRepository().createConnectionRepository(authentication.getName());
+		if (authentication.getPrincipal() instanceof UserInfo) {
+			UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+			return usersConnectionRepository().createConnectionRepository(userInfo.getId().toString());
+		} else {
+			return usersConnectionRepository().createConnectionRepository(authentication.getName());
+		}
 	}
 	
 	@Bean
@@ -86,7 +94,7 @@ public class SocialConfig {
 	
 	@Bean
 	public ProviderSignInController providerSignInController(RequestCache requestCache) {
-		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new SimpleSignInAdapter(requestCache));
+		return new ProviderSignInController(connectionFactoryLocator(), usersConnectionRepository(), new SocialSignInAdapter(requestCache));
 	}
 
 }
