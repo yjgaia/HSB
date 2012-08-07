@@ -2,7 +2,6 @@ package kr.swmaestro.hsb.controller.main;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 import kr.swmaestro.hsb.annotation.NeedAuth;
 
@@ -22,11 +21,16 @@ public class HomeController {
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
 	@RequestMapping("/")
-	@NeedAuth
 	public String home(HttpServletRequest request) {
 		// just view
 		System.out.println("home");
 		return "home";
+	}
+	
+	@NeedAuth("ROLE_USER")
+	@RequestMapping("/test")
+	public void test() {
+		
 	}
 
 }

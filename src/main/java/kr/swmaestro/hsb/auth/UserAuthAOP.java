@@ -6,12 +6,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import kr.swmaestro.hsb.annotation.NeedAuth;
 import kr.swmaestro.hsb.util.ArgsUtil;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.security.access.annotation.Secured;
 
 import com.couchbase.client.CouchbaseClient;
 
@@ -21,7 +22,7 @@ public class UserAuthAOP {
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
 	
-	@Around("execution(* kr.swmaestro.hsb.controller.*.*.*(..))")
+	@Around("@annotation(kr.swmaestro.hsb.annotation.NeedAuth)")
 	public Object setAroundUserAuth(ProceedingJoinPoint joinPoint) throws Throwable {
 		
 		System.out.println("---------@Around--------");
@@ -35,15 +36,18 @@ public class UserAuthAOP {
 			System.out.println("no request arg");
 		}
 		
-
+		Signature signature = joinPoint.getSignature();
+		
 		// 어노테이션을 가져옴
-		Annotation[] annotations = joinPoint.getSignature().getDeclaringType().getAnnotations();
+		Annotation[] annotations = signature.getDeclaringType().getMethod(signature.getName()).getAnnotations();
 		
 		for (Annotation annotation : annotations) {
 			// Secured 어노테이션의 값을 가져와 인증 시 권한 비교
-			if (annotation.annotationType() == Secured.class) {
-				Secured secured = (Secured) annotation;
-				System.out.println(secured.value());
+			if (annotation.annotationType() == NeedAuth.class) {
+				NeedAuth a = (NeedAuth) annotation;
+				for (String s : a.value()) {
+					System.out.println(s);
+				}
 			}
 		}
 		
