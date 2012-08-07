@@ -51,7 +51,7 @@
     <!-- AOP 클래스 자동 프록시화 -->
 	<aop:aspectj-autoproxy />		
 	
-	<bean id="authAOP" class="kr.swmaestro.hsb.auth.AuthAOP" factory-method="aspectOf"/>
+	<bean id="authAOP" class="kr.swmaestro.hsb.auth_old.AuthAOP" factory-method="aspectOf"/>
     
     <bean class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close" id="dataSource">
         <property name="driverClassName" value="${database.driverClassName}"/>

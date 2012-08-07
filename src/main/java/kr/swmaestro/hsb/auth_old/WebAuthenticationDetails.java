@@ -1,4 +1,4 @@
-package kr.swmaestro.hsb.auth;
+package kr.swmaestro.hsb.auth_old;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package kr.swmaestro.hsb.auth;
+package kr.swmaestro.hsb.auth_old;
 
 import java.lang.annotation.Annotation;
 
@@ -21,7 +21,7 @@ public class AuthAOP {
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
 	
-	@Around("@annotation(kr.swmaestro.hsb.auth.Auth)")
+	//@Around("@annotation(kr.swmaestro.hsb.auth.Auth)")
 	public Object setAroundUserAuth(ProceedingJoinPoint joinPoint) throws Throwable {
 		
 		System.out.println("---------@Around--------");

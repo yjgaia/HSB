@@ -3,7 +3,7 @@ package kr.swmaestro.hsb.controller.main;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import kr.swmaestro.hsb.auth.Auth;
+import kr.swmaestro.hsb.auth_old.Auth;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class HomeController {
 		return "home";
 	}
 	
-	@Auth("ROLE_USER")
+	//@Auth("ROLE_USER")
 	@RequestMapping("/test")
 	public void test() {
 		

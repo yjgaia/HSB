@@ -10,19 +10,17 @@ import kr.swmaestro.hsb.domain.UserInfo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.WebAttributes;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.web.SignInAdapter;
 import org.springframework.web.context.request.NativeWebRequest;
 
 public final class SocialSignInAdapter implements SignInAdapter {
 
-	private final RequestCache requestCache;
+	//private final RequestCache requestCache;
 
 	@Inject
-	public SocialSignInAdapter(RequestCache requestCache) {
-		this.requestCache = requestCache;
+	public SocialSignInAdapter(/*RequestCache requestCache*/) {
+		//this.requestCache = requestCache;
 	}
 	
 	@Override
@@ -40,13 +38,14 @@ public final class SocialSignInAdapter implements SignInAdapter {
 	private String extractOriginalUrl(NativeWebRequest request) {
 		HttpServletRequest nativeReq = request.getNativeRequest(HttpServletRequest.class);
 		HttpServletResponse nativeRes = request.getNativeResponse(HttpServletResponse.class);
-		SavedRequest saved = requestCache.getRequest(nativeReq, nativeRes);
+		return null;
+		/*SavedRequest saved = requestCache.getRequest(nativeReq, nativeRes);
 		if (saved == null) {
 			return null;
 		}
 		requestCache.removeRequest(nativeReq, nativeRes);
 		removeAutheticationAttributes(nativeReq.getSession(false));
-		return saved.getRedirectUrl();
+		return saved.getRedirectUrl();*/
 	}
 		 
 	private void removeAutheticationAttributes(HttpSession session) {
