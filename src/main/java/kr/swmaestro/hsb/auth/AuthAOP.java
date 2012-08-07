@@ -21,7 +21,7 @@ public class AuthAOP {
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
 	
-	@Around("@annotation(kr.swmaestro.hsb.annotation.NeedAuth)")
+	@Around("@annotation(kr.swmaestro.hsb.auth.Auth)")
 	public Object setAroundUserAuth(ProceedingJoinPoint joinPoint) throws Throwable {
 		
 		System.out.println("---------@Around--------");

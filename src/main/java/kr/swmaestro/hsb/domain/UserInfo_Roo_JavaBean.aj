@@ -72,4 +72,52 @@ privileged aspect UserInfo_Roo_JavaBean {
         this.writeCount = writeCount;
     }
     
+    public boolean UserInfo.isSocialUser() {
+        return this.socialUser;
+    }
+    
+    public void UserInfo.setSocialUser(boolean socialUser) {
+        this.socialUser = socialUser;
+    }
+    
+    public String UserInfo.getSocialDisplayName() {
+        return this.socialDisplayName;
+    }
+    
+    public void UserInfo.setSocialDisplayName(String socialDisplayName) {
+        this.socialDisplayName = socialDisplayName;
+    }
+    
+    public String UserInfo.getSocialImageUrl() {
+        return this.socialImageUrl;
+    }
+    
+    public void UserInfo.setSocialImageUrl(String socialImageUrl) {
+        this.socialImageUrl = socialImageUrl;
+    }
+    
+    public String UserInfo.getSocialProfileUrl() {
+        return this.socialProfileUrl;
+    }
+    
+    public void UserInfo.setSocialProfileUrl(String socialProfileUrl) {
+        this.socialProfileUrl = socialProfileUrl;
+    }
+    
+    public String UserInfo.getSocialProviderId() {
+        return this.socialProviderId;
+    }
+    
+    public void UserInfo.setSocialProviderId(String socialProviderId) {
+        this.socialProviderId = socialProviderId;
+    }
+    
+    public String UserInfo.getSocialProviderUserId() {
+        return this.socialProviderUserId;
+    }
+    
+    public void UserInfo.setSocialProviderUserId(String socialProviderUserId) {
+        this.socialProviderUserId = socialProviderUserId;
+    }
+    
 }

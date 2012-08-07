@@ -3,7 +3,6 @@ package kr.swmaestro.hsb.social;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import kr.devin.social.SocialSignInAdapter;
 import kr.swmaestro.hsb.domain.UserInfo;
 
 import org.springframework.context.annotation.Bean;
