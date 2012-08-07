@@ -19,11 +19,11 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class FriendRequest {
 
 	@ManyToOne
-	@JoinColumn(name = "requestUsername", nullable = false)
+	@JoinColumn(name = "requestUserId", nullable = false)
 	private UserInfo requestUser;
 
 	@ManyToOne
-	@JoinColumn(name = "targetUsername", nullable = false)
+	@JoinColumn(name = "targetUserId", nullable = false)
 	private UserInfo targetUser;
 
 	@Column(nullable = false)

@@ -35,7 +35,7 @@ public class Article {
 	private String content;
 
 	@ManyToOne
-	@JoinColumn(name = "writerUsername", nullable = false)
+	@JoinColumn(name = "writerUserId", nullable = false)
 	private UserInfo writerUser;
 
 	@Column(nullable = false)
