@@ -5,8 +5,8 @@ import java.util.Date;
 import java.util.HashSet;
 
 import javax.persistence.Column;
-import javax.persistence.Id;
 import javax.persistence.Transient;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -26,15 +26,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class UserInfo implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
-	@Id
 	@NotEmpty
 	@Size(min = 4, max = 20)
-	@Column(nullable = false, length = 20)
+	@Pattern(regexp = "[_a-z0-9-]*")
+	@Column(length = 20, unique = true)
 	private String username;
 
 	@NotEmpty
 	@Size(min = 4, max = 20)
-	@Column(nullable = false, length = 40)
+	@Column(length = 40)
 	// 암호화 하면 암호의 길이 증가
 	private String password;
 
@@ -46,25 +46,57 @@ public class UserInfo implements UserDetails {
 
 	@NotEmpty
 	@Size(min = 4, max = 20)
-	@Column(nullable = false, length = 20, unique = true)
+	@Column(length = 20, unique = true)
 	private String nickname;
 
-	//@NotEmpty 구지 필수로 할 필요는 없을것 같습니다.
+	@NotEmpty
 	@Size(max = 320)
 	@Email
-	@Column(/*nullable = false, */length = 320)
+	@Column(length = 320)
 	private String email;
 
 	@Column(nullable = false)
 	private Date joinDate;
 
 	private int loginCount;
+	
+	public void increaseLoginCount() {
+		loginCount++;
+	};
 
 	private int writeCount;
+	
+	// 소셜 유저를 위한 설정
+	private boolean socialUser = false;
+	private String socialDisplayName;
+	private String socialImageUrl;
+	private String socialProfileUrl;
+	private String socialProviderId;
+	private String socialProviderUserId;
 
 	@Override
 	public Collection<GrantedAuthority> getAuthorities() {
 		HashSet<GrantedAuthority> hs = new HashSet<GrantedAuthority>();
+		if (isSocialUser()) {
+			hs.add(new GrantedAuthority() {
+				private static final long serialVersionUID = 1L;
+				
+				@Override
+				public String getAuthority() {
+					return "ROLE_SOCIAL";
+				}
+			});
+		}
+		if (username != null && username.equals("admin")) {
+			hs.add(new GrantedAuthority() {
+				private static final long serialVersionUID = 1L;
+	
+				@Override
+				public String getAuthority() {
+					return "ROLE_ADMIN";
+				}
+			});
+		}
 		hs.add(new GrantedAuthority() {
 			private static final long serialVersionUID = 1L;
 
@@ -107,5 +139,5 @@ public class UserInfo implements UserDetails {
 	public static boolean existsNickname(String nickname) {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
-	
+
 }
