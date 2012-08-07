@@ -37,6 +37,7 @@ public class AuthAOP {
 		
 		Signature signature = joinPoint.getSignature();
 		
+		/*
 		// 어노테이션을 가져옴
 		Annotation[] annotations = signature.getDeclaringType().getMethod(signature.getName()).getAnnotations();
 		
@@ -49,6 +50,7 @@ public class AuthAOP {
 				}
 			}
 		}
+		*/
 		
 		return joinPoint.proceed();
 	}
