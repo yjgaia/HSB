@@ -6,17 +6,17 @@ package kr.swmaestro.hsb.domain;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
+import kr.devin.domain.UserInfo;
 import kr.swmaestro.hsb.domain.Comment;
-import kr.swmaestro.hsb.domain.UserInfo;
 
 privileged aspect Article_Roo_JavaBean {
     
-    public String Article.getTitle() {
-        return this.title;
+    public UserInfo Article.getTargetUser() {
+        return this.targetUser;
     }
     
-    public void Article.setTitle(String title) {
-        this.title = title;
+    public void Article.setTargetUser(UserInfo targetUser) {
+        this.targetUser = targetUser;
     }
     
     public String Article.getContent() {

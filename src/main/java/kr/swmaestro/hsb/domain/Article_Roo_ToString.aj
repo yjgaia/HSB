@@ -12,7 +12,7 @@ privileged aspect Article_Roo_ToString {
         sb.append("CommentList: ").append(getCommentList() == null ? "null" : getCommentList().size()).append(", ");
         sb.append("Content: ").append(getContent()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Title: ").append(getTitle()).append(", ");
+        sb.append("TargetUser: ").append(getTargetUser()).append(", ");
         sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
         sb.append("WriterUser: ").append(getWriterUser());
