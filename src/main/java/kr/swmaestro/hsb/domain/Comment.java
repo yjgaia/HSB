@@ -18,7 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class Comment {
+public class Comment implements DomainModel {
 
 	@ManyToOne
 	@JoinColumn(name = "articleId", nullable = false)

@@ -23,7 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class UserInfo implements UserDetails {
+public class UserInfo implements UserDetails, DomainModel {
 	private static final long serialVersionUID = 1L;
 
 	@NotEmpty

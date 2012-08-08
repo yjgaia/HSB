@@ -16,7 +16,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class FriendRelation {
+public class FriendRelation implements DomainModel {
 	
 	@ManyToOne
 	@JoinColumn(name = "user1Id", nullable = false)

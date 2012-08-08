@@ -22,7 +22,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class Article {
+public class Article implements DomainModel {
 	
 	@NotEmpty
 	@Size(max = 500)

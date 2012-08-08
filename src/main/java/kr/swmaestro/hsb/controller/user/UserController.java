@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.validation.Valid;
 
+import kr.swmaestro.hsb.data.DataCenter;
 import kr.swmaestro.hsb.domain.UserInfo;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class UserController {
 
 	@Autowired
 	private SaltSource saltSource;
+	
+	@Autowired
+	private DataCenter dataCenter;
 
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public void join(UserInfo userInfo) {
@@ -55,7 +59,9 @@ public class UserController {
 			// password encoding
 			userInfo.setPassword(passwordEncoder.encodePassword(userInfo.getPassword(), saltSource.getSalt(userInfo)));
 			userInfo.setJoinDate(new Date());
-			userInfo.persist();
+			
+			dataCenter.save(userInfo);
+			
 			return "redirect:/";
 		}
 	}

@@ -17,8 +17,8 @@
 	
 	<body>
 		
-		<form action="${pageContext.request.contextPath}/user/loginProcess" class="well span3" method="POST">
-			<c:if test="${not empty param.isError}">
+		<form action="${pageContext.request.contextPath}/auth/signin" class="well span3" method="POST">
+			<c:if test="${not empty param.error}">
 			<div class="alert alert-error">
 				<button type="button" class="close" data-dismiss="alert">×</button>
 				로그인 할 수 없습니다.<br>
