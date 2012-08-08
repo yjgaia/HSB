@@ -1,7 +1,6 @@
 package kr.swmaestro.hsb.auth;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,9 +37,10 @@ public class AuthController {
 		System.out.println(password);
 		
 		if (true) { // 인증되면 쿠키를 생성후 삽입
-			String uid = UUID.randomUUID().toString();
+			
+			String uid = keyValueCacheManager.put("test");
 			response.addCookie(CookieBox.createCookie(Auth.COOKIE_KEY, uid, "/"));
-			keyValueCacheManager.set(uid, "test");
+			
 		}
 		return "redirect:/";
 	}
