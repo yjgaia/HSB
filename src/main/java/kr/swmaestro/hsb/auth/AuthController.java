@@ -41,7 +41,19 @@ public class AuthController {
 			String uid = keyValueCacheManager.put("test");
 			response.addCookie(CookieBox.createCookie(Auth.COOKIE_KEY, uid, "/"));
 			
+			// 만약 remember me 기능이 추가된다면 cookie 유지 시간만 늘이면 됩니다.
 		}
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/auth/signout")
+	public String signout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		
+		String uid = new CookieBox(request).getValue(Auth.COOKIE_KEY);
+		keyValueCacheManager.remove(uid);
+		// 쿠키 제거
+		response.addCookie(CookieBox.createCookie(Auth.COOKIE_KEY, uid, "/", 0));
+		
 		return "redirect:/";
 	}
 

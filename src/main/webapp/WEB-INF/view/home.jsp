@@ -9,6 +9,8 @@
 	<body>
 	
 		<h1>HSB</h1>
+		
+		${authUser}
 
 		<p>
 			<%--<sec:authorize access="isAnonymous()">--%>

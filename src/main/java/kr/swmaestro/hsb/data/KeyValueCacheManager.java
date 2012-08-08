@@ -31,5 +31,9 @@ public class KeyValueCacheManager {
 	public void put(String key, Object o) {
 		client.set(key, EXP, o);
 	}
+	
+	public void remove(String key) {
+		client.delete(key);
+	}
 
 }

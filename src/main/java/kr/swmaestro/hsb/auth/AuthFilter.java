@@ -11,10 +11,21 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import kr.swmaestro.hsb.data.KeyValueCacheManager;
+import kr.swmaestro.hsb.util.CookieBox;
+
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 public class AuthFilter implements Filter {
+	
+	private KeyValueCacheManager keyValueCacheManager;
 
 	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {}
+	public void init(FilterConfig filterConfig) throws ServletException {
+		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(filterConfig.getServletContext());
+		keyValueCacheManager = (KeyValueCacheManager) applicationContext.getBeansOfType(KeyValueCacheManager.class).values().toArray()[0];
+	}
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
@@ -22,10 +33,11 @@ public class AuthFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
-		// POST로 접근했을 경우에만 해당
-		if (request.getMethod().equals("POST")) {
-			System.out.println("!!" + request.getParameter("j_username"));
-		}
+		String uid = new CookieBox(request).getValue(Auth.COOKIE_KEY);
+		
+		// 여기서 인증값이 있으면 인증처리
+		System.out.println("!!~" + keyValueCacheManager.get(uid));
+		request.setAttribute("authUser", "TEST_SIGN_IN_USER");
 		
 		chain.doFilter(request, response);
 	}
