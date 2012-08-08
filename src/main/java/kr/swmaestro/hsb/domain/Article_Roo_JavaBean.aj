@@ -6,8 +6,8 @@ package kr.swmaestro.hsb.domain;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
-import kr.devin.domain.UserInfo;
 import kr.swmaestro.hsb.domain.Comment;
+import kr.swmaestro.hsb.domain.UserInfo;
 
 privileged aspect Article_Roo_JavaBean {
     
