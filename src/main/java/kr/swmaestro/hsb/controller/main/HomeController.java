@@ -1,11 +1,15 @@
 package kr.swmaestro.hsb.controller.main;
 
+import java.io.IOException;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
-import kr.swmaestro.hsb.auth_old.Auth;
+import kr.swmaestro.hsb.auth.Auth;
+import kr.swmaestro.hsb.data.KeyValueCacheManager;
+import kr.swmaestro.hsb.util.CookieBox;
 
-import org.springframework.security.access.annotation.Secured;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,13 +21,17 @@ import com.couchbase.client.CouchbaseClient;
 @Controller
 @RequestMapping
 public class HomeController {
+	
+	@Autowired
+	private KeyValueCacheManager keyValueCacheManager;
 
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;
 	@RequestMapping("/")
-	public String home(HttpServletRequest request) {
+	public String home(HttpServletRequest request) throws IOException {
 		// just view
-		System.out.println("home");
+		String key = new CookieBox(request).getValue(Auth.COOKIE_KEY);
+		System.out.println(keyValueCacheManager.get(key));
 		return "home";
 	}
 	

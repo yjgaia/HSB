@@ -82,7 +82,7 @@
     <bean id="baseURIs" class="java.util.ArrayList">
     	<constructor-arg>
         <list>
-            <ref bean="mainServerURI" />               
+            <ref bean="mainServerURI" />
         </list>
     </constructor-arg>
     </bean>
