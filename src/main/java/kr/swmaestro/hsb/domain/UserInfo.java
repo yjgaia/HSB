@@ -9,6 +9,8 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import kr.swmaestro.hsb.data.DataModel;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.entity.RooEntity;
@@ -23,7 +25,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class UserInfo implements UserDetails, DomainModel {
+public class UserInfo implements UserDetails, DataModel {
 	private static final long serialVersionUID = 1L;
 
 	@NotEmpty

@@ -11,6 +11,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
+import kr.devin.domain.UserInfo;
+import kr.swmaestro.hsb.data.DataModel;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -22,12 +25,11 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class Article implements DomainModel {
+public class Article implements DataModel {
 	
-	@NotEmpty
-	@Size(max = 500)
-	@Column(length = 500, nullable = false)
-	private String title;
+	@ManyToOne
+	@JoinColumn(name = "targetUserId")
+	private UserInfo targetUser;
 
 	@NotEmpty
 	@Size(max = 3000)

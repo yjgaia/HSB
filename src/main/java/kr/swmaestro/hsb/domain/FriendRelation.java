@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import kr.swmaestro.hsb.data.DataModel;
+
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -16,7 +18,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class FriendRelation implements DomainModel {
+public class FriendRelation implements DataModel {
 	
 	@ManyToOne
 	@JoinColumn(name = "user1Id", nullable = false)
