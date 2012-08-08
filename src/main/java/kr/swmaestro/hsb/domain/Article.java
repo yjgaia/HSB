@@ -11,7 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Size;
 
-import kr.devin.domain.UserInfo;
 import kr.swmaestro.hsb.data.DataModel;
 
 import org.hibernate.validator.constraints.NotEmpty;
