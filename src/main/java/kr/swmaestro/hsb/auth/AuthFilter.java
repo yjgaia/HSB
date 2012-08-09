@@ -11,7 +11,7 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.swmaestro.hsb.data.KeyValueCacheManager;
+import kr.swmaestro.hsb.data.CouchbaseCacheManager;
 import kr.swmaestro.hsb.util.CookieBox;
 
 import org.springframework.web.context.WebApplicationContext;
@@ -19,12 +19,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class AuthFilter implements Filter {
 	
-	private KeyValueCacheManager keyValueCacheManager;
+	private CouchbaseCacheManager keyValueCacheManager;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(filterConfig.getServletContext());
-		keyValueCacheManager = (KeyValueCacheManager) applicationContext.getBeansOfType(KeyValueCacheManager.class).values().toArray()[0];
+		keyValueCacheManager = (CouchbaseCacheManager) applicationContext.getBeansOfType(CouchbaseCacheManager.class).values().toArray()[0];
 	}
 
 	@Override

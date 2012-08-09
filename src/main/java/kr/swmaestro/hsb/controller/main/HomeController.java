@@ -6,7 +6,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import kr.swmaestro.hsb.auth.Auth;
-import kr.swmaestro.hsb.data.KeyValueCacheManager;
+import kr.swmaestro.hsb.data.CouchbaseCacheManager;
 import kr.swmaestro.hsb.util.CookieBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import com.couchbase.client.CouchbaseClient;
 public class HomeController {
 	
 	@Autowired
-	private KeyValueCacheManager keyValueCacheManager;
+	private CouchbaseCacheManager keyValueCacheManager;
 
 	@Resource(name="couchbaseClient")
 	CouchbaseClient client;

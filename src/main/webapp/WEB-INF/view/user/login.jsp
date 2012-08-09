@@ -34,6 +34,7 @@
 			<a class="btn" href="${pageContext.request.contextPath}/user/join">회원가입</a>
 		</form>
 		
+		<%--
 		<div class="span3">
 		
 			<!-- FACEBOOK login -->
@@ -48,6 +49,7 @@
 			</form>
 		
 		</div>
+		 --%>
 
 	</body>
 </html>

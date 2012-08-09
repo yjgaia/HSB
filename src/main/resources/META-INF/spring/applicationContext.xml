@@ -96,6 +96,12 @@
     </bean>
     
     
+    <!-- Redis Server 세팅 -->
+    <bean class="redis.clients.jedis.Jedis">
+    	<constructor-arg value="hanul.co" />
+   	</bean>
+    
+    
     
     <!-- 인증 관련 -->
     <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder" />

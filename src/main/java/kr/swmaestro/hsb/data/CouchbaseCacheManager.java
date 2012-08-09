@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import com.couchbase.client.CouchbaseClient;
 
 @Component
-public class KeyValueCacheManager {
+public class CouchbaseCacheManager {
 	
 	private final static int EXP = 30 * 60; // 30분
 

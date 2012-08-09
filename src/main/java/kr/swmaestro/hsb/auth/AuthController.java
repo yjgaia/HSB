@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import kr.swmaestro.hsb.data.KeyValueCacheManager;
+import kr.swmaestro.hsb.data.CouchbaseCacheManager;
 import kr.swmaestro.hsb.util.CookieBox;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class AuthController {
 	private SaltSource saltSource;
 	
 	@Autowired
-	private KeyValueCacheManager keyValueCacheManager;
+	private CouchbaseCacheManager keyValueCacheManager;
 
 	@RequestMapping(value = "/auth/signin", method = RequestMethod.POST)
 	public String signin(@RequestParam("j_username") String username, @RequestParam("j_password") String password, HttpServletRequest request, HttpServletResponse response) throws IOException {
