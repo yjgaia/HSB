@@ -61,6 +61,16 @@
         </pluginRepository>
     </pluginRepositories>
     <dependencies>
+    	<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+			<version>1.9.7</version>
+		</dependency>
+		<dependency>
+			<groupId>rome</groupId>
+			<artifactId>rome</artifactId>
+			<version>1.0</version>
+		</dependency>
     	<!-- Social -->
     	<dependency>
 		    <groupId>org.springframework.social</groupId>
