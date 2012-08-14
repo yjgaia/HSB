@@ -9,9 +9,22 @@ privileged aspect UserInfo_Roo_ToString {
     
     public String UserInfo.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Mom: ").append(getMom()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("JoinDate: ").append(getJoinDate()).append(", ");
+        sb.append("LoginCount: ").append(getLoginCount()).append(", ");
+        sb.append("Nickname: ").append(getNickname()).append(", ");
+        sb.append("Password: ").append(getPassword()).append(", ");
+        sb.append("PasswordConfirm: ").append(getPasswordConfirm()).append(", ");
+        sb.append("ReturnDate: ").append(getReturnDate()).append(", ");
+        sb.append("SecureKey: ").append(getSecureKey()).append(", ");
+        sb.append("Url: ").append(getUrl()).append(", ");
+        sb.append("Username: ").append(getUsername()).append(", ");
+        sb.append("Version: ").append(getVersion()).append(", ");
+        sb.append("WriteCount: ").append(getWriteCount()).append(", ");
+        sb.append("Enable: ").append(isEnable()).append(", ");
+        sb.append("Success: ").append(isSuccess());
         return sb.toString();
     }
     

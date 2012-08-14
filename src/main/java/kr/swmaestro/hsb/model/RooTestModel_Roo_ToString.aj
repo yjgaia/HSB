@@ -9,8 +9,12 @@ privileged aspect RooTestModel_Roo_ToString {
     
     public String RooTestModel.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Mom: ").append(getMom()).append(", ");
-        sb.append("Msg: ").append(getMsg());
+        sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
+        sb.append("Msg: ").append(getMsg()).append(", ");
+        sb.append("ReturnDate: ").append(getReturnDate()).append(", ");
+        sb.append("SecureKey: ").append(getSecureKey()).append(", ");
+        sb.append("Url: ").append(getUrl()).append(", ");
+        sb.append("Success: ").append(isSuccess());
         return sb.toString();
     }
     

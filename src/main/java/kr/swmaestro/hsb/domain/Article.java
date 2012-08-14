@@ -24,7 +24,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 //@RooEntity
-public class Article implements DataModel {
+public class Article /*implements DataModel*/ {
 	
 	@ManyToOne
 	@JoinColumn(name = "targetUserId")

@@ -28,9 +28,6 @@ public class UserController {
 
 	@Autowired
 	private SaltSource saltSource;
-	
-	@Autowired
-	private DataCenter dataCenter;
 
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public void join(UserInfo userInfo) {

@@ -20,7 +20,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 //@RooEntity
-public class Comment implements DataModel {
+public class Comment /*implements DataModel*/ {
 
 	@ManyToOne
 	@JoinColumn(name = "articleId", nullable = false)

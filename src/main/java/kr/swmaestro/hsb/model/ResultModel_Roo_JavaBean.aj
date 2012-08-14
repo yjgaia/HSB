@@ -4,15 +4,50 @@
 package kr.swmaestro.hsb.model;
 
 import java.lang.String;
+import java.util.Date;
+import java.util.Set;
+import kr.swmaestro.hsb.model.ErrorInfo;
 
 privileged aspect ResultModel_Roo_JavaBean {
     
-    public String ResultModel.getMom() {
-        return this.mom;
+    public String ResultModel.getUrl() {
+        return this.url;
     }
     
-    public void ResultModel.setMom(String mom) {
-        this.mom = mom;
+    public void ResultModel.setUrl(String url) {
+        this.url = url;
+    }
+    
+    public boolean ResultModel.isSuccess() {
+        return this.success;
+    }
+    
+    public void ResultModel.setSuccess(boolean success) {
+        this.success = success;
+    }
+    
+    public Set<ErrorInfo> ResultModel.getErrors() {
+        return this.errors;
+    }
+    
+    public void ResultModel.setErrors(Set<ErrorInfo> errors) {
+        this.errors = errors;
+    }
+    
+    public Date ResultModel.getReturnDate() {
+        return this.returnDate;
+    }
+    
+    public void ResultModel.setReturnDate(Date returnDate) {
+        this.returnDate = returnDate;
+    }
+    
+    public String ResultModel.getSecureKey() {
+        return this.secureKey;
+    }
+    
+    public void ResultModel.setSecureKey(String secureKey) {
+        this.secureKey = secureKey;
     }
     
 }
