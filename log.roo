@@ -26,3 +26,14 @@ entity --class ~.domain.Comment
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-05 14:18:17
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-07 13:14:48
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-08 09:37:28
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-13 17:12:21
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-13 17:12:38
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-13 17:12:45
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-13 17:13:20
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-13 17:13:28
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-13 17:14:07
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-13 17:14:14
+entity --class ~.model.ResultModel
+entity --class ~.model.RooTestModel
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-14 02:00:05
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-14 09:01:16

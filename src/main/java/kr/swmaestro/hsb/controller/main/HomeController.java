@@ -34,11 +34,5 @@ public class HomeController {
 		System.out.println(keyValueCacheManager.get(key));
 		return "home";
 	}
-	
-	//@Auth("ROLE_USER")
-	@RequestMapping("/test")
-	public void test() {
-		
-	}
 
 }

@@ -1,7 +1,7 @@
 import redis.clients.jedis.Jedis;
 
 
-public class TEst {
+public class foooooo {
 	
 	public static void main(String[] args) {
 		Jedis jedis = new Jedis("hanul.co");
