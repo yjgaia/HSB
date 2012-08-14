@@ -14,7 +14,5 @@ import java.lang.annotation.Target;
 public @interface Auth {
 	
 	final String COOKIE_KEY = "_AUTH_KEY_";
-	
-	public String[] value();
 
 }

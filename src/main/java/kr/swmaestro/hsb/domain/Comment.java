@@ -19,7 +19,7 @@ import org.springframework.roo.addon.tostring.RooToString;
  */
 @RooJavaBean
 @RooToString
-@RooEntity
+//@RooEntity
 public class Comment implements DataModel {
 
 	@ManyToOne

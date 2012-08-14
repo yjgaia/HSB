@@ -5,11 +5,13 @@ package kr.swmaestro.hsb.model;
 
 import java.lang.String;
 
-privileged aspect ResultModel_Roo_ToString {
+privileged aspect UserInfo_Roo_ToString {
     
-    public String ResultModel.toString() {
+    public String UserInfo.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Mom: ").append(getMom());
+        sb.append("Id: ").append(getId()).append(", ");
+        sb.append("Mom: ").append(getMom()).append(", ");
+        sb.append("Version: ").append(getVersion());
         return sb.toString();
     }
     

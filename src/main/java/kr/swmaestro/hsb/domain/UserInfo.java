@@ -24,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @RooJavaBean
 @RooToString
-@RooEntity
+//@RooEntity
 public class UserInfo implements UserDetails, DataModel {
 	private static final long serialVersionUID = 1L;
 
@@ -130,6 +130,7 @@ public class UserInfo implements UserDetails, DataModel {
 		return true;
 	}
 	
+	/*
 	public static UserInfo findUserInfoByUsername(String username) {
 		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE username = :username", UserInfo.class).setParameter("username", username).getSingleResult();
 	}
@@ -141,5 +142,6 @@ public class UserInfo implements UserDetails, DataModel {
 	public static boolean existsNickname(String nickname) {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
+    */
 
 }

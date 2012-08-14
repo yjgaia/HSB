@@ -11,8 +11,6 @@ privileged aspect Comment_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Article: ").append(getArticle()).append(", ");
         sb.append("Content: ").append(getContent()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
-        sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
         sb.append("WriterUser: ").append(getWriterUser());
         return sb.toString();

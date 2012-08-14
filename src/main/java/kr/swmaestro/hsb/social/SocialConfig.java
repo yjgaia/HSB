@@ -70,7 +70,8 @@ public class SocialConfig {
 		}
 		if (authentication.getPrincipal() instanceof UserInfo) {
 			UserInfo userInfo = (UserInfo) authentication.getPrincipal();
-			return usersConnectionRepository().createConnectionRepository(userInfo.getId().toString());
+			//return usersConnectionRepository().createConnectionRepository(userInfo.getId().toString());
+			return null;
 		} else {
 			return usersConnectionRepository().createConnectionRepository(authentication.getName());
 		}

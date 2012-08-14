@@ -26,9 +26,10 @@ public final class SocialConnectionSignUp implements ConnectionSignUp {
 		userInfo.setSocialProfileUrl(connection.getProfileUrl());
 		userInfo.setSocialProviderId(connection.getKey().getProviderId());
 		userInfo.setSocialProviderUserId(connection.getKey().getProviderUserId());
-		userInfo.persist();
+		//userInfo.persist();
 		
-		return userInfo.getId().toString();
+		//return userInfo.getId().toString();
+		return null;
 	}
 
 }

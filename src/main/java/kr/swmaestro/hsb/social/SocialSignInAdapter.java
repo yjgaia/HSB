@@ -27,11 +27,11 @@ public final class SocialSignInAdapter implements SignInAdapter {
 	public String signIn(String userId, Connection<?> connection, NativeWebRequest request) {
 		
 		// 유저 정보 로드
-		UserInfo userInfo = UserInfo.findUserInfo(Long.valueOf(userId));
-		userInfo.increaseLoginCount();
-		userInfo.merge();
+		//UserInfo userInfo = UserInfo.findUserInfo(Long.valueOf(userId));
+		//userInfo.increaseLoginCount();
+		//userInfo.merge();
 		
-		SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userInfo, null, null));	
+		//SecurityContextHolder.getContext().setAuthentication(new UsernamePasswordAuthenticationToken(userInfo, null, null));	
 		return extractOriginalUrl(request);
 	}
 

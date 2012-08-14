@@ -11,7 +11,6 @@ privileged aspect UserInfo_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("Authorities: ").append(getAuthorities() == null ? "null" : getAuthorities().size()).append(", ");
         sb.append("Email: ").append(getEmail()).append(", ");
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("JoinDate: ").append(getJoinDate()).append(", ");
         sb.append("LoginCount: ").append(getLoginCount()).append(", ");
         sb.append("Nickname: ").append(getNickname()).append(", ");
@@ -23,7 +22,6 @@ privileged aspect UserInfo_Roo_ToString {
         sb.append("SocialProviderId: ").append(getSocialProviderId()).append(", ");
         sb.append("SocialProviderUserId: ").append(getSocialProviderUserId()).append(", ");
         sb.append("Username: ").append(getUsername()).append(", ");
-        sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteCount: ").append(getWriteCount()).append(", ");
         sb.append("AccountNonExpired: ").append(isAccountNonExpired()).append(", ");
         sb.append("AccountNonLocked: ").append(isAccountNonLocked()).append(", ");

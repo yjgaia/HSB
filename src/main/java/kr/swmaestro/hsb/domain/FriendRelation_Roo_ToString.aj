@@ -9,11 +9,9 @@ privileged aspect FriendRelation_Roo_ToString {
     
     public String FriendRelation.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Id: ").append(getId()).append(", ");
         sb.append("RelateDate: ").append(getRelateDate()).append(", ");
         sb.append("User1: ").append(getUser1()).append(", ");
-        sb.append("User2: ").append(getUser2()).append(", ");
-        sb.append("Version: ").append(getVersion());
+        sb.append("User2: ").append(getUser2());
         return sb.toString();
     }
     

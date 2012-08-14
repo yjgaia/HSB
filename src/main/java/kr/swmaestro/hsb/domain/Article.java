@@ -23,7 +23,7 @@ import org.springframework.roo.addon.tostring.RooToString;
  */
 @RooJavaBean
 @RooToString
-@RooEntity
+//@RooEntity
 public class Article implements DataModel {
 	
 	@ManyToOne

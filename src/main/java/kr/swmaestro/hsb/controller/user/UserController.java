@@ -42,7 +42,7 @@ public class UserController {
 	public String join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
 
 		// other validations
-		if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
+		/*if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
 			bindingResult.rejectValue("password", "Equals.userInfo.passwordConfirm");
 		}
 		if (!bindingResult.hasFieldErrors("username") && UserInfo.existsUser(userInfo.getUsername())) {
@@ -63,7 +63,8 @@ public class UserController {
 			dataCenter.save(userInfo);
 			
 			return "redirect:/";
-		}
+		}*/
+		return null;
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)

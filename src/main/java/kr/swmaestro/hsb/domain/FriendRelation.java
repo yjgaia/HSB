@@ -17,7 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
  */
 @RooJavaBean
 @RooToString
-@RooEntity
+//@RooEntity
 public class FriendRelation implements DataModel {
 	
 	@ManyToOne
