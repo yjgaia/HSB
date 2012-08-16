@@ -1,5 +1,7 @@
 package kr.swmaestro.hsb.data;
 
+import java.util.List;
+
 
 public class DataCenter {
 
@@ -19,8 +21,15 @@ public class DataCenter {
 	}
 
 	// 목록화
-	public static void list(Long afterId, int count) {
-
+	public static List<?> list(Class<?> clazz, Long afterId, int count) {
+		if (clazz == DataModel.class) {
+			try {
+				return ((DataModel) clazz.newInstance()).list(afterId, count);
+			} catch (InstantiationException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 
 	// 저장
