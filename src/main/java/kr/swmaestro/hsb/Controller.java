@@ -15,6 +15,7 @@ import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.RooTestModel;
 import kr.swmaestro.hsb.model.UserInfo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -25,6 +26,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @org.springframework.stereotype.Controller
 public class Controller {
+	
+	@Autowired
+	DataCenter dataCenter;
 	
 	@RequestMapping(value = "test", method = RequestMethod.GET)
 	public void test(UserInfo userInfo, BindingResult bindingResult, Model model) {
@@ -105,7 +109,7 @@ public class Controller {
 	//@RequestMapping(value = "user/account", method = RequestMethod.POST)
 	public void join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
 		if (errorCheck(userInfo, bindingResult)) {
-			DataCenter.save(userInfo);
+			dataCenter.save(userInfo);
 		}
 		ret(userInfo, model, request);
 	}
