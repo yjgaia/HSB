@@ -39,10 +39,10 @@
 		    return formatted;
 		}
 		$(function() {
-			$.getJSON('${fn:indexOf(result.url, "?") == -1 ? result.url : result.url.substring(0, fn:indexOf(result.url, "?")).concat(".json").concat(result.url.substring(fn:indexOf(result.url, "?")))}', function(obj) {
+			$.getJSON('${fn:indexOf(result.url, "?") == -1 ? result.url.concat(".json") : result.url.substring(0, fn:indexOf(result.url, "?")).concat(".json").concat(result.url.substring(fn:indexOf(result.url, "?")))}', function(obj) {
 				$('#json').text(JSON.stringify(obj, null, 4));
 			});
-			$.get('${fn:indexOf(result.url, "?") == -1 ? result.url : result.url.substring(0, fn:indexOf(result.url, "?")).concat(".xml").concat(result.url.substring(fn:indexOf(result.url, "?")))}', function(xml) {
+			$.get('${fn:indexOf(result.url, "?") == -1 ? result.url.concat(".xml") : result.url.substring(0, fn:indexOf(result.url, "?")).concat(".xml").concat(result.url.substring(fn:indexOf(result.url, "?")))}', function(xml) {
 				$('#xml').text(formatXml(xml));
 			}, 'text');
 		});

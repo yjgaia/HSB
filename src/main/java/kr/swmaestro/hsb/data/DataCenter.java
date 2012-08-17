@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.google.gson.Gson;
+
 import redis.clients.jedis.Jedis;
 
 @Component
@@ -19,6 +21,7 @@ public class DataCenter {
 	// 하나의 객체를 가져옴
 	public DataModel get(Class<?> clazz, Long id) {
 		if (clazz == DataModel.class) {
+			//jedis.get(key);
 			try {
 				return ((DataModel) clazz.newInstance()).get(id);
 			} catch (InstantiationException | IllegalAccessException e) {
@@ -43,6 +46,7 @@ public class DataCenter {
 	// 저장
 	public void save(DataModel dataModel) {
 		dataModel.merge();
+		jedis.set(dataModel.createCacheKey(), new Gson().toJson(dataModel));
 	}
 
 	// 삭제 (말이 삭제지 숨기는것)

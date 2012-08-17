@@ -4,6 +4,8 @@ import java.util.List;
 
 public interface DataModel {
 	
+	public String createCacheKey();
+	
 	public DataModel get(Long id);
 	
 	// RDBMS 데이터베이스에 없으면 생성하고, 있으면 업데이트
