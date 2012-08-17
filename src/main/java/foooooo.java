@@ -1,6 +1,6 @@
 import redis.clients.jedis.Jedis;
 
-
+@Deprecated
 public class foooooo {
 	
 	public static void main(String[] args) {

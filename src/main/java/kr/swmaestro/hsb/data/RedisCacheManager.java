@@ -9,6 +9,7 @@ import redis.clients.jedis.Jedis;
 
 import com.google.gson.Gson;
 
+@Deprecated
 @Component
 public class RedisCacheManager {
 	

@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 
 import redis.clients.jedis.Jedis;
 
+@Deprecated
 @Component
 public class DataCenter {
 	

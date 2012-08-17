@@ -15,6 +15,7 @@ import org.aspectj.lang.annotation.Aspect;
 
 import com.couchbase.client.CouchbaseClient;
 
+@Deprecated
 @Aspect
 public class AuthAOP {
 	

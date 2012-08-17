@@ -2,6 +2,7 @@ package kr.swmaestro.hsb.data;
 
 import java.util.List;
 
+@Deprecated
 public interface DataModel {
 	
 	public String createCacheKey();

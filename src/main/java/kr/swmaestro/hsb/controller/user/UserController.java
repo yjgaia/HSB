@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 /**
  * @author 심영재
  */
+@Deprecated
 @Controller
 @RequestMapping("user")
 public class UserController {
