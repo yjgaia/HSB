@@ -7,6 +7,7 @@ package kr.swmaestro.hsb.data;
  * 
  * @author 심영재
  */
+@Deprecated
 public class DataBackupThread extends Thread {
 
 	private DataModel dataModel;

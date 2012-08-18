@@ -1,15 +1,12 @@
 package kr.swmaestro.hsb.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import kr.swmaestro.hsb.data.DataModel;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -24,7 +21,7 @@ import com.thoughtworks.xstream.annotations.XStreamAlias;
 @RooEntity
 @XmlRootElement
 @XStreamAlias("result")
-public class UserInfo extends ResultModel implements DataModel {
+public class UserInfo extends ResultModel {
 	
 	@NotEmpty(message = "아이디를 입력해주세요.")
 	@Size(min = 4, max = 20, message = "아이디는 4글자 이상, 20글자 이하로 입력해주세요.")
@@ -67,19 +64,28 @@ public class UserInfo extends ResultModel implements DataModel {
 	private int writeCount;
 	
 	private boolean enable;
-
-	@Override
-	public UserInfo get(Long id) {
-		UserInfo userInfo = UserInfo.findUserInfo(id);
-		if (userInfo.isEnable()) {
-			return userInfo;
-		}
-		return null;
+	
+	public void test() {
+		cache.set("test", this);
+		cache.addIndex("test2", 1l, "TEST1");
+		cache.addIndex("test2", 10l, "TEST2");
+		cache.addIndex("test2", 5l, "TEST3");
+		cache.addIndex("test2", 4l, "TEST4");
+		cache.addIndex("test2", 7l, "TEST5");
+		cache.addIndex("test2", 9l, "TEST6");
+		cache.addIndex("test2", 2l, "TEST7");
+		cache.getIndex("test2", 0, 100);
 	}
-
-	@Override
-	public List<UserInfo> list(Long afterId, int count) {
-		return null;
-	}
+	
+	public void create() {
+		// RDBMS에 저장
+		this.persist();
+		
+		
+	};
+	
+	public void update() {
+		
+	};
 	
 }

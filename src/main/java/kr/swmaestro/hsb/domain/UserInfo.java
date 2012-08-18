@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 /**
  * @author 심영재
  */
+@Deprecated
 @RooJavaBean
 @RooToString
 //@RooEntity

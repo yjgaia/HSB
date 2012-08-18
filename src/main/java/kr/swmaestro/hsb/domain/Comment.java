@@ -17,6 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 /**
  * @author 심영재
  */
+@Deprecated
 @RooJavaBean
 @RooToString
 //@RooEntity

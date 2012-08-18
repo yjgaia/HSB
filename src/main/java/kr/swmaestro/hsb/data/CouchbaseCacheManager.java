@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.couchbase.client.CouchbaseClient;
 
+@Deprecated
 @Component
 public class CouchbaseCacheManager {
 	

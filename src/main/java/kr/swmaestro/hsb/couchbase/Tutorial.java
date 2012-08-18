@@ -25,6 +25,7 @@ import net.spy.memcached.transcoders.Transcoder;
 import com.couchbase.client.CouchbaseClient;
 import com.couchbase.client.CouchbaseConnectionFactory;
 
+@Deprecated
 public class Tutorial {
 
     private static CouchbaseClient client;

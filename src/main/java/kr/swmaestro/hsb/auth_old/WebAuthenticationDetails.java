@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.security.core.SpringSecurityCoreVersion;
 
+@Deprecated
 public class WebAuthenticationDetails implements Serializable {
 
     private static final long serialVersionUID = SpringSecurityCoreVersion.SERIAL_VERSION_UID;

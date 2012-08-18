@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import kr.swmaestro.hsb.auth.Auth;
-import kr.swmaestro.hsb.data.DataCenter;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.RooTestModel;
@@ -26,11 +25,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @org.springframework.stereotype.Controller
 public class Controller {
 	
+	// 데이터센터 제거
+	//@Autowired
+	//DataCenter dataCenter;
+	
 	@RequestMapping(value = "test", method = RequestMethod.GET)
 	public void test(UserInfo userInfo, BindingResult bindingResult, Model model) {
-		RooTestModel rooTestModel = new RooTestModel();
-		rooTestModel.setMsg("message");
-		model.addAttribute("result", rooTestModel);
+		//RooTestModel rooTestModel = new RooTestModel();
+		//rooTestModel.setMsg("message");
+		//model.addAttribute("result", rooTestModel);
+		userInfo.test();
+		System.out.println("run");
 	}
 
 	
@@ -105,7 +110,8 @@ public class Controller {
 	//@RequestMapping(value = "user/account", method = RequestMethod.POST)
 	public void join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
 		if (errorCheck(userInfo, bindingResult)) {
-			DataCenter.save(userInfo);
+			//dataCenter.save(userInfo);
+			
 		}
 		ret(userInfo, model, request);
 	}

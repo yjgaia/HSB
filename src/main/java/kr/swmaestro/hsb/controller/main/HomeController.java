@@ -18,6 +18,7 @@ import com.couchbase.client.CouchbaseClient;
 /**
  * @author 심영재
  */
+@Deprecated
 @Controller
 @RequestMapping
 public class HomeController {
