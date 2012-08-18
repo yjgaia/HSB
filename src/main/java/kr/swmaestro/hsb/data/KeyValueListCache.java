@@ -1,13 +1,14 @@
 package kr.swmaestro.hsb.data;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Tuple;
 
 /**
  * key-value 혹은 key-list 캐시
@@ -46,14 +47,17 @@ public class KeyValueListCache {
 		jedis.zadd(key, score, targetKey);
 	}
 	
-	public void getIndex(String key, int start, int end) {
+	@SuppressWarnings("unchecked")
+	public <T> List<T> list(String key, int start, int end, Class<T> classOfT) {
 		
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 출력된다.
 		//System.out.println(jedis.zrange(key, start, end).getClass());
 		
-		for (String value : jedis.zrange(key, start, end)) {
-			System.out.println(value);
+		List<T> l = new ArrayList<>();
+		for (String targetKey : jedis.zrange(key, start, end)) {
+			l.add((T) get(targetKey, classOfT));
 		}
+		return l;
 	}
 	
 	public <T> Object get(String key, Class<T> classOfT) {

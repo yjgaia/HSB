@@ -74,7 +74,16 @@ public class UserInfo extends ResultModel {
 		cache.addIndex("test2", 7l, "TEST5");
 		cache.addIndex("test2", 9l, "TEST6");
 		cache.addIndex("test2", 2l, "TEST7");
-		cache.getIndex("test2", 0, 100);
+		
+		cache.set("TEST1", "String1");
+		cache.set("TEST2", "String2");
+		cache.set("TEST3", "String3");
+		cache.set("TEST4", "String4");
+		cache.set("TEST5", "String5");
+		cache.set("TEST6", "String6");
+		cache.set("TEST7", "String7");
+		
+		System.out.println(cache.list("test2", 0, 100, String.class));
 	}
 	
 	public void create() {
