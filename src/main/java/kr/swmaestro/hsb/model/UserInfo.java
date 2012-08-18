@@ -67,6 +67,14 @@ public class UserInfo extends ResultModel {
 	
 	public void test() {
 		cache.set("test", this);
+		cache.addIndex("test2", 1l, "TEST1");
+		cache.addIndex("test2", 10l, "TEST2");
+		cache.addIndex("test2", 5l, "TEST3");
+		cache.addIndex("test2", 4l, "TEST4");
+		cache.addIndex("test2", 7l, "TEST5");
+		cache.addIndex("test2", 9l, "TEST6");
+		cache.addIndex("test2", 2l, "TEST7");
+		cache.getIndex("test2", 0, 100);
 	}
 	
 	public void create() {
