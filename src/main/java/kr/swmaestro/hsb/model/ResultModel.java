@@ -3,12 +3,14 @@ package kr.swmaestro.hsb.model;
 import java.util.Date;
 import java.util.Set;
 
+import kr.swmaestro.hsb.DateToLongConverter;
 import kr.swmaestro.hsb.data.KeyValueListCache;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
@@ -24,8 +26,10 @@ public class ResultModel {
 	protected KeyValueListCache cache;
 
 	private String url;
-	private boolean success = true;
+	private boolean success; // 부정적인것이 더 좋다.
 	private Set<ErrorInfo> errors;
+	
+	@XStreamConverter(DateToLongConverter.class)
 	private Date returnDate;
 	private String secureKey;
 	

@@ -64,12 +64,28 @@ privileged aspect UserInfo_Roo_JavaBean {
         this.loginCount = loginCount;
     }
     
+    public Date UserInfo.getLastLoginDate() {
+        return this.lastLoginDate;
+    }
+    
+    public void UserInfo.setLastLoginDate(Date lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
+    }
+    
     public int UserInfo.getWriteCount() {
         return this.writeCount;
     }
     
     public void UserInfo.setWriteCount(int writeCount) {
         this.writeCount = writeCount;
+    }
+    
+    public Date UserInfo.getLastWriteDate() {
+        return this.lastWriteDate;
+    }
+    
+    public void UserInfo.setLastWriteDate(Date lastWriteDate) {
+        this.lastWriteDate = lastWriteDate;
     }
     
     public boolean UserInfo.isEnable() {

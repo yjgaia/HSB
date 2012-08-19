@@ -14,6 +14,8 @@ privileged aspect UserInfo_Roo_ToString {
         sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("JoinDate: ").append(getJoinDate()).append(", ");
+        sb.append("LastLoginDate: ").append(getLastLoginDate()).append(", ");
+        sb.append("LastWriteDate: ").append(getLastWriteDate()).append(", ");
         sb.append("LoginCount: ").append(getLoginCount()).append(", ");
         sb.append("Nickname: ").append(getNickname()).append(", ");
         sb.append("Password: ").append(getPassword()).append(", ");

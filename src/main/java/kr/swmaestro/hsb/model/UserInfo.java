@@ -8,6 +8,8 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import kr.swmaestro.hsb.DateToLongConverter;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -17,6 +19,7 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
@@ -62,6 +65,7 @@ public class UserInfo extends ResultModel {
 	@Column(length = 320, nullable = false)
 	private String email;
 
+	@XStreamConverter(DateToLongConverter.class)
 	@Column(nullable = false)
 	private Date joinDate;
 
@@ -70,8 +74,12 @@ public class UserInfo extends ResultModel {
 	public void increaseLoginCount() {
 		loginCount++;
 	};
+	
+	private Date lastLoginDate;
 
 	private int writeCount;
+	
+	private Date lastWriteDate;
 	
 	private boolean enable;
 	

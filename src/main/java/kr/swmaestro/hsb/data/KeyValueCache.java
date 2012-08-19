@@ -1,5 +1,7 @@
 package kr.swmaestro.hsb.data;
 
+import net.spy.memcached.CASValue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,7 +29,11 @@ public class KeyValueCache {
 		if (key == null) {
 			return null;
 		}
-		return client.getAndTouch(key, COMMON_EXPIRE_SECOND).getValue();
+		CASValue<?> v = client.getAndTouch(key, COMMON_EXPIRE_SECOND);
+		if (v == null) {
+			return null;
+		}
+		return v.getValue();
 	}
 
 }

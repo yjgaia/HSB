@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import kr.swmaestro.hsb.auth.Auth;
 import kr.swmaestro.hsb.auth.AuthManager;
+import kr.swmaestro.hsb.auth.AuthUserInfo;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.UserInfo;
@@ -92,33 +93,66 @@ public class Controller {
 	}
 	
 	// 인증처리
-	private boolean auth(Model model, HttpServletRequest request) {
-		if (authManager.isAuthenticated(request)) {
+	private boolean authCheck(String secureKey, Model model, HttpServletRequest request) {
+		if (authManager.isAuthenticated(secureKey)) {
 			return true;
 		} else {
-			ResultModel rm = new ResultModel();
+			ResultModel resultModel = new ResultModel();
 			ErrorInfo error = new ErrorInfo();
 			error.setCode("NeedAuth");
 			error.setDefaultMessage("인증이 필요합니다.");
 			Set<ErrorInfo> errors = new HashSet<>();
 			errors.add(error);
-			rm.setErrors(errors);
-			ret(rm, model, request);
+			resultModel.setSuccess(false);
+			resultModel.setErrors(errors);
+			ret(resultModel, model, request);
+			return false;
+		}
+	}
+	
+	// 인증처리
+	private boolean authCheck(ResultModel resultModel, Model model, HttpServletRequest request) {
+		if (authManager.isAuthenticated(resultModel.getSecureKey())) {
+			return true;
+		} else {
+			ErrorInfo error = new ErrorInfo();
+			error.setCode("NeedAuth");
+			error.setDefaultMessage("인증이 필요합니다.");
+			Set<ErrorInfo> errors = new HashSet<>();
+			errors.add(error);
+			resultModel.setSuccess(false);
+			resultModel.setErrors(errors);
+			ret(resultModel, model, request);
 			return false;
 		}
 	}
 	
 	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public void test(Model model, HttpServletRequest request) {
-		if (auth(model, request)) {
+	public void test(String secureKey, Model model, HttpServletRequest request) {
+		if (authCheck(secureKey, model, request)) {
 			System.out.println("TEST 페이지 실행");
 		}
 	}
 	
 	// 로그인
 	@RequestMapping(value = "user/auth", method = RequestMethod.POST) // 인증 생성
-	public void login(BindingResult bindingResult, Model model) {
-		
+	public void login(@Valid AuthUserInfo authUserInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
+		UserInfo userInfo = UserInfo.findUserInfoByUsername(authUserInfo.getUsername());
+		if (userInfo == null) {
+			bindingResult.rejectValue("username", "NotExists.authUserInfo.username", "존재하지 않는 아이디입니다.");
+		} else if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(PasswordEncoder.encodePassword(authUserInfo.getPassword()))) {
+			bindingResult.rejectValue("password", "Wrong.authUserInfo.password", "잘못된 비밀번호입니다.");
+		}
+		if (errorCheck(userInfo, bindingResult)) {
+			authManager.auth(userInfo);
+			
+			userInfo.setLastLoginDate(new Date());
+			userInfo.increaseLoginCount();
+			
+			// 성공~!
+			userInfo.setSuccess(true);
+		}
+		ret(userInfo, model, request);
 	}
 	
 	// 로그아웃
@@ -145,6 +179,9 @@ public class Controller {
 			userInfo.setPassword(PasswordEncoder.encodePassword(userInfo.getPassword()));
 			userInfo.setJoinDate(new Date());
 			userInfo.save();
+			
+			// 성공~!
+			userInfo.setSuccess(true);
 		}
 		ret(userInfo, model, request);
 	}
