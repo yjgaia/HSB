@@ -26,12 +26,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping()
 public class Controller {
 	
-	// 데이터센터 제거
-	//@Autowired
-	//DataCenter dataCenter;
-	
+	@Auth
 	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public void test() {}
+	public void test() {
+		System.out.println("TEST 페이지 실행");
+	}
 
 	
 	// 오류 체크

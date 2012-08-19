@@ -1,6 +1,7 @@
 package kr.swmaestro.hsb.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.couchbase.client.CouchbaseClient;
 
@@ -10,9 +11,23 @@ import com.couchbase.client.CouchbaseClient;
  * 
  * @author 심영재
  */
+@Component
 public class KeyValueCache {
 	
 	@Autowired
 	private CouchbaseClient client;
+	
+	private final static int COMMON_EXPIRE_SECOND = 5 * 60; // 5분
+	
+	public void set(String key, Object object) {
+		client.set(key, COMMON_EXPIRE_SECOND, object);
+	}
+	
+	public Object get(String key) {
+		if (key == null) {
+			return null;
+		}
+		return client.getAndTouch(key, COMMON_EXPIRE_SECOND).getValue();
+	}
 
 }

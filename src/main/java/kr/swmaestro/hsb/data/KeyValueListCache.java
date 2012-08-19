@@ -44,16 +44,19 @@ public class KeyValueListCache {
 	}
 	
 	public void addIndex(String key, Long score, String targetKey) {
+		// 읽어오는 순간 expire 시간 재생성
+		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		jedis.zadd(key, score, targetKey);
 	}
 	
 	@SuppressWarnings("unchecked")
 	public <T> List<T> list(String key, int start, int end, Class<T> classOfT) {
 		
-		//class java.util.LinkedHashSet 이기 때문에 순서대로 출력된다.
-		//System.out.println(jedis.zrange(key, start, end).getClass());
+		// 읽어오는 순간 expire 시간 재생성
+		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		
 		List<T> l = new ArrayList<>();
+		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
 		for (String targetKey : jedis.zrange(key, start, end)) {
 			l.add((T) get(targetKey, classOfT));
 		}
@@ -61,6 +64,9 @@ public class KeyValueListCache {
 	}
 	
 	public <T> Object get(String key, Class<T> classOfT) {
+		if (key == null) {
+			return null;
+		}
 		ObjectMapper om = new ObjectMapper();
 		try {
 			// 읽어오는 순간 expire 시간 재생성
