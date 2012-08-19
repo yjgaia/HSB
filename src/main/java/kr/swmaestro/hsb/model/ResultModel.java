@@ -11,12 +11,15 @@ import org.springframework.roo.addon.javabean.RooJavaBean;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
+/**
+ * @author 심영재
+ */
 @RooJavaBean
 public abstract class ResultModel {
 	
 	// json과 xml로 반환하지 않는다.
-	@JsonIgnore
-	@XStreamOmitField
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	@Autowired
 	protected KeyValueListCache cache;
 

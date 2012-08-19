@@ -12,6 +12,10 @@
 	<context:component-scan base-package="kr.swmaestro.hsb" />
 
 	<mvc:annotation-driven />
+	<mvc:resources location="/img/" mapping="/img/**" />
+	<mvc:resources location="/script/" mapping="/script/**" />
+	<mvc:resources location="/style/" mapping="/style/**" />
+	<mvc:default-servlet-handler />
 
 	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"

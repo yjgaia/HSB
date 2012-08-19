@@ -19,12 +19,12 @@ import org.springframework.web.context.support.WebApplicationContextUtils;
 
 public class AuthFilter implements Filter {
 	
-	private CouchbaseCacheManager keyValueCacheManager;
+	//private CouchbaseCacheManager keyValueCacheManager;
 
 	@Override
 	public void init(FilterConfig filterConfig) throws ServletException {
 		WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(filterConfig.getServletContext());
-		keyValueCacheManager = (CouchbaseCacheManager) applicationContext.getBeansOfType(CouchbaseCacheManager.class).values().toArray()[0];
+		//keyValueCacheManager = (CouchbaseCacheManager) applicationContext.getBeansOfType(CouchbaseCacheManager.class).values().toArray()[0];
 	}
 
 	@Override
@@ -33,11 +33,13 @@ public class AuthFilter implements Filter {
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
 		
+		/*
 		String uid = new CookieBox(request).getValue(Auth.COOKIE_KEY);
 		
 		// 여기서 인증값이 있으면 인증처리
 		System.out.println("!!~" + keyValueCacheManager.get(uid));
 		request.setAttribute("authUser", "TEST_SIGN_IN_USER");
+		*/
 		
 		chain.doFilter(request, response);
 	}

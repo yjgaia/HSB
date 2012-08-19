@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 쿠키 유틸리티 클래스
  * 
- * @author Mr. 하늘
+ * @author 심영재
  */
 public class CookieBox {
 

@@ -6,6 +6,7 @@
 		<pattern>/script/*</pattern>
 		<pattern>/static/*</pattern>
 		<pattern>/style/*</pattern>
+		<pattern>/test</pattern>
 	</excludes>
 
 	<decorator name="layout" page="layout.jsp">

@@ -11,8 +11,8 @@ import javax.validation.Valid;
 import kr.swmaestro.hsb.auth.Auth;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
-import kr.swmaestro.hsb.model.RooTestModel;
 import kr.swmaestro.hsb.model.UserInfo;
+import kr.swmaestro.hsb.util.PasswordEncoder;
 
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @org.springframework.stereotype.Controller
+@RequestMapping()
 public class Controller {
 	
 	// 데이터센터 제거
@@ -30,13 +31,7 @@ public class Controller {
 	//DataCenter dataCenter;
 	
 	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public void test(UserInfo userInfo, BindingResult bindingResult, Model model) {
-		//RooTestModel rooTestModel = new RooTestModel();
-		//rooTestModel.setMsg("message");
-		//model.addAttribute("result", rooTestModel);
-		userInfo.test();
-		System.out.println("run");
-	}
+	public void test() {}
 
 	
 	// 오류 체크
@@ -52,8 +47,10 @@ public class Controller {
 				}
 				error.setDefaultMessage(objectError.getDefaultMessage());
 				Set<Object> arguments = new HashSet<>();
-				for (int i = 1 ; i < objectError.getArguments().length ; i++) {
-					arguments.add(objectError.getArguments()[i]);
+				if (objectError.getArguments() != null) {
+					for (int i = 1 ; i < objectError.getArguments().length ; i++) {
+						arguments.add(objectError.getArguments()[i]);
+					}
 				}
 				error.setArguments(arguments);
 				errors.add(error);
@@ -69,26 +66,29 @@ public class Controller {
 	private void ret(ResultModel resultModel, Model model, HttpServletRequest request) {
 		
 		// URL에 파라미터 붙히기
-		String Url = request.getRequestURL().toString();
-		Enumeration<?> param = request.getParameterNames();
-		if (param != null) {
-			String strParam = null;
-			while (param.hasMoreElements()) {
-				if (strParam == null) {
-					strParam = "?";
-				} else {
-					strParam += "&";
+		String url = request.getRequestURL().toString();
+		
+		if (request.getMethod().equals("GET")) {
+			Enumeration<?> param = request.getParameterNames();
+			if (param != null) {
+				String strParam = null;
+				while (param.hasMoreElements()) {
+					if (strParam == null) {
+						strParam = "?";
+					} else {
+						strParam += "&";
+					}
+					String name = (String) param.nextElement();
+					String value = request.getParameter(name);
+					strParam += name + "=" + value;
 				}
-				String name = (String) param.nextElement();
-				String value = request.getParameter(name);
-				strParam += name + "=" + value;
-			}
-			if (strParam != null) {
-				Url += strParam;
+				if (strParam != null) {
+					url += strParam;
+				}
 			}
 		}
         
-		resultModel.setUrl(Url);
+		resultModel.setUrl(url);
 		resultModel.setSecureKey(null); // 보안 키 제거
 		resultModel.setReturnDate(new Date()); // 서버측 반환 시간 설정
 		model.addAttribute("result", resultModel);
@@ -106,12 +106,24 @@ public class Controller {
 	public void logout(Model model) {}
 		
 	// 회원가입
-	@RequestMapping(value = "user/account", method = RequestMethod.GET) // 테스트용
-	//@RequestMapping(value = "user/account", method = RequestMethod.POST)
+	@RequestMapping(value = "user/account", method = RequestMethod.POST)
 	public void join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
+		
+		if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
+			bindingResult.rejectValue("password", "Equals.userInfo.passwordConfirm", "비밀번호와 비밀번호 확인이 다릅니다.");
+		}
+		if (!bindingResult.hasFieldErrors("username") && UserInfo.existsUser(userInfo.getUsername())) {
+			bindingResult.rejectValue("username", "Exists.userInfo.username", "이미 존재하는 아이디입니다.");
+		}
+		if (!bindingResult.hasFieldErrors("nickname") && UserInfo.existsNickname(userInfo.getNickname())) {
+			bindingResult.rejectValue("nickname", "Exists.userInfo.nickname", "이미 존재하는 닉네임입니다.");
+		}
+		
 		if (errorCheck(userInfo, bindingResult)) {
-			//dataCenter.save(userInfo);
-			
+			// 암호화
+			userInfo.setPassword(PasswordEncoder.encodePassword(userInfo.getPassword()));
+			userInfo.setJoinDate(new Date());
+			userInfo.save();
 		}
 		ret(userInfo, model, request);
 	}
@@ -149,6 +161,14 @@ public class Controller {
 	@Auth // 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.DELETE) // 팔로우 제거
 	public void unfollow(@PathVariable String username, Model model) {}
+	
+	// 팔로잉 목록
+	@RequestMapping(value = "{username}/following", method = RequestMethod.GET)
+	public void following(@PathVariable String username, Model model) {}
+	
+	// 팔로어 목록
+	@RequestMapping(value = "{username}/followers", method = RequestMethod.GET)
+	public void followers(@PathVariable String username, Model model) {}
 	
 	// 글삭제
 	@Auth // 인증 필요
