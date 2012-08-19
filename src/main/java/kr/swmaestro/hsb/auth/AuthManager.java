@@ -30,6 +30,11 @@ public class AuthManager {
 		return (UserInfo) keyValueCache.get(key);
 	}
 	
+	public Long getUserId(HttpServletRequest request) {
+		UserInfo userInfo = getUserInfo(request);
+		return userInfo == null ? null : userInfo.getId();
+	}
+	
 	public void auth(UserInfo userInfo, HttpServletResponse response) {
 		String key = PasswordEncoder.encodePassword(UUID.randomUUID().toString());
 		keyValueCache.set(key, userInfo);
@@ -38,6 +43,14 @@ public class AuthManager {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isAnonymous(HttpServletRequest request) {
+		return getUserInfo(request) == null;
+	}
+
+	public boolean isAuthenticated(HttpServletRequest request) {
+		return getUserInfo(request) != null;
 	}
 
 }

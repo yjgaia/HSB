@@ -9,11 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import kr.swmaestro.hsb.auth.Auth;
+import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.util.PasswordEncoder;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -26,12 +28,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping()
 public class Controller {
 	
-	@Auth
-	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public void test() {
-		System.out.println("TEST 페이지 실행");
-	}
-
+	@Autowired
+	private AuthManager authManager;
 	
 	// 오류 체크
 	private boolean errorCheck(ResultModel resultModel, BindingResult bindingResult) {
@@ -93,6 +91,30 @@ public class Controller {
 		model.addAttribute("result", resultModel);
 	}
 	
+	// 인증처리
+	private boolean auth(Model model, HttpServletRequest request) {
+		if (authManager.isAuthenticated(request)) {
+			return true;
+		} else {
+			ResultModel rm = new ResultModel();
+			ErrorInfo error = new ErrorInfo();
+			error.setCode("NeedAuth");
+			error.setDefaultMessage("인증이 필요합니다.");
+			Set<ErrorInfo> errors = new HashSet<>();
+			errors.add(error);
+			rm.setErrors(errors);
+			ret(rm, model, request);
+			return false;
+		}
+	}
+	
+	@RequestMapping(value = "test", method = RequestMethod.GET)
+	public void test(Model model, HttpServletRequest request) {
+		if (auth(model, request)) {
+			System.out.println("TEST 페이지 실행");
+		}
+	}
+	
 	// 로그인
 	@RequestMapping(value = "user/auth", method = RequestMethod.POST) // 인증 생성
 	public void login(BindingResult bindingResult, Model model) {
@@ -103,7 +125,7 @@ public class Controller {
 	@Auth // 인증 필요
 	@RequestMapping(value = "user/auth", method = RequestMethod.DELETE) // 인증 제거
 	public void logout(Model model) {}
-		
+	
 	// 회원가입
 	@RequestMapping(value = "user/account", method = RequestMethod.POST)
 	public void join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {

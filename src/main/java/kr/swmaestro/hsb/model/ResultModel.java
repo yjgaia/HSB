@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
  * @author 심영재
  */
 @RooJavaBean
-public abstract class ResultModel {
+public class ResultModel {
 	
 	// json과 xml로 반환하지 않는다.
 	@JsonIgnore // JSON으로 출력하지 않음
