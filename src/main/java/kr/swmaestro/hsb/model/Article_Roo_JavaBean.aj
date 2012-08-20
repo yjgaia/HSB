@@ -17,6 +17,14 @@ privileged aspect Article_Roo_JavaBean {
         this.targetUserId = targetUserId;
     }
     
+    public String Article.getTargetUserUsername() {
+        return this.targetUserUsername;
+    }
+    
+    public void Article.setTargetUserUsername(String targetUserUsername) {
+        this.targetUserUsername = targetUserUsername;
+    }
+    
     public String Article.getTargetUserNickname() {
         return this.targetUserNickname;
     }
@@ -41,6 +49,14 @@ privileged aspect Article_Roo_JavaBean {
         this.writerId = writerId;
     }
     
+    public Long Article.getWriterUsername() {
+        return this.writerUsername;
+    }
+    
+    public void Article.setWriterUsername(Long writerUsername) {
+        this.writerUsername = writerUsername;
+    }
+    
     public String Article.getWriterNickname() {
         return this.writerNickname;
     }
@@ -55,6 +71,14 @@ privileged aspect Article_Roo_JavaBean {
     
     public void Article.setWriteDate(Date writeDate) {
         this.writeDate = writeDate;
+    }
+    
+    public int Article.getCommentCount() {
+        return this.commentCount;
+    }
+    
+    public void Article.setCommentCount(int commentCount) {
+        this.commentCount = commentCount;
     }
     
 }

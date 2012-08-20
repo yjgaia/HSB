@@ -4,7 +4,6 @@
 package kr.swmaestro.hsb.model;
 
 import java.lang.String;
-import java.util.Date;
 import java.util.Set;
 import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.ErrorInfo;
@@ -17,14 +16,6 @@ privileged aspect ResultModel_Roo_JavaBean {
     
     public void ResultModel.setCache(KeyValueListCache cache) {
         this.cache = cache;
-    }
-    
-    public String ResultModel.getUrl() {
-        return this.url;
-    }
-    
-    public void ResultModel.setUrl(String url) {
-        this.url = url;
     }
     
     public boolean ResultModel.isSuccess() {
@@ -41,14 +32,6 @@ privileged aspect ResultModel_Roo_JavaBean {
     
     public void ResultModel.setErrors(Set<ErrorInfo> errors) {
         this.errors = errors;
-    }
-    
-    public Date ResultModel.getReturnDate() {
-        return this.returnDate;
-    }
-    
-    public void ResultModel.setReturnDate(Date returnDate) {
-        this.returnDate = returnDate;
     }
     
     public String ResultModel.getSecureKey() {

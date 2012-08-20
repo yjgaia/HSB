@@ -1,7 +1,6 @@
 package kr.swmaestro.hsb;
 
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,6 +10,7 @@ import javax.validation.Valid;
 import kr.swmaestro.hsb.auth.Auth;
 import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.auth.AuthUserInfo;
+import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.UserInfo;
@@ -63,6 +63,7 @@ public class Controller {
 	// 결과값 반환
 	private void ret(ResultModel resultModel, Model model, HttpServletRequest request) {
 		
+		/*
 		// URL에 파라미터 붙히기
 		String url = request.getRequestURL().toString();
 		
@@ -85,10 +86,11 @@ public class Controller {
 				}
 			}
 		}
+		*/
         
-		resultModel.setUrl(url);
+		//resultModel.setUrl(url);
 		resultModel.setSecureKey(null); // 보안 키 제거
-		resultModel.setReturnDate(new Date()); // 서버측 반환 시간 설정
+		//resultModel.setReturnDate(new Date()); // 서버측 반환 시간 설정
 		model.addAttribute("result", resultModel);
 	}
 	
@@ -137,22 +139,29 @@ public class Controller {
 	// 로그인
 	@RequestMapping(value = "user/auth", method = RequestMethod.POST) // 인증 생성
 	public void login(@Valid AuthUserInfo authUserInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
-		UserInfo userInfo = UserInfo.findUserInfoByUsername(authUserInfo.getUsername());
-		if (userInfo == null) {
+		
+		UserInfo userInfo = null;
+		
+		if (!UserInfo.existsUser(authUserInfo.getUsername())) {
 			bindingResult.rejectValue("username", "NotExists.authUserInfo.username", "존재하지 않는 아이디입니다.");
-		} else if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(PasswordEncoder.encodePassword(authUserInfo.getPassword()))) {
-			bindingResult.rejectValue("password", "Wrong.authUserInfo.password", "잘못된 비밀번호입니다.");
+		} else {
+			userInfo = UserInfo.findUserInfoByUsername(authUserInfo.getUsername());
+			if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(PasswordEncoder.encodePassword(authUserInfo.getPassword()))) {
+				bindingResult.rejectValue("password", "Wrong.authUserInfo.password", "잘못된 비밀번호입니다.");
+			}
 		}
-		if (errorCheck(userInfo, bindingResult)) {
-			authManager.auth(userInfo);
+		if (errorCheck(authUserInfo, bindingResult)) {
+			String secureKey = authManager.auth(userInfo);
 			
 			userInfo.setLastLoginDate(new Date());
 			userInfo.increaseLoginCount();
 			
+			authUserInfo.setGeneratedSecureKey(secureKey);
+			
 			// 성공~!
-			userInfo.setSuccess(true);
+			authUserInfo.setSuccess(true);
 		}
-		ret(userInfo, model, request);
+		ret(authUserInfo, model, request);
 	}
 	
 	// 로그아웃
@@ -208,7 +217,19 @@ public class Controller {
 	// 글쓰기
 	@Auth // 인증 필요
 	@RequestMapping(method = RequestMethod.POST)
-	public void write(Model model) {}
+	public void write(@Valid Article article, BindingResult bindingResult, Model model, HttpServletRequest request) {
+		if (authCheck(article, model, request)) {
+			if (errorCheck(article, bindingResult)) {
+				
+				// 저장
+				article.save();
+				
+				// 성공~!
+				article.setSuccess(true);
+			}
+			ret(article, model, request);
+		}
+	}
 
 	// 팔로우하기
 	@Auth // 인증 필요
@@ -232,5 +253,15 @@ public class Controller {
 	@Auth // 인증 필요
 	@RequestMapping(value = "article/{id}", method = RequestMethod.DELETE) // 글 제거
 	public void deleteArticle(@PathVariable Long id, Model model) {}
+	
+	// 댓글 등록
+	@Auth // 인증 필요
+	@RequestMapping(value = "article/{articleId}/comment", method = RequestMethod.POST) // 댓글 등록
+	public void comment(@PathVariable Long articleId, Model model) {}
+	
+	// 댓글 삭제
+	@Auth // 인증 필요
+	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
+	public void deleteComment(@PathVariable Long id, Model model) {}
 	
 }

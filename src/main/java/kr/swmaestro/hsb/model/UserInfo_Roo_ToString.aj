@@ -20,9 +20,7 @@ privileged aspect UserInfo_Roo_ToString {
         sb.append("Nickname: ").append(getNickname()).append(", ");
         sb.append("Password: ").append(getPassword()).append(", ");
         sb.append("PasswordConfirm: ").append(getPasswordConfirm()).append(", ");
-        sb.append("ReturnDate: ").append(getReturnDate()).append(", ");
         sb.append("SecureKey: ").append(getSecureKey()).append(", ");
-        sb.append("Url: ").append(getUrl()).append(", ");
         sb.append("Username: ").append(getUsername()).append(", ");
         sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteCount: ").append(getWriteCount()).append(", ");

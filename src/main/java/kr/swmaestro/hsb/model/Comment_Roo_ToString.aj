@@ -5,19 +5,16 @@ package kr.swmaestro.hsb.model;
 
 import java.lang.String;
 
-privileged aspect Article_Roo_ToString {
+privileged aspect Comment_Roo_ToString {
     
-    public String Article.toString() {
+    public String Comment.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Cache: ").append(getCache()).append(", ");
-        sb.append("CommentCount: ").append(getCommentCount()).append(", ");
         sb.append("Content: ").append(getContent()).append(", ");
         sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("SecureKey: ").append(getSecureKey()).append(", ");
-        sb.append("TargetUserId: ").append(getTargetUserId()).append(", ");
-        sb.append("TargetUserNickname: ").append(getTargetUserNickname()).append(", ");
-        sb.append("TargetUserUsername: ").append(getTargetUserUsername()).append(", ");
+        sb.append("TargetArticleId: ").append(getTargetArticleId()).append(", ");
         sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
         sb.append("WriterId: ").append(getWriterId()).append(", ");

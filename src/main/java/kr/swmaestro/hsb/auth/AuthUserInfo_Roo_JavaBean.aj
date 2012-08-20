@@ -23,4 +23,12 @@ privileged aspect AuthUserInfo_Roo_JavaBean {
         this.password = password;
     }
     
+    public String AuthUserInfo.getGeneratedSecureKey() {
+        return this.generatedSecureKey;
+    }
+    
+    public void AuthUserInfo.setGeneratedSecureKey(String generatedSecureKey) {
+        this.generatedSecureKey = generatedSecureKey;
+    }
+    
 }

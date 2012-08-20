@@ -4,7 +4,10 @@ import javax.persistence.Column;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import kr.swmaestro.hsb.model.ResultModel;
+
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.map.annotate.JsonView;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -13,7 +16,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 @RooJavaBean
 @RooToString
-public class AuthUserInfo {
+public class AuthUserInfo extends ResultModel {
 	
 	@NotEmpty(message = "아이디를 입력해주세요.")
 	@Size(min = 4, max = 20, message = "아이디는 4글자 이상, 20글자 이하로 입력해주세요.")
@@ -28,5 +31,7 @@ public class AuthUserInfo {
 	@Column(length = 40)
 	// 암호화 하면 암호의 길이 증가
 	private String password;
+	
+	private String generatedSecureKey;
 
 }

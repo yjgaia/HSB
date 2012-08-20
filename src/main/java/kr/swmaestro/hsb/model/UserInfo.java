@@ -13,7 +13,6 @@ import kr.swmaestro.hsb.DateToLongConverter;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -31,7 +30,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @XmlRootElement
 @XStreamAlias("result")
 public class UserInfo extends ResultModel {
-	
+
 	@NotEmpty(message = "아이디를 입력해주세요.")
 	@Size(min = 4, max = 20, message = "아이디는 4글자 이상, 20글자 이하로 입력해주세요.")
 	@Pattern(regexp = "[_a-z0-9-]*", message = "아이디는 영어와 숫자로 입력해주세요.")
@@ -59,28 +58,42 @@ public class UserInfo extends ResultModel {
 	@Column(length = 20, unique = true)
 	private String nickname;
 
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	@NotEmpty(message = "이메일을 입력해주세요.")
 	@Size(max = 320, message = "이메일은 {1}글자 이하로 입력해주세요.")
 	@Email(message = "이메일은 이메일 형식에 맞추어 주세요.")
 	@Column(length = 320, nullable = false)
 	private String email;
 
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	@XStreamConverter(DateToLongConverter.class)
 	@Column(nullable = false)
 	private Date joinDate;
 
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	private int loginCount;
 	
 	public void increaseLoginCount() {
 		loginCount++;
 	};
 	
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	private Date lastLoginDate;
 
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	private int writeCount;
 	
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	private Date lastWriteDate;
 	
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
 	private boolean enable;
 	
 	public static UserInfo findUserInfoByUsername(String username) {

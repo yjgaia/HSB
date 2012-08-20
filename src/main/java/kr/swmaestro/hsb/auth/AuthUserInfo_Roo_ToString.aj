@@ -9,8 +9,13 @@ privileged aspect AuthUserInfo_Roo_ToString {
     
     public String AuthUserInfo.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Cache: ").append(getCache()).append(", ");
+        sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
+        sb.append("GeneratedSecureKey: ").append(getGeneratedSecureKey()).append(", ");
         sb.append("Password: ").append(getPassword()).append(", ");
-        sb.append("Username: ").append(getUsername());
+        sb.append("SecureKey: ").append(getSecureKey()).append(", ");
+        sb.append("Username: ").append(getUsername()).append(", ");
+        sb.append("Success: ").append(isSuccess());
         return sb.toString();
     }
     

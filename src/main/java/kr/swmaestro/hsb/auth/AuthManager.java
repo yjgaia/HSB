@@ -16,7 +16,7 @@ public class AuthManager {
 	private KeyValueCache keyValueCache;
 	
 	public UserInfo getUserInfo(String secureKey) {
-		return (UserInfo) keyValueCache.get(secureKey);
+		return (UserInfo) keyValueCache.get(secureKey, UserInfo.class);
 	}
 	
 	public Long getUserId(String secureKey) {

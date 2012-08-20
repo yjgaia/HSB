@@ -17,20 +17,14 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class Article extends ResultModel {
+public class Comment extends ResultModel {
 	
 	@NotNull
-	private Long targetUserId;
+	private Long targetArticleId;
 	
-	@NotNull
-	private String targetUserUsername;
-	
-	@NotNull
-	private String targetUserNickname;
-
 	@NotEmpty
-	@Size(max = 3000)
-	@Column(length = 3000, nullable = false)
+	@Size(max = 500)
+	@Column(length = 500, nullable = false)
 	private String content;
 
 	@NotNull
@@ -45,13 +39,11 @@ public class Article extends ResultModel {
 	@Column(nullable = false)
 	private Date writeDate;
 	
-	private int commentCount;
-	
 	public void save() {
 		// RDBMS에 저장
 		persist();
 		// 캐시에 저장
-		cache.set("article:" + getId(), this);
+		cache.set("comment:" + getId(), this);
 	};
 
 }

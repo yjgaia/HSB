@@ -24,7 +24,11 @@ public class KeyValueListCache {
 	@Autowired
 	private Jedis jedis;
 	
-	private final static int COMMON_EXPIRE_SECOND = 5 * 60; // 5분
+	private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
+	//private final static int COMMON_EXPIRE_SECOND = 7 * 24 * 60 * 60; // 1주일 정도 캐시에 저장해둔다.
+	
+	private final static long MAX_LIST_SIZE = 100; // 테스트용 100개
+	//private final static long MAX_LIST_SIZE = 1000; // 한 목록에 최대로 저장할 수 있는 갯수
 	
 	public void set(String key, Object object) {
 		
@@ -47,6 +51,11 @@ public class KeyValueListCache {
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		jedis.zadd(key, score, targetKey);
+		long count = jedis.zcount(key, "-inf", "+inf");
+		if (count > MAX_LIST_SIZE) { // 갯수가 최대값보다 크면
+			// 마지막 값을 삭제
+			jedis.zremrangeByRank(targetKey, 0, 0);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
