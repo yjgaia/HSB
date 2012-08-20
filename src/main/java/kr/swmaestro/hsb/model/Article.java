@@ -34,7 +34,7 @@ public class Article extends ResultModel {
 	private String content;
 
 	@NotNull
-	private Long writerId;
+	private String writerId;
 	
 	@NotNull
 	private Long writerUsername;
