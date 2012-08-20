@@ -108,6 +108,7 @@ public class UserInfo extends ResultModel {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
 	
+	/*
 	public void test() {
 		cache.set("test", this);
 		cache.addIndex("test2", 1l, "TEST1");
@@ -128,14 +129,21 @@ public class UserInfo extends ResultModel {
 		
 		System.out.println(cache.list("test2", 0, 100, String.class));
 	}
+	*/
 	
+	// 저장과 수정을 담당
 	public void save() {
 		// RDBMS에 저장
-		persist();
+		merge();
 		// 캐시에 저장
 		cache.set("user:" + getId(), this);
-		
-		System.out.println(cache.get("user:" + getId(), UserInfo.class));
-	};
+	}
+	
+	// 유저 정보 제거
+	public void delete() {
+		enable = false;
+		merge();
+		cache.delete("user:" + getId());
+	}
 	
 }

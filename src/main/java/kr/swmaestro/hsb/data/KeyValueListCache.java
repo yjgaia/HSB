@@ -86,5 +86,9 @@ public class KeyValueListCache {
 		}
 		return null;
 	}
+	
+	public void delete(String key) {
+		jedis.del(key);
+	}
 
 }
