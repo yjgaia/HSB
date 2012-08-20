@@ -15,6 +15,7 @@ import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.util.PasswordEncoder;
+import kr.swmaestro.hsb.util.article.ArticleUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -216,10 +217,15 @@ public class Controller {
 	
 	// 글쓰기
 	@Auth // 인증 필요
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value="write",method = RequestMethod.POST)
 	public void write(@Valid Article article, BindingResult bindingResult, Model model, HttpServletRequest request) {
+		
 		if (authCheck(article, model, request)) {
+			UserInfo userInfoFromSession=authManager.getUserInfo(article.getSecureKey());
+			article=ArticleUtil.setArticleInfoWithSession(article, userInfoFromSession);
+			System.out.println(article.getWriterId());
 			if (errorCheck(article, bindingResult)) {
+				article.setWriteDate(new Date());
 				
 				// 저장
 				article.save();
