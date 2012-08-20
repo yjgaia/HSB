@@ -34,10 +34,10 @@ public class Article extends ResultModel {
 	private String content;
 
 	@NotNull
-	private String writerId;
+	private Long writerId;
 	
 	@NotNull
-	private Long writerUsername;
+	private String writerUsername;
 	
 	@NotNull
 	private String writerNickname;

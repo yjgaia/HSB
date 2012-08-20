@@ -41,19 +41,19 @@ privileged aspect Article_Roo_JavaBean {
         this.content = content;
     }
     
-    public String Article.getWriterId() {
+    public Long Article.getWriterId() {
         return this.writerId;
     }
     
-    public void Article.setWriterId(String writerId) {
+    public void Article.setWriterId(Long writerId) {
         this.writerId = writerId;
     }
     
-    public Long Article.getWriterUsername() {
+    public String Article.getWriterUsername() {
         return this.writerUsername;
     }
     
-    public void Article.setWriterUsername(Long writerUsername) {
+    public void Article.setWriterUsername(String writerUsername) {
         this.writerUsername = writerUsername;
     }
     
