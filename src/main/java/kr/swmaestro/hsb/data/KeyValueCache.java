@@ -22,8 +22,8 @@ public class KeyValueCache {
 	@Autowired
 	private CouchbaseClient client;
 	
-	//private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
-	private final static int COMMON_EXPIRE_SECOND = 30 * 60; // request 세션과 같이 일반적으로 30분 유지
+	private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
+	//private final static int COMMON_EXPIRE_SECOND = 30 * 60; // request 세션과 같이 일반적으로 30분 유지
 	
 	public void set(String key, Object object) {
 		

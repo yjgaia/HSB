@@ -49,11 +49,11 @@ privileged aspect Article_Roo_JavaBean {
         this.writerId = writerId;
     }
     
-    public String Article.getWriterUsername() {
+    public Long Article.getWriterUsername() {
         return this.writerUsername;
     }
     
-    public void Article.setWriterUsername(String writerUsername) {
+    public void Article.setWriterUsername(Long writerUsername) {
         this.writerUsername = writerUsername;
     }
     

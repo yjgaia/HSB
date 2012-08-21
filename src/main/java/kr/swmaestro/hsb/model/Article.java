@@ -33,10 +33,13 @@ public class Article extends ResultModel {
 	@Column(length = 3000, nullable = false)
 	private String content;
 
+	@NotNull
 	private Long writerId;
 	
-	private String writerUsername;
+	@NotNull
+	private Long writerUsername;
 	
+	@NotNull
 	private String writerNickname;
 
 	@Column(nullable = false)
