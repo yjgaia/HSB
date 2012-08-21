@@ -5,18 +5,9 @@ package kr.swmaestro.hsb.model;
 
 import java.lang.String;
 import java.util.Set;
-import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.ErrorInfo;
 
 privileged aspect ResultModel_Roo_JavaBean {
-    
-    public KeyValueListCache ResultModel.getCache() {
-        return this.cache;
-    }
-    
-    public void ResultModel.setCache(KeyValueListCache cache) {
-        this.cache = cache;
-    }
     
     public boolean ResultModel.isSuccess() {
         return this.success;

@@ -1,6 +1,7 @@
 package kr.swmaestro.hsb.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotNull;
@@ -18,15 +19,6 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooToString
 @RooEntity
 public class Article extends ResultModel {
-	
-	@NotNull
-	private Long targetUserId;
-	
-	@NotNull
-	private String targetUserUsername;
-	
-	@NotNull
-	private String targetUserNickname;
 
 	@NotEmpty
 	@Size(max = 3000)
@@ -43,12 +35,5 @@ public class Article extends ResultModel {
 	private Date writeDate;
 	
 	private int commentCount;
-	
-	public void save() {
-		// RDBMS에 저장
-		persist();
-		// 캐시에 저장
-		cache.set("article:" + getId(), this);
-	};
 
 }

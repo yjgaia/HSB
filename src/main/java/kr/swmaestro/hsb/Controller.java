@@ -14,6 +14,8 @@ import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.ResultModel;
 import kr.swmaestro.hsb.model.UserInfo;
+import kr.swmaestro.hsb.service.ArticleService;
+import kr.swmaestro.hsb.service.UserService;
 import kr.swmaestro.hsb.util.PasswordEncoder;
 import kr.swmaestro.hsb.util.article.ArticleUtil;
 
@@ -32,6 +34,12 @@ public class Controller {
 	
 	@Autowired
 	private AuthManager authManager;
+	
+	@Autowired
+	private UserService userService;
+	
+	@Autowired
+	private ArticleService articleService;
 	
 	// 오류 체크
 	private boolean errorCheck(ResultModel resultModel, BindingResult bindingResult) {
@@ -188,7 +196,8 @@ public class Controller {
 			// 암호화
 			userInfo.setPassword(PasswordEncoder.encodePassword(userInfo.getPassword()));
 			userInfo.setJoinDate(new Date());
-			userInfo.save();
+			
+			userService.saveUserInfo(userInfo);
 			
 			// 성공~!
 			userInfo.setSuccess(true);
@@ -228,7 +237,7 @@ public class Controller {
 				article.setWriteDate(new Date());
 				
 				// 저장
-				article.save();
+				articleService.saveArticle(article);
 				
 				// 성공~!
 				article.setSuccess(true);

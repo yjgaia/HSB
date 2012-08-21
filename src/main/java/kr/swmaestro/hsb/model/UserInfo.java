@@ -131,19 +131,4 @@ public class UserInfo extends ResultModel {
 	}
 	*/
 	
-	// 저장과 수정을 담당
-	public void save() {
-		// RDBMS에 저장
-		merge();
-		// 캐시에 저장
-		cache.set("user:" + getId(), this);
-	}
-	
-	// 유저 정보 제거
-	public void delete() {
-		enable = false;
-		merge();
-		cache.delete("user:" + getId());
-	}
-	
 }

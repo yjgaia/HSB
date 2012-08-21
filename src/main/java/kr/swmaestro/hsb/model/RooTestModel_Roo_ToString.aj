@@ -9,7 +9,6 @@ privileged aspect RooTestModel_Roo_ToString {
     
     public String RooTestModel.toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("Cache: ").append(getCache()).append(", ");
         sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("Msg: ").append(getMsg()).append(", ");
         sb.append("SecureKey: ").append(getSecureKey()).append(", ");

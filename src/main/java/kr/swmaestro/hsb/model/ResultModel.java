@@ -2,10 +2,7 @@ package kr.swmaestro.hsb.model;
 
 import java.util.Set;
 
-import kr.swmaestro.hsb.data.KeyValueListCache;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
@@ -16,11 +13,15 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @RooJavaBean
 public class ResultModel {
 	
+	/*
+	서비스 레이어로 옮김
+	
 	// json과 xml로 반환하지 않는다.
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
 	@Autowired
 	protected KeyValueListCache cache;
+	*/
 
 	// 불필요한 정보를 구지 보내주는건 옳은 일이 아니다.
 	//private String url;

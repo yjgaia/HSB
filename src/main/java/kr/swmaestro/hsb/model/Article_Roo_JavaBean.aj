@@ -9,30 +9,6 @@ import java.util.Date;
 
 privileged aspect Article_Roo_JavaBean {
     
-    public Long Article.getTargetUserId() {
-        return this.targetUserId;
-    }
-    
-    public void Article.setTargetUserId(Long targetUserId) {
-        this.targetUserId = targetUserId;
-    }
-    
-    public String Article.getTargetUserUsername() {
-        return this.targetUserUsername;
-    }
-    
-    public void Article.setTargetUserUsername(String targetUserUsername) {
-        this.targetUserUsername = targetUserUsername;
-    }
-    
-    public String Article.getTargetUserNickname() {
-        return this.targetUserNickname;
-    }
-    
-    public void Article.setTargetUserNickname(String targetUserNickname) {
-        this.targetUserNickname = targetUserNickname;
-    }
-    
     public String Article.getContent() {
         return this.content;
     }

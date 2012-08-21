@@ -41,9 +41,9 @@ public class Comment extends ResultModel {
 	
 	public void save() {
 		// RDBMS에 저장
-		persist();
+		//persist();
 		// 캐시에 저장
-		cache.set("comment:" + getId(), this);
+		//cache.set("comment:" + getId(), this);
 	};
 
 }
