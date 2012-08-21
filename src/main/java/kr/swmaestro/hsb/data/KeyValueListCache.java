@@ -47,6 +47,11 @@ public class KeyValueListCache {
 		}
 	}
 	
+	public void addSet(String key,String targetKey){
+		jedis.expire(key, COMMON_EXPIRE_SECOND);
+		jedis.sadd(key, targetKey);
+	}
+	
 	public void addIndex(String key, Long score, String targetKey) {
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
