@@ -50,6 +50,7 @@ field set --class kr.swmaestro.hsb.model.ResultModel --fieldName errorCodes --ty
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-19 19:31:19
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-19 19:43:58
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-20 10:01:57
+<<<<<<< HEAD
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-20 16:07:21
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-20 16:17:52
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-20 23:28:38
@@ -57,3 +58,6 @@ field set --class kr.swmaestro.hsb.model.ResultModel --fieldName errorCodes --ty
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-20 23:31:28
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log closed at 2012-08-21 03:36:59
 // Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-21 10:59:13
+=======
+// Spring Roo 1.1.5.RELEASE [rev d3a68c3] log opened at 2012-08-21 09:14:13
+>>>>>>> branch 'master' of https://github.com/Hanul/HSB.git
