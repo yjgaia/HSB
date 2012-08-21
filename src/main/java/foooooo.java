@@ -8,6 +8,7 @@ public class foooooo {
 		jedis.set("foo", "bar");
 		String value = jedis.get("foo");
 		System.out.println(value);
+		System.out.println(jedis.get("article:6"));
 	}
 
 }
