@@ -246,22 +246,31 @@ public class Controller {
 	// 팔로우하기
 	@Auth // 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.POST) // 팔로우 생성
-	public void follow(@PathVariable String username, @Valid Follower follower, BindingResult bindingResult, Model model) {
+	public String follow(@PathVariable String username, @Valid Follower follower, BindingResult bindingResult, Model model) {
 		Result result= new Result();
 		
 		if(authCheck(follower,model)){
 			UserInfo followerUser=authManager.getUserInfo(follower.getSecureKey());
 			UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
-			follower.setUserId(followedUser.getId());
-			follower.setFollowerId(followerUser.getId());
-			follower.setFollowDate(new Date());
 			
-			followerService.saveFollower(follower);
+			//본인의 계정은 팔로우 할 수 없도록 validation
+			if (!bindingResult.hasFieldErrors("userId") && followerUser.getId().equals(followedUser.getId()) ){
+				bindingResult.rejectValue("userId", "Equals.follower.userid", "본인의 아이디는 팔로우 할 수 없습니다.");
+			}
+			if (errorCheck(result, bindingResult)) {
+				follower.setUserId(followedUser.getId());
+				follower.setFollowerId(followerUser.getId());
+				follower.setFollowDate(new Date());
 			
-			result.setSuccess(true);
+				followerService.saveFollower(follower);
 			
+				result.setSuccess(true);
+			}
+			ret(result,follower,model);
 		}
-		ret(result,follower,model);
+		
+		return "home";
+		
 	}
 	
 	// 언팔로우
