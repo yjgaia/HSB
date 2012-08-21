@@ -13,10 +13,12 @@ import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.auth.AuthUserInfo;
 import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.ErrorInfo;
+import kr.swmaestro.hsb.model.Follower;
 import kr.swmaestro.hsb.model.Result;
 import kr.swmaestro.hsb.model.SecureKeyModel;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.service.ArticleService;
+import kr.swmaestro.hsb.service.FollowerService;
 import kr.swmaestro.hsb.service.UserService;
 import kr.swmaestro.hsb.util.PasswordEncoder;
 import kr.swmaestro.hsb.util.article.ArticleUtil;
@@ -42,6 +44,9 @@ public class Controller {
 	
 	@Autowired
 	private ArticleService articleService;
+	
+	@Autowired
+	private FollowerService followerService;
 	
 	// 오류 체크
 	private boolean errorCheck(Result result, BindingResult bindingResult) {
@@ -241,7 +246,23 @@ public class Controller {
 	// 팔로우하기
 	@Auth // 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.POST) // 팔로우 생성
-	public void follow(@PathVariable String username, Model model) {}
+	public void follow(@PathVariable String username, @Valid Follower follower, BindingResult bindingResult, Model model) {
+		Result result= new Result();
+		
+		if(authCheck(follower,model)){
+			UserInfo followerUser=authManager.getUserInfo(follower.getSecureKey());
+			UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
+			follower.setUserId(followedUser.getId());
+			follower.setFollowerId(followerUser.getId());
+			follower.setFollowDate(new Date());
+			
+			followerService.saveFollower(follower);
+			
+			result.setSuccess(true);
+			
+		}
+		ret(result,follower,model);
+	}
 	
 	// 언팔로우
 	@Auth // 인증 필요
