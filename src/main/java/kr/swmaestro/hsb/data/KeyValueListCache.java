@@ -3,6 +3,7 @@ package kr.swmaestro.hsb.data;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,11 @@ public class KeyValueListCache {
 	@Autowired
 	private Jedis jedis;
 	
-	private final static int COMMON_EXPIRE_SECOND = 60*5; // 테스트용 5분
+	private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
 	//private final static int COMMON_EXPIRE_SECOND = 7 * 24 * 60 * 60; // 1주일 정도 캐시에 저장해둔다.
 	
 	private final static long MAX_LIST_SIZE = 100; // 테스트용 100개
-	//private final static long MAX_LIST_SIZE = 1000; // 한 목록에 최대로 저장할 수 있는 갯수
+	//private final static long MAX_LIST_SIZE = 300; // 한 목록에 최대로 저장할 수 있는 갯수
 	
 	public void set(String key, Object object) {
 		
@@ -57,37 +58,40 @@ public class KeyValueListCache {
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		jedis.zadd(key, score, targetKey);
-		long count = jedis.zcount(key, "-inf", "+inf");
+		long count = jedis.zcard(key);
 		if (count > MAX_LIST_SIZE) { // 갯수가 최대값보다 크면
 			// 마지막 값을 삭제
 			jedis.zremrangeByRank(targetKey, 0, 0);
 		}
 	}
 	
-	public List<String> getIndexes(String key, int start, int end) {
-		
-		// 읽어오는 순간 expire 시간 재생성
-		jedis.expire(key, COMMON_EXPIRE_SECOND);
-		
-		List<String> l = new ArrayList<>();
-		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
-		for (String targetKey : jedis.zrange(key, start, end)) {
-			l.add(targetKey);
-		}
-		return l;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public <T> List<T> list(String key, Long score, int count, Class<T> classOfT) {
 		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		
-		List<T> l = new ArrayList<>();
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
-		for (String targetKey : jedis.zrangeByScore(key, Long.toString(score + 1), "+inf", 0, count)) {
-			l.add((T) get(targetKey, classOfT));
+		// TODO: 잘못됬음 offset을 바꿔야함.
+		Set<String> keySet = jedis.zrangeByScore(key, "-inf", Long.toString(score - 1), 0, count);
+		
+		List<T> l = new ArrayList<>();
+		if (keySet.size() > 0) {
+			List<String> jsonList = jedis.mget(keySet.toArray(new String[]{}));
+			ObjectMapper om = new ObjectMapper();
+			
+			for (String json : jsonList) {
+				
+				//System.out.println(json);
+				if (json != null) {
+					try {
+						l.add(om.readValue(json, classOfT));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
 		}
+		
 		return l;
 	}
 	

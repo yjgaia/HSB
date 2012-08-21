@@ -205,7 +205,7 @@ public class Controller {
 	public void timeline(Model model) {
 	}
 	
-	// 회원의 모든 정보 + 글 보기
+	// 글 목록 보기
 	@RequestMapping(value = "{username}", method = RequestMethod.GET)
 	public String home(@PathVariable String username, String secureKey, Model model) {
 		Result result = new Result();
@@ -213,6 +213,8 @@ public class Controller {
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
 		List<Article> articleList = articleService.findArticlesByWriterId(UserInfo.findUserInfoByUsername(username).getId(), 0l, 10);
 		System.out.println(articleList.size());
+		
+		result.setSuccess(true);
 		
 		ret(result, articleList, model);
 		
