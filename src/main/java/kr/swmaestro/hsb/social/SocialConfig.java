@@ -3,7 +3,7 @@ package kr.swmaestro.hsb.social;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import kr.swmaestro.hsb.domain.UserInfo;
+import kr.swmaestro.hsb.model.UserInfo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -69,7 +69,7 @@ public class SocialConfig {
 			throw new IllegalStateException("Unable to get a ConnectionRepository: no user signed in");
 		}
 		if (authentication.getPrincipal() instanceof UserInfo) {
-			UserInfo userInfo = (UserInfo) authentication.getPrincipal();
+			//UserInfo userInfo = (UserInfo) authentication.getPrincipal();
 			//return usersConnectionRepository().createConnectionRepository(userInfo.getId().toString());
 			return null;
 		} else {

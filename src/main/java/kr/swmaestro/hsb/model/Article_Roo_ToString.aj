@@ -11,15 +11,13 @@ privileged aspect Article_Roo_ToString {
         StringBuilder sb = new StringBuilder();
         sb.append("CommentCount: ").append(getCommentCount()).append(", ");
         sb.append("Content: ").append(getContent()).append(", ");
-        sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("SecureKey: ").append(getSecureKey()).append(", ");
         sb.append("Version: ").append(getVersion()).append(", ");
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
         sb.append("WriterId: ").append(getWriterId()).append(", ");
         sb.append("WriterNickname: ").append(getWriterNickname()).append(", ");
-        sb.append("WriterUsername: ").append(getWriterUsername()).append(", ");
-        sb.append("Success: ").append(isSuccess());
+        sb.append("WriterUsername: ").append(getWriterUsername());
         return sb.toString();
     }
     

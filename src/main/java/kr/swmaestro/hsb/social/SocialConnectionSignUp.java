@@ -1,9 +1,5 @@
 package kr.swmaestro.hsb.social;
 
-import java.util.Date;
-
-import kr.swmaestro.hsb.domain.UserInfo;
-
 import org.springframework.social.connect.Connection;
 import org.springframework.social.connect.ConnectionSignUp;
 
@@ -15,7 +11,7 @@ public final class SocialConnectionSignUp implements ConnectionSignUp {
 	@Override
 	public String execute(Connection<?> connection) {
 		
-		// 유저 정보를 생성하고 저장
+		/*// 유저 정보를 생성하고 저장
 		UserInfo userInfo = new UserInfo();
 		
 		userInfo.setJoinDate(new Date());
@@ -28,7 +24,7 @@ public final class SocialConnectionSignUp implements ConnectionSignUp {
 		userInfo.setSocialProviderUserId(connection.getKey().getProviderUserId());
 		//userInfo.persist();
 		
-		//return userInfo.getId().toString();
+		//return userInfo.getId().toString();*/
 		return null;
 	}
 

@@ -5,14 +5,12 @@ package kr.swmaestro.hsb.model;
 
 import java.lang.String;
 
-privileged aspect RooTestModel_Roo_JavaBean {
+privileged aspect SecureKeyModel_Roo_ToString {
     
-    public String RooTestModel.getMsg() {
-        return this.msg;
-    }
-    
-    public void RooTestModel.setMsg(String msg) {
-        this.msg = msg;
+    public String SecureKeyModel.toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("SecureKey: ").append(getSecureKey());
+        return sb.toString();
     }
     
 }

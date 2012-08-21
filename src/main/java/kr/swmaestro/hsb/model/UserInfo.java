@@ -29,7 +29,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @RooEntity
 @XmlRootElement
 @XStreamAlias("result")
-public class UserInfo extends ResultModel {
+public class UserInfo extends SecureKeyModel {
 
 	@NotEmpty(message = "아이디를 입력해주세요.")
 	@Size(min = 4, max = 20, message = "아이디는 4글자 이상, 20글자 이하로 입력해주세요.")
@@ -107,28 +107,5 @@ public class UserInfo extends ResultModel {
 	public static boolean existsNickname(String nickname) {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
-	
-	/*
-	public void test() {
-		cache.set("test", this);
-		cache.addIndex("test2", 1l, "TEST1");
-		cache.addIndex("test2", 10l, "TEST2");
-		cache.addIndex("test2", 5l, "TEST3");
-		cache.addIndex("test2", 4l, "TEST4");
-		cache.addIndex("test2", 7l, "TEST5");
-		cache.addIndex("test2", 9l, "TEST6");
-		cache.addIndex("test2", 2l, "TEST7");
-		
-		cache.set("TEST1", "String1");
-		cache.set("TEST2", "String2");
-		cache.set("TEST3", "String3");
-		cache.set("TEST4", "String4");
-		cache.set("TEST5", "String5");
-		cache.set("TEST6", "String6");
-		cache.set("TEST7", "String7");
-		
-		System.out.println(cache.list("test2", 0, 100, String.class));
-	}
-	*/
 	
 }

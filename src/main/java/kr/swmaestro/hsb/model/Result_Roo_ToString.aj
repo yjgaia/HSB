@@ -5,13 +5,14 @@ package kr.swmaestro.hsb.model;
 
 import java.lang.String;
 
-privileged aspect RooTestModel_Roo_ToString {
+privileged aspect Result_Roo_ToString {
     
-    public String RooTestModel.toString() {
+    public String Result.toString() {
         StringBuilder sb = new StringBuilder();
+        sb.append("Data: ").append(getData()).append(", ");
         sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
-        sb.append("Msg: ").append(getMsg()).append(", ");
-        sb.append("SecureKey: ").append(getSecureKey()).append(", ");
+        sb.append("List: ").append(getList() == null ? "null" : getList().size()).append(", ");
+        sb.append("Single: ").append(isSingle()).append(", ");
         sb.append("Success: ").append(isSuccess());
         return sb.toString();
     }

@@ -2,6 +2,7 @@ package kr.swmaestro.hsb;
 
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,8 @@ import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.auth.AuthUserInfo;
 import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.ErrorInfo;
-import kr.swmaestro.hsb.model.ResultModel;
+import kr.swmaestro.hsb.model.Result;
+import kr.swmaestro.hsb.model.SecureKeyModel;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.service.ArticleService;
 import kr.swmaestro.hsb.service.UserService;
@@ -42,7 +44,7 @@ public class Controller {
 	private ArticleService articleService;
 	
 	// 오류 체크
-	private boolean errorCheck(ResultModel resultModel, BindingResult bindingResult) {
+	private boolean errorCheck(Result result, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			Set<ErrorInfo> errors = new HashSet<>();
 			for (ObjectError objectError : bindingResult.getAllErrors()) {
@@ -62,85 +64,59 @@ public class Controller {
 				error.setArguments(arguments);
 				errors.add(error);
 			}
-			resultModel.setErrors(errors);
-			resultModel.setSuccess(false);
+			result.setErrors(errors);
+			result.setSuccess(false);
 			return false;
 		}
 		return true;
 	}
 	
 	// 결과값 반환
-	private void ret(ResultModel resultModel, Model model, HttpServletRequest request) {
-		
-		/*
-		// URL에 파라미터 붙히기
-		String url = request.getRequestURL().toString();
-		
-		if (request.getMethod().equals("GET")) {
-			Enumeration<?> param = request.getParameterNames();
-			if (param != null) {
-				String strParam = null;
-				while (param.hasMoreElements()) {
-					if (strParam == null) {
-						strParam = "?";
-					} else {
-						strParam += "&";
-					}
-					String name = (String) param.nextElement();
-					String value = request.getParameter(name);
-					strParam += name + "=" + value;
-				}
-				if (strParam != null) {
-					url += strParam;
-				}
-			}
-		}
-		*/
-        
-		//resultModel.setUrl(url);
-		resultModel.setSecureKey(null); // 보안 키 제거
-		//resultModel.setReturnDate(new Date()); // 서버측 반환 시간 설정
-		model.addAttribute("result", resultModel);
+	private void ret(Result result, SecureKeyModel data, Model model) {
+		data.setSecureKey(null); // 보안 키 제거
+		result.setSingle(true);
+		result.setData(data);
+		model.addAttribute("result", result);
+	}
+	
+	// 결과값 반환
+	private void ret(Result result, List list, Model model) {
+		result.setSingle(false);
+		result.setList(list);
+		model.addAttribute("result", result);
 	}
 	
 	// 인증처리
-	private boolean authCheck(String secureKey, Model model, HttpServletRequest request) {
+	private boolean authCheck(String secureKey, Model model) {
 		if (authManager.isAuthenticated(secureKey)) {
 			return true;
 		} else {
-			ResultModel resultModel = new ResultModel();
+			Result result = new Result();
 			ErrorInfo error = new ErrorInfo();
 			error.setCode("NeedAuth");
 			error.setDefaultMessage("인증이 필요합니다.");
 			Set<ErrorInfo> errors = new HashSet<>();
 			errors.add(error);
-			resultModel.setSuccess(false);
-			resultModel.setErrors(errors);
-			ret(resultModel, model, request);
+			result.setSuccess(false);
+			result.setErrors(errors);
+			model.addAttribute("result", result);
 			return false;
 		}
 	}
 	
 	// 인증처리
-	private boolean authCheck(ResultModel resultModel, Model model, HttpServletRequest request) {
-		if (authManager.isAuthenticated(resultModel.getSecureKey())) {
-			return true;
-		} else {
-			ErrorInfo error = new ErrorInfo();
-			error.setCode("NeedAuth");
-			error.setDefaultMessage("인증이 필요합니다.");
-			Set<ErrorInfo> errors = new HashSet<>();
-			errors.add(error);
-			resultModel.setSuccess(false);
-			resultModel.setErrors(errors);
-			ret(resultModel, model, request);
-			return false;
-		}
+	private boolean authCheck(SecureKeyModel secureKeyModel, Model model) {
+		return authCheck(secureKeyModel.getSecureKey(), model);
 	}
 	
-	@RequestMapping(value = "test", method = RequestMethod.GET)
-	public void test(String secureKey, Model model, HttpServletRequest request) {
-		if (authCheck(secureKey, model, request)) {
+	@RequestMapping(method = RequestMethod.GET)
+	public String main(Model model) {
+		return "main";
+	}
+	
+	@RequestMapping(value = "admin/test", method = RequestMethod.GET)
+	public void test(String secureKey, Model model) {
+		if (authCheck(secureKey, model)) {
 			System.out.println("TEST 페이지 실행");
 		}
 	}
@@ -148,6 +124,7 @@ public class Controller {
 	// 로그인
 	@RequestMapping(value = "user/auth", method = RequestMethod.POST) // 인증 생성
 	public void login(@Valid AuthUserInfo authUserInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
+		Result result = new Result();
 		
 		UserInfo userInfo = null;
 		
@@ -159,18 +136,19 @@ public class Controller {
 				bindingResult.rejectValue("password", "Wrong.authUserInfo.password", "잘못된 비밀번호입니다.");
 			}
 		}
-		if (errorCheck(authUserInfo, bindingResult)) {
+		if (errorCheck(result, bindingResult)) {
 			String secureKey = authManager.auth(userInfo);
 			
 			userInfo.setLastLoginDate(new Date());
 			userInfo.increaseLoginCount();
+			userService.saveUserInfo(userInfo);
 			
 			authUserInfo.setGeneratedSecureKey(secureKey);
 			
 			// 성공~!
-			authUserInfo.setSuccess(true);
+			result.setSuccess(true);
 		}
-		ret(authUserInfo, model, request);
+		ret(result, authUserInfo, model);
 	}
 	
 	// 로그아웃
@@ -180,7 +158,8 @@ public class Controller {
 	
 	// 회원가입
 	@RequestMapping(value = "user/account", method = RequestMethod.POST)
-	public void join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
+	public void join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
+		Result result = new Result();
 		
 		if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
 			bindingResult.rejectValue("password", "Equals.userInfo.passwordConfirm", "비밀번호와 비밀번호 확인이 다릅니다.");
@@ -192,7 +171,7 @@ public class Controller {
 			bindingResult.rejectValue("nickname", "Exists.userInfo.nickname", "이미 존재하는 닉네임입니다.");
 		}
 		
-		if (errorCheck(userInfo, bindingResult)) {
+		if (errorCheck(result, bindingResult)) {
 			// 암호화
 			userInfo.setPassword(PasswordEncoder.encodePassword(userInfo.getPassword()));
 			userInfo.setJoinDate(new Date());
@@ -200,9 +179,9 @@ public class Controller {
 			userService.saveUserInfo(userInfo);
 			
 			// 성공~!
-			userInfo.setSuccess(true);
+			result.setSuccess(true);
 		}
-		ret(userInfo, model, request);
+		ret(result, userInfo, model);
 	}
 	
 	// 회원 정보 수정
@@ -215,35 +194,48 @@ public class Controller {
 	@RequestMapping(value = "user/account", method = RequestMethod.DELETE)
 	public void leave(@PathVariable String username, Model model) {}
 	
-	// 회원의 모든 정보 + 글 보기
-	@RequestMapping(value = "{username}", method = RequestMethod.GET)
-	public void view(@PathVariable String username, Model model) {}
-	
 	// 타임라인
 	@Auth // 인증 필요
-	@RequestMapping(method = RequestMethod.GET)
-	public void timeline(Model model) {}
+	@RequestMapping(value = "user/timeline", method = RequestMethod.GET)
+	public void timeline(Model model) {
+	}
+	
+	// 회원의 모든 정보 + 글 보기
+	@RequestMapping(value = "{username}", method = RequestMethod.GET)
+	public String home(@PathVariable String username, String secureKey, Model model) {
+		Result result = new Result();
+		
+		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
+		List<Article> articleList = articleService.findArticlesByWriterId(UserInfo.findUserInfoByUsername(username).getId(), 0l, 10);
+		System.out.println(articleList.size());
+		
+		ret(result, articleList, model);
+		
+		return "home";
+	}
 	
 	// 글쓰기
-	@Auth // 인증 필요
-	@RequestMapping(value="write",method = RequestMethod.POST)
-	public void write(@Valid Article article, BindingResult bindingResult, Model model, HttpServletRequest request) {
+	@RequestMapping(value = "{username}", method = RequestMethod.POST)
+	public String write(@PathVariable String username, @Valid Article article, BindingResult bindingResult, Model model) {
+		Result result = new Result();
 		
-		if (authCheck(article, model, request)) {
+		if (authCheck(article, model)) {
 			UserInfo userInfoFromSession=authManager.getUserInfo(article.getSecureKey());
 			article=ArticleUtil.setArticleInfoWithSession(article, userInfoFromSession);
 			System.out.println(article.getWriterId());
-			if (errorCheck(article, bindingResult)) {
+			if (errorCheck(result, bindingResult)) {
 				article.setWriteDate(new Date());
 				
 				// 저장
 				articleService.saveArticle(article);
 				
 				// 성공~!
-				article.setSuccess(true);
+				result.setSuccess(true);
 			}
-			ret(article, model, request);
+			ret(result, article, model);
 		}
+		
+		return "home";
 	}
 
 	// 팔로우하기

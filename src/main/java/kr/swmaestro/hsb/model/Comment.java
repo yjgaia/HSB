@@ -17,7 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 @RooJavaBean
 @RooToString
 @RooEntity
-public class Comment extends ResultModel {
+public class Comment extends SecureKeyModel {
 	
 	@NotNull
 	private Long targetArticleId;
@@ -38,12 +38,5 @@ public class Comment extends ResultModel {
 
 	@Column(nullable = false)
 	private Date writeDate;
-	
-	public void save() {
-		// RDBMS에 저장
-		//persist();
-		// 캐시에 저장
-		//cache.set("comment:" + getId(), this);
-	};
 
 }

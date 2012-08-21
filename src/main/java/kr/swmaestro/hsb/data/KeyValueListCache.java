@@ -72,14 +72,14 @@ public class KeyValueListCache {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T> List<T> list(String key, int start, int end, Class<T> classOfT) {
+	public <T> List<T> list(String key, Long score, int count, Class<T> classOfT) {
 		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		
 		List<T> l = new ArrayList<>();
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
-		for (String targetKey : jedis.zrange(key, start, end)) {
+		for (String targetKey : jedis.zrangeByScore(key, Long.toString(score + 1), "+inf", 0, count)) {
 			l.add((T) get(targetKey, classOfT));
 		}
 		return l;

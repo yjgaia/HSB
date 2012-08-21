@@ -17,7 +17,7 @@ public class UserService {
 		// RDBMS에 저장
 		userInfo.merge();
 		// 캐시에 저장
-		cache.set("user:" + userInfo.getId(), this);
+		cache.set("user:" + userInfo.getId(), userInfo);
 	}
 	
 	// 유저 정보 제거

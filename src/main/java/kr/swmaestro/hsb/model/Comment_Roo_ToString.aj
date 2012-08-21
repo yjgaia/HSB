@@ -10,7 +10,6 @@ privileged aspect Comment_Roo_ToString {
     public String Comment.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Content: ").append(getContent()).append(", ");
-        sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("SecureKey: ").append(getSecureKey()).append(", ");
         sb.append("TargetArticleId: ").append(getTargetArticleId()).append(", ");
@@ -18,8 +17,7 @@ privileged aspect Comment_Roo_ToString {
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
         sb.append("WriterId: ").append(getWriterId()).append(", ");
         sb.append("WriterNickname: ").append(getWriterNickname()).append(", ");
-        sb.append("WriterUsername: ").append(getWriterUsername()).append(", ");
-        sb.append("Success: ").append(isSuccess());
+        sb.append("WriterUsername: ").append(getWriterUsername());
         return sb.toString();
     }
     
