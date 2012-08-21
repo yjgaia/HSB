@@ -24,7 +24,7 @@ public class KeyValueListCache {
 	@Autowired
 	private Jedis jedis;
 	
-	private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
+	private final static int COMMON_EXPIRE_SECOND = 60*5; // 테스트용 5분
 	//private final static int COMMON_EXPIRE_SECOND = 7 * 24 * 60 * 60; // 1주일 정도 캐시에 저장해둔다.
 	
 	private final static long MAX_LIST_SIZE = 100; // 테스트용 100개
@@ -48,8 +48,9 @@ public class KeyValueListCache {
 	}
 	
 	public void addSet(String key,String targetKey){
-		jedis.expire(key, COMMON_EXPIRE_SECOND);
+		System.out.println("sadd:"+key+","+targetKey);
 		jedis.sadd(key, targetKey);
+		jedis.expire(key, COMMON_EXPIRE_SECOND);
 	}
 	
 	public void addIndex(String key, Long score, String targetKey) {
