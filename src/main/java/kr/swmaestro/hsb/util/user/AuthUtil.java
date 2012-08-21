@@ -1,6 +1,7 @@
 package kr.swmaestro.hsb.util.user;
 
-import kr.swmaestro.hsb.domain.UserInfo;
+
+import kr.swmaestro.hsb.model.UserInfo;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
