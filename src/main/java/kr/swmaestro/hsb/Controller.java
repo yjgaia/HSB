@@ -252,16 +252,19 @@ public class Controller {
 		Result result= new Result();
 		
 		if(authCheck(follower,model)){
-			UserInfo followerUser=authManager.getUserInfo(follower.getSecureKey());
+			UserInfo followingUser=authManager.getUserInfo(follower.getSecureKey());
 			UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
 			
 			//본인의 계정은 팔로우 할 수 없도록 validation
-			if (!bindingResult.hasFieldErrors("userId") && followerUser.getId().equals(followedUser.getId()) ){
+			if (followingUser.getId().equals(followedUser.getId()) ){
 				bindingResult.rejectValue("userId", "Equals.follower.userid", "본인의 아이디는 팔로우 할 수 없습니다.");
+			}
+			if(UserInfo.isFollowing(followedUser.getId(),followingUser.getId())){
+				bindingResult.rejectValue("userId", "Exists.follower.userid", "이미 팔로우한 아이디 입니다.");
 			}
 			if (errorCheck(result, bindingResult)) {
 				follower.setUserId(followedUser.getId());
-				follower.setFollowerId(followerUser.getId());
+				follower.setFollowerId(followingUser.getId());
 				follower.setFollowDate(new Date());
 			
 				followerService.saveFollower(follower);

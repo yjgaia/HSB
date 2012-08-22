@@ -10,6 +10,8 @@ privileged aspect UserInfo_Roo_ToString {
     public String UserInfo.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Email: ").append(getEmail()).append(", ");
+        sb.append("FollowerCount: ").append(getFollowerCount()).append(", ");
+        sb.append("FollowingCount: ").append(getFollowingCount()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("JoinDate: ").append(getJoinDate()).append(", ");
         sb.append("LastLoginDate: ").append(getLastLoginDate()).append(", ");

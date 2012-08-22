@@ -57,6 +57,16 @@ public class UserInfo extends SecureKeyModel {
 	@Size(min = 4, max = 20, message = "닉네임은 {2}글자 이상, {1}글자 이하로 입력해주세요.")
 	@Column(length = 20, unique = true)
 	private String nickname;
+	
+	private int followerCount;
+	public void increaseFollowerCount(){
+		followerCount++;
+	}
+	
+	private int followingCount;
+	public void increaseFollowingCount(){
+		followingCount++;
+	}
 
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
@@ -107,5 +117,9 @@ public class UserInfo extends SecureKeyModel {
 	public static boolean existsNickname(String nickname) {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
+
+	public static boolean isFollowing(Long user_id, Long follower_id) {
+		return entityManager().createQuery("SELECT COUNT(f) FROM Follower f WHERE user_id = :user_id AND follower_id=:follower_id", Long.class).setParameter("user_id", user_id).setParameter("follower_id", follower_id).getSingleResult() > 0l;
+	}
 	
 }

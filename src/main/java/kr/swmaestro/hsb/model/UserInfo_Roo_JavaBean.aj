@@ -40,6 +40,22 @@ privileged aspect UserInfo_Roo_JavaBean {
         this.nickname = nickname;
     }
     
+    public int UserInfo.getFollowerCount() {
+        return this.followerCount;
+    }
+    
+    public void UserInfo.setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
+    }
+    
+    public int UserInfo.getFollowingCount() {
+        return this.followingCount;
+    }
+    
+    public void UserInfo.setFollowingCount(int followingCount) {
+        this.followingCount = followingCount;
+    }
+    
     public String UserInfo.getEmail() {
         return this.email;
     }
