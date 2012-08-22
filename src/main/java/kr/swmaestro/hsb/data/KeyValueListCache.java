@@ -2,6 +2,7 @@ package kr.swmaestro.hsb.data;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -71,12 +72,15 @@ public class KeyValueListCache {
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
-		// TODO: 잘못됬음 offset을 바꿔야함.
-		Set<String> keySet = jedis.zrangeByScore(key, "-inf", Long.toString(score - 1), 0, count);
+		Set<String> keySet = jedis.zrangeByScore(key, "-inf", "(" + Long.toString(score), 0, count);
 		
 		List<T> l = new ArrayList<>();
 		if (keySet.size() > 0) {
 			List<String> jsonList = jedis.mget(keySet.toArray(new String[]{}));
+			
+			// 순서 반대로.
+			Collections.reverse(jsonList);
+			
 			ObjectMapper om = new ObjectMapper();
 			
 			for (String json : jsonList) {
