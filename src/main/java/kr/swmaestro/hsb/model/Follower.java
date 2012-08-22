@@ -19,10 +19,8 @@ import org.springframework.roo.addon.tostring.RooToString;
 public class Follower extends SecureKeyModel{
 
 
-	@NotNull
 	private Long userId;
 	
-	@NotNull
 	private Long followerId;
 	
 	@Column(nullable = false)
