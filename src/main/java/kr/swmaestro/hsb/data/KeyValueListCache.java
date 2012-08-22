@@ -74,6 +74,10 @@ public class KeyValueListCache {
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
 		Set<String> keySet = jedis.zrangeByScore(key, "-inf", "(" + Long.toString(score), 0, count);
 		
+		return getCachedList(keySet,classOfT);
+	}
+	
+	private <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT){
 		List<T> l = new ArrayList<>();
 		if (keySet.size() > 0) {
 			List<String> jsonList = jedis.mget(keySet.toArray(new String[]{}));

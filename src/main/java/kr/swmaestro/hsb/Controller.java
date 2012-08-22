@@ -211,7 +211,7 @@ public class Controller {
 		Result result = new Result();
 		
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
-		List<Article> articleList = articleService.findArticlesByWriterId(UserInfo.findUserInfoByUsername(username).getId(), 0l, 10);
+		List<Article> articleList = articleService.findArticlesByWriterId(userInfo.getId(), 0l, 10);
 		System.out.println(articleList.size());
 		
 		result.setSuccess(true);
@@ -282,7 +282,13 @@ public class Controller {
 	
 	// 팔로잉 목록
 	@RequestMapping(value = "{username}/following", method = RequestMethod.GET)
-	public void following(@PathVariable String username, Model model) {}
+	public void following(@PathVariable String username, Model model) {
+		Result result= new Result();
+		
+		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
+		
+		
+	}
 	
 	// 팔로어 목록
 	@RequestMapping(value = "{username}/followers", method = RequestMethod.GET)
