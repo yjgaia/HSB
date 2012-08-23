@@ -22,5 +22,10 @@ public class Follower extends SecureKeyModel{
 	
 	@Column(nullable = false)
 	private Date followDate;
-
+	public static boolean isFollowing(Long user_id, Long follower_id) {
+		return entityManager().createQuery("SELECT COUNT(f) FROM Follower f WHERE user_id = :user_id AND follower_id=:follower_id", Long.class).setParameter("user_id", user_id).setParameter("follower_id", follower_id).getSingleResult() > 0l;
+	}
+	public static Follower findFollowInfoByFollower(Long user_id,Long follower_id){
+		return entityManager().createQuery("SELECT f FROM Follower f WHERE user_id = :user_id AND follower_id=:follower_id", Follower.class).setParameter("user_id", user_id).setParameter("follower_id", follower_id).getSingleResult();
+	}
 }

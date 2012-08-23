@@ -50,10 +50,16 @@ public class KeyValueListCache {
 		}
 	}
 	
-	public void addSet(String key,String targetKey){
+	public void addSetElement(String key,String targetKey){
 		System.out.println("sadd:"+key+","+targetKey);
 		jedis.sadd(key, targetKey);
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
+	}
+	
+	public void removeSetElement(String key,String targetKey){
+		System.out.println("srem:"+key+","+targetKey);
+		jedis.srem(key, targetKey);
+		jedis.expire(key,COMMON_EXPIRE_SECOND);
 	}
 	
 	public void addIndex(String key, Long score, String targetKey) {

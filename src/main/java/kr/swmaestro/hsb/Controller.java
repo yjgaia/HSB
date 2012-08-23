@@ -258,7 +258,7 @@ public class Controller {
 			if (followingUser.getId().equals(followedUser.getId()) ){
 				bindingResult.rejectValue("userId", "Equals.follower.userId", "본인의 아이디는 팔로우 할 수 없습니다.");
 			}
-			if(UserInfo.isFollowing(followedUser.getId(),followingUser.getId())){
+			if(Follower.isFollowing(followedUser.getId(),followingUser.getId())){
 				bindingResult.rejectValue("userId", "Exists.follower.userId", "이미 팔로우한 아이디 입니다.");
 			}
 			if (errorCheck(result, bindingResult)) {
@@ -281,7 +281,25 @@ public class Controller {
 	// 언팔로우
 	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.DELETE) // 팔로우 제거
-	public void unfollow(@PathVariable String username, Model model) {}
+	public String unfollow(@PathVariable String username,@Valid Follower follower,BindingResult bindingResult, Model model) {
+		Result result= new Result();
+		
+		if(authCheck(follower, model)){
+			UserInfo followingUser=authManager.getUserInfo(follower.getSecureKey());
+			UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
+			
+			if(errorCheck(result,bindingResult)){
+				follower.setUserId(followedUser.getId());
+				follower.setFollowerId(followingUser.getId());
+				followerService.removeFollow(follower);
+				
+				// 성공
+				result.setSuccess(true);
+			}
+			ret(result,follower,model);
+		}
+		return "home";
+	}
 	
 	// 팔로잉 목록
 	@RequestMapping(value = "{username}/following", method = RequestMethod.GET)

@@ -59,13 +59,13 @@ public class UserInfo extends SecureKeyModel {
 	private String nickname;
 	
 	private int followerCount;
-	public void increaseFollowerCount(){
-		followerCount++;
+	public void addFollowerCount(int i){
+		followerCount=followerCount+i;
 	}
 	
 	private int followingCount;
-	public void increaseFollowingCount(){
-		followingCount++;
+	public void addFollowingCount(int i){
+		followingCount=followingCount+i;
 	}
 
 	@JsonIgnore // JSON으로 출력하지 않음
@@ -118,8 +118,5 @@ public class UserInfo extends SecureKeyModel {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
 
-	public static boolean isFollowing(Long user_id, Long follower_id) {
-		return entityManager().createQuery("SELECT COUNT(f) FROM Follower f WHERE user_id = :user_id AND follower_id=:follower_id", Long.class).setParameter("user_id", user_id).setParameter("follower_id", follower_id).getSingleResult() > 0l;
-	}
 	
 }
