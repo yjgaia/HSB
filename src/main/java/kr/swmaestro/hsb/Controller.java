@@ -256,10 +256,10 @@ public class Controller {
 			
 			//본인의 계정은 팔로우 할 수 없도록 validation
 			if (followingUser.getId().equals(followedUser.getId()) ){
-				bindingResult.rejectValue("userId", "Equals.follower.userId", "본인의 아이디는 팔로우 할 수 없습니다.");
+				bindingResult.rejectValue("userId", "Equals.follower.userid", "본인의 아이디는 팔로우 할 수 없습니다.");
 			}
 			if(Follower.isFollowing(followedUser.getId(),followingUser.getId())){
-				bindingResult.rejectValue("userId", "Exists.follower.userId", "이미 팔로우한 아이디 입니다.");
+				bindingResult.rejectValue("userId", "Exists.follower.userid", "이미 팔로우한 아이디 입니다.");
 			}
 			if (errorCheck(result, bindingResult)) {
 				follower.setUserId(followedUser.getId());
@@ -281,13 +281,15 @@ public class Controller {
 	// 언팔로우
 	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.DELETE) // 팔로우 제거
-	public String unfollow(@PathVariable String username,@Valid Follower follower,BindingResult bindingResult, Model model) {
+	public String unfollow(@PathVariable String username,String secureKey,@Valid Follower follower,BindingResult bindingResult, Model model) {
 		Result result= new Result();
-		
-		if(authCheck(follower, model)){
+		System.out.println("secureKey:"+secureKey);
+		if(authCheck(secureKey, model)){
 			UserInfo followingUser=authManager.getUserInfo(follower.getSecureKey());
 			UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
-			
+			if(!Follower.isFollowing(followedUser.getId(),followingUser.getId())){
+				bindingResult.rejectValue("userId", "NonExists.follower.userid", "팔로우 관계가 아닙니다.");
+			}
 			if(errorCheck(result,bindingResult)){
 				follower.setUserId(followedUser.getId());
 				follower.setFollowerId(followingUser.getId());
