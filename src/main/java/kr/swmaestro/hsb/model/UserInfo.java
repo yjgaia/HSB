@@ -8,7 +8,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import kr.swmaestro.hsb.DateToLongConverter;
+import kr.swmaestro.hsb.XmlDateToLongConverter;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
@@ -78,7 +78,7 @@ public class UserInfo extends SecureKeyModel {
 
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
-	@XStreamConverter(DateToLongConverter.class)
+	@XStreamConverter(XmlDateToLongConverter.class)
 	@Column(nullable = false)
 	private Date joinDate;
 

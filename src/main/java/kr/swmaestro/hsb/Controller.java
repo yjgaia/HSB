@@ -8,7 +8,6 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-import kr.swmaestro.hsb.auth.Auth;
 import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.auth.AuthUserInfo;
 import kr.swmaestro.hsb.model.Article;
@@ -85,7 +84,7 @@ public class Controller {
 	}
 	
 	// 결과값 반환
-	private void ret(Result result, List list, Model model) {
+	private void ret(Result result, List<?> list, Model model) {
 		result.setSingle(false);
 		result.setList(list);
 		model.addAttribute("result", result);
@@ -157,7 +156,7 @@ public class Controller {
 	}
 	
 	// 로그아웃
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "user/auth", method = RequestMethod.DELETE) // 인증 제거
 	public void logout(Model model) {}
 	
@@ -190,17 +189,17 @@ public class Controller {
 	}
 	
 	// 회원 정보 수정
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "user/account", method = RequestMethod.PUT)
 	public void updateAccount(@PathVariable String username, Model model) {}
 	
 	// 회원 정보 삭제 (탈퇴)
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "user/account", method = RequestMethod.DELETE)
 	public void leave(@PathVariable String username, Model model) {}
 	
 	// 타임라인
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "user/timeline", method = RequestMethod.GET)
 	public void timeline(Model model) {
 	}
@@ -246,7 +245,7 @@ public class Controller {
 	}
 
 	// 팔로우하기
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.POST) // 팔로우 생성
 	public String follow(@PathVariable String username, @Valid Follower follower, BindingResult bindingResult, Model model) {
 		Result result= new Result();
@@ -279,7 +278,7 @@ public class Controller {
 	}
 	
 	// 언팔로우
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.DELETE) // 팔로우 제거
 	public void unfollow(@PathVariable String username, Model model) {}
 	
@@ -298,17 +297,17 @@ public class Controller {
 	public void followers(@PathVariable String username, Model model) {}
 	
 	// 글삭제
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "article/{id}", method = RequestMethod.DELETE) // 글 제거
 	public void deleteArticle(@PathVariable Long id, Model model) {}
 	
 	// 댓글 등록
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "article/{articleId}/comment", method = RequestMethod.POST) // 댓글 등록
 	public void comment(@PathVariable Long articleId, Model model) {}
 	
 	// 댓글 삭제
-	@Auth // 인증 필요
+	// 인증 필요
 	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
 	public void deleteComment(@PathVariable Long id, Model model) {}
 	

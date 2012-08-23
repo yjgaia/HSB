@@ -42,11 +42,11 @@ privileged aspect Result_Roo_JavaBean {
         this.data = data;
     }
     
-    public List Result.getList() {
+    public List<?> Result.getList() {
         return this.list;
     }
     
-    public void Result.setList(List list) {
+    public void Result.setList(List<?> list) {
         this.list = list;
     }
     
