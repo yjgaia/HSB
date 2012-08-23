@@ -96,6 +96,8 @@ public class KeyValueListCache {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+				} else {
+					l.add(null);
 				}
 			}
 		}

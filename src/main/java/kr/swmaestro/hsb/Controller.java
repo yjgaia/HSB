@@ -256,10 +256,10 @@ public class Controller {
 			
 			//본인의 계정은 팔로우 할 수 없도록 validation
 			if (followingUser.getId().equals(followedUser.getId()) ){
-				bindingResult.rejectValue("userId", "Equals.follower.userid", "본인의 아이디는 팔로우 할 수 없습니다.");
+				bindingResult.rejectValue("userId", "Equals.follower.userId", "본인의 아이디는 팔로우 할 수 없습니다.");
 			}
 			if(UserInfo.isFollowing(followedUser.getId(),followingUser.getId())){
-				bindingResult.rejectValue("userId", "Exists.follower.userid", "이미 팔로우한 아이디 입니다.");
+				bindingResult.rejectValue("userId", "Exists.follower.userId", "이미 팔로우한 아이디 입니다.");
 			}
 			if (errorCheck(result, bindingResult)) {
 				follower.setUserId(followedUser.getId());
@@ -268,6 +268,7 @@ public class Controller {
 			
 				followerService.saveFollower(follower);
 			
+				// 성공
 				result.setSuccess(true);
 			}
 			ret(result,follower,model);
