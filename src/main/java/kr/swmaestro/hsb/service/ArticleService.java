@@ -1,6 +1,8 @@
 package kr.swmaestro.hsb.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.Article;
@@ -15,7 +17,10 @@ public class ArticleService {
 	protected KeyValueListCache cache;
 	
 	public List<Article> findArticlesByWriterId(Long writerId, Long afterArticleId, int count) {
-		List<Article> articleList = cache.list("user:" + writerId + ":articles", afterArticleId, count, Article.class);
+		
+		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
+		
+		List<Article> articleList = cache.list("user:" + writerId + ":articles", afterArticleId, count, Article.class, emptyValueIndexMap);
 		
 		// 캐시에서 불러온 글 목록 수가 예상보다 적을때...
 		if (articleList.size() < count) {
@@ -30,8 +35,14 @@ public class ArticleService {
 				List<Article> addArticleList = Article.findArticlesByWriterId(writerId, addAfterArticleId, count - articleList.size());
 				articleList.addAll(addArticleList);
 				
-				// 불러온 목록도 캐시에 넣어줍시다.
+				// TODO: 불러온 목록도 캐시에 넣어줍시다.
 			}
+		}
+		
+		// 비어있는 값들이 있을때...
+		if (emptyValueIndexMap.size() > 0) {
+			
+			// TODO: 가져온 값들도 캐시에 넣어줍니다.
 		}
 		
 		return articleList;

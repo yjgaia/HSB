@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.codehaus.jackson.map.ObjectMapper;
@@ -66,7 +67,7 @@ public class KeyValueListCache {
 		}
 	}
 	
-	public <T> List<T> list(String key, Long score, int count, Class<T> classOfT) {
+	public <T> List<T> list(String key, Long score, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap) {
 		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
@@ -74,22 +75,24 @@ public class KeyValueListCache {
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
 		Set<String> keySet = jedis.zrangeByScore(key, "-inf", "(" + Long.toString(score), 0, count);
 		
-		return getCachedList(keySet,classOfT);
+		return getCachedList(keySet,classOfT, emptyValueIndexMap);
 	}
 	
-	private <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT){
+	private <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT, Map<String, Integer> emptyValueIndexMap){
 		List<T> l = new ArrayList<>();
 		if (keySet.size() > 0) {
-			List<String> jsonList = jedis.mget(keySet.toArray(new String[]{}));
+			String[] keySets = keySet.toArray(new String[]{});
+			List<String> jsonList = jedis.mget(keySets);
 			
 			// 순서 반대로.
 			Collections.reverse(jsonList);
 			
 			ObjectMapper om = new ObjectMapper();
 			
-			for (String json : jsonList) {
+			int size = jsonList.size();
+			for (int i = 0 ; i < size ; i++) {
+				String json = jsonList.get(i);
 				
-				//System.out.println(json);
 				if (json != null) {
 					try {
 						l.add(om.readValue(json, classOfT));
@@ -97,9 +100,14 @@ public class KeyValueListCache {
 						e.printStackTrace();
 					}
 				} else {
+					// 비어있는 값인 경우 key와 index를 저장
+					emptyValueIndexMap.put(keySets[size - i - 1], i);
+					
 					l.add(null);
 				}
+				
 			}
+			
 		}
 		
 		return l;
