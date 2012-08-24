@@ -6,9 +6,12 @@ import java.util.Set;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
+
 /**
  * @author 심영재
  */
+@XStreamAlias("result")
 @RooJavaBean
 @RooToString
 public class Result {

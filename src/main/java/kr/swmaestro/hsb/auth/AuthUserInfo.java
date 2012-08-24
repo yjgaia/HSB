@@ -11,8 +11,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
+import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
+@XStreamAlias("authUserInfo")
 @RooJavaBean
 @RooToString
 public class AuthUserInfo extends SecureKeyModel {

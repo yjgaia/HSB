@@ -24,11 +24,10 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 /**
  * @author 심영재
  */
+@XStreamAlias("userInfo")
 @RooJavaBean
 @RooToString
 @RooEntity
-@XmlRootElement
-@XStreamAlias("result")
 public class UserInfo extends SecureKeyModel {
 
 	@NotEmpty(message = "아이디를 입력해주세요.")
