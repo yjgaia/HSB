@@ -5,7 +5,7 @@
 <html>
 	<head>
 		<title>HSB</title>
-		<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="${pageContext.request.contextPath}/script/jquery-1.8.0.custom.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/script/json2.min.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/script/form2js.js"></script>
 		<script type="text/javascript" src="${pageContext.request.contextPath}/script/js2form.js"></script>
@@ -63,10 +63,10 @@
 				
 				var method = o.method;
 				// 브라우저가 지원하지 않을 경우가 있음
-				if (method == 'PUT' || method == 'DELETE') {
+				/*if (method == 'PUT' || method == 'DELETE') {
 					p._method = method;
 					method = 'POST';
-				}
+				}*/
 				
 				$.ajax({
 					url: o.url.indexOf('?') === -1 ? o.url + '.json' : o.url.substring(0, o.url.indexOf('?')) + '.json' + o.url.substring(o.url.indexOf('?'))
@@ -105,7 +105,7 @@
 		<form id="form">
 			<input id="get" type="radio" name="method" value="GET" checked="checked"><label for="get">GET</label>
 			<input id="post" type="radio" name="method" value="POST"><label for="post">POST</label>
-			<input id="put" type="radio" name="method" value="PUT"><label for="post">PUT</label>
+			<input id="put" type="radio" name="method" value="PUT"><label for="put">PUT</label>
 			<input id="delete" type="radio" name="method" value="DELETE"><label for="delete">DELETE</label>
 			<textarea name="url">http://localhost:8080/HSB/user/account</textarea>
 			<textarea name="params">{username: 'test'}</textarea>

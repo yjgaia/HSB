@@ -332,4 +332,16 @@ public class Controller {
 	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
 	public void deleteComment(@PathVariable Long id, Model model) {}
 	
+	@RequestMapping(value = "delete/test", method = RequestMethod.DELETE) // DELETE 테스트
+	public void deleteTest(UserInfo userInfo, Model model, HttpServletRequest request) {
+		System.out.println(userInfo.getUsername());
+		model.addAttribute("result", "");
+	}
+	
+	@RequestMapping(value = "put/test", method = RequestMethod.PUT) // PUT 테스트
+	public void putTest(UserInfo userInfo, Model model, HttpServletRequest request) {
+		System.out.println(userInfo.getUsername());
+		model.addAttribute("result", "");
+	}
+	
 }
