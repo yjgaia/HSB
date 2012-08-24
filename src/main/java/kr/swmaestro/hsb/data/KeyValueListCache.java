@@ -78,6 +78,10 @@ public class KeyValueListCache {
 	
 	public Set<String> getIndexes(String key) {
 		
+		if (!jedis.exists(key)) {
+			return null;
+		}
+		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		

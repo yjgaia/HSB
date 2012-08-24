@@ -305,6 +305,7 @@ public class Controller {
 	}
 	
 	// 글쓰기
+	// TODO: 유저네임이랑 로그인 유저가 같은지 판단하는 코드 필요.
 	@RequestMapping(value = "{username}", method = RequestMethod.POST)
 	public String write(@PathVariable String username, @Valid Article article, BindingResult bindingResult, Model model) {
 		Result result = new Result();
