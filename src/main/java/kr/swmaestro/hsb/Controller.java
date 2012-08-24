@@ -411,6 +411,13 @@ public class Controller {
 	// 팔로어 목록
 	@RequestMapping(value = "{username}/followers", method = RequestMethod.GET)
 	public String followers(@PathVariable String username, Model model) {
+		Result result= new Result();
+		
+		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
+		List<UserInfo> userList=followerService.getFollowerListByUserInfo(userInfo);
+		result.setSuccess(true);
+		
+		ret(result, userList, model);
 		return "followers";
 	}
 	

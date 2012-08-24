@@ -87,8 +87,8 @@ public class FollowService {
 		return Follow.findFollowsByTargetUserId(targetUserId);
 	}
 	public List<UserInfo> getFollowingListByUserInfo(UserInfo userInfo) {
-		String folliwingListKey=getFollowingListKey(userInfo.getId());
-		Set<String> followingSet=cache.getSetByKey(folliwingListKey);
+		String followingListKey=getFollowingListKey(userInfo.getId());
+		Set<String> followingSet=cache.getSetByKey(followingListKey);
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
 		List<UserInfo> cachedUserList=cache.getCachedList(followingSet,UserInfo.class, emptyValueIndexMap);
 		
@@ -117,7 +117,7 @@ public class FollowService {
 			List<UserInfo> followingListInDB= UserInfo.getFollowingListById(userInfo.getId());
 			for(UserInfo user: followingListInDB){
 				String key=cacheUserInfo(user);
-				cache.addSetElement(folliwingListKey, key);
+				cache.addSetElement(followingListKey, key);
 			}
 			
 			return followingListInDB;
@@ -129,5 +129,44 @@ public class FollowService {
 		String key=generateKeyByUser(user.getId());
 		cache.set(key,user);
 		return key;
+	}
+	public List<UserInfo> getFollowerListByUserInfo(UserInfo userInfo) {
+		String followerListKey=getFollowerListKey(userInfo.getId());
+		Set<String> followerSet=cache.getSetByKey(followerListKey);
+		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
+		List<UserInfo> cachedUserList=cache.getCachedList(followerSet,UserInfo.class, emptyValueIndexMap);
+		
+		// 비어있는 값들이 있을때...
+		if (emptyValueIndexMap.size() > 0) {
+					
+			List<Long> userIdList = new ArrayList<>();
+			for (String key : emptyValueIndexMap.keySet()) {
+			// article:{id}
+				Long id = Long.parseLong(key.substring(5));
+				userIdList.add(id);
+			}
+			
+			List<UserInfo> addUserInfoList = UserInfo.findUsersByIds(userIdList);
+			// 가져온 값들도 캐시에 넣어줍니다.
+			for (UserInfo user : addUserInfoList) {
+				String key = cacheUserInfo(user);
+				// 그리고 원래 글 목록에 삽입.
+				cachedUserList.set(emptyValueIndexMap.get(key), user);
+			}
+		}
+		
+		//캐싱된 값과 followingCount가 다름 
+		if(userInfo.getFollowerCount()>cachedUserList.size()){
+			System.out.println("캐싱 된것 없음");
+			List<UserInfo> followerListInDB= UserInfo.getFollowerListById(userInfo.getId());
+			for(UserInfo user: followerListInDB){
+				String key=cacheUserInfo(user);
+				cache.addSetElement(followerListKey, key);
+			}
+			
+			return followerListInDB;
+		}
+		
+		return cachedUserList;
 	}
 }

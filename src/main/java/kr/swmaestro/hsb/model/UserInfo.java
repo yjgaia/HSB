@@ -135,5 +135,9 @@ public class UserInfo extends SecureKeyModel {
 		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE id in(SELECT targetUserId FROM Follow WHERE followerId=:id)",UserInfo.class).setParameter("id", id).getResultList();
 	}
 
+	public static List<UserInfo> getFollowerListById(Long id) {
+		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE id in(SELECT followerId FROM Follow WHERE targetUserId=:id)",UserInfo.class).setParameter("id", id).getResultList();
+	}
+
 	
 }
