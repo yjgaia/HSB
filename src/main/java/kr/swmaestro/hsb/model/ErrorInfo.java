@@ -7,7 +7,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 
-@XStreamAlias("errorInfo")
+@XStreamAlias("error")
 @RooJavaBean
 @RooToString
 public class ErrorInfo {

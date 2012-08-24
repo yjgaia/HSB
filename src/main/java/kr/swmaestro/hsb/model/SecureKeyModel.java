@@ -10,7 +10,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 /**
  * @author 심영재
  */
-@XStreamAlias("secureKeyModel")
+@XStreamAlias("item")
 @RooJavaBean
 @RooToString
 public class SecureKeyModel {

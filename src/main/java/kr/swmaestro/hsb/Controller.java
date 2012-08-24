@@ -20,7 +20,6 @@ import kr.swmaestro.hsb.service.ArticleService;
 import kr.swmaestro.hsb.service.FollowService;
 import kr.swmaestro.hsb.service.UserService;
 import kr.swmaestro.hsb.util.PasswordEncoder;
-import kr.swmaestro.hsb.util.article.ArticleUtil;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -311,8 +310,12 @@ public class Controller {
 		Result result = new Result();
 		
 		if (authCheck(article, model)) {
-			UserInfo userInfoFromSession=authManager.getUserInfo(article.getSecureKey());
-			article=ArticleUtil.setArticleInfoWithSession(article, userInfoFromSession);
+			UserInfo userInfo = authManager.getUserInfo(article.getSecureKey());
+
+			article.setWriterId(userInfo.getId());
+			article.setWriterNickname(userInfo.getNickname());
+			article.setWriterUsername(userInfo.getUsername());
+			
 			System.out.println(article.getWriterId());
 			if (errorCheck(result, bindingResult)) {
 				article.setWriteDate(new Date());

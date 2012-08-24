@@ -7,17 +7,20 @@ import javax.persistence.Column;
 import javax.persistence.TypedQuery;
 import javax.validation.constraints.Size;
 
+import kr.swmaestro.hsb.XmlDateToLongConverter;
+
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 
 /**
  * @author 심영재
  */
-@XStreamAlias("article")
+@XStreamAlias("item")
 @RooJavaBean
 @RooToString
 @RooEntity
@@ -37,6 +40,7 @@ public class Article extends SecureKeyModel {
 	@Column(nullable = false)
 	private String writerNickname;
 
+	@XStreamConverter(XmlDateToLongConverter.class)
 	@Column(nullable = false)
 	private Date writeDate;
 	

@@ -14,7 +14,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
-@XStreamAlias("authUserInfo")
+@XStreamAlias("item")
 @RooJavaBean
 @RooToString
 public class AuthUserInfo extends SecureKeyModel {

@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
 
 import kr.swmaestro.hsb.XmlDateToLongConverter;
 
@@ -24,7 +23,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 /**
  * @author 심영재
  */
-@XStreamAlias("userInfo")
+@XStreamAlias("item")
 @RooJavaBean
 @RooToString
 @RooEntity

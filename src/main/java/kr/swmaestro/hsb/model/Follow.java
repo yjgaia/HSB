@@ -5,9 +5,13 @@ import java.util.List;
 
 import javax.persistence.Column;
 
+import kr.swmaestro.hsb.XmlDateToLongConverter;
+
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.tostring.RooToString;
+
+import com.thoughtworks.xstream.annotations.XStreamConverter;
 /**
  * @author 이한솔  
  */
@@ -34,6 +38,7 @@ public class Follow extends SecureKeyModel{
 	@Column(nullable = false)
 	private Long followerNickname;
 	
+	@XStreamConverter(XmlDateToLongConverter.class)
 	@Column(nullable = false)
 	private Date followDate;
 	
