@@ -78,15 +78,11 @@ public class KeyValueListCache {
 	
 	public Set<String> getIndexes(String key) {
 		
-		if (!jedis.exists(key)) {
-			return null;
-		}
-		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
-		return jedis.smembers(key); 
+		return jedis.zrange(key, 0, -1); 
 	}
 
 	public <T> List<T> list(String key, Long beforeScore, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap) {
