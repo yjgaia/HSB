@@ -61,16 +61,23 @@
 				setCookie('url', o.url, 30);
 				setCookie('params', o.params, 30);
 				
+				var method = o.method;
+				// 브라우저가 지원하지 않을 경우가 있음
+				if (method == 'PUT' || method == 'DELETE') {
+					p._method = method;
+					method = 'POST';
+				}
+				
 				$.ajax({
 					url: o.url.indexOf('?') === -1 ? o.url + '.json' : o.url.substring(0, o.url.indexOf('?')) + '.json' + o.url.substring(o.url.indexOf('?'))
-					, type: o.method
+					, type: method
 					, data: p
 					, success: function(json) {
 						$('#json').text(JSON.stringify(json, null, 4));
 						
 						$.ajax({
 							url: o.url.indexOf('?') === -1 ? o.url + '.xml' : o.url.substring(0, o.url.indexOf('?')) + '.xml' + o.url.substring(o.url.indexOf('?'))
-							, type: o.method
+							, type: method
 							, data: p
 							, dataType: 'text'
 							, success: function(xml) {
