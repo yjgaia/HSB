@@ -32,11 +32,64 @@ public class ArticleService {
 		return "user:" + userId + ":articles";
 	}
 	
-	public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
+	private String getTimelineIndexKey(Long userId) {
+		return "user:" + userId + ":timeline";
+	}
+	
+public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
 		
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
 		
 		List<Article> articleList = cache.list(getUserIndexKey(writerId), beforeArticleId, count, Article.class, emptyValueIndexMap);
+		
+		// 비어있는 값들이 있을때...
+		if (emptyValueIndexMap.size() > 0) {
+			
+			List<Long> articleIdList = new ArrayList<>();
+			for (String key : emptyValueIndexMap.keySet()) {
+				// article:{id}
+				Long id = Long.parseLong(key.substring(8));
+				articleIdList.add(id);
+			}
+			
+			List<Article> addArticleList = Article.findArticlesByIds(articleIdList);
+			
+			// 가져온 값들도 캐시에 넣어줍니다.
+			for (Article article : addArticleList) {
+				String key = cacheArticle(article);
+				
+				// 그리고 원래 글 목록에 삽입.
+				articleList.set(emptyValueIndexMap.get(key), article);
+			}
+		}
+		
+		// 캐시에서 불러온 글 목록 수가 예상보다 적을때...
+		if (articleList.size() < count) {
+			
+			Long addBeforeArticleId = null;
+			if (articleList.size() > 0) {
+				addBeforeArticleId = articleList.get(articleList.size() - 1).getId();
+			}
+			
+			if (addBeforeArticleId == null || addBeforeArticleId > 1) { // 마지막 글 id가 1보다 클때만 가져옴. 그 이하는 의미없음.
+				List<Article> addArticleList = Article.findArticlesByWriterId(writerId, addBeforeArticleId, count - articleList.size());
+				articleList.addAll(addArticleList);
+				
+				// 가져온 값들도 캐시에 넣어줍니다.
+				for (Article article : addArticleList) {
+					cacheArticle(article);
+				}
+			}
+		}
+		
+		return articleList;
+	}
+
+	public List<Article> timelineByWriterId(Long writerId, Long beforeArticleId, int count) {
+		
+		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
+		
+		List<Article> articleList = cache.list(getTimelineIndexKey(writerId), beforeArticleId, count, Article.class, emptyValueIndexMap);
 		
 		// 비어있는 값들이 있을때...
 		if (emptyValueIndexMap.size() > 0) {
@@ -91,7 +144,10 @@ public class ArticleService {
 		
 		// 작성자를 팔로우하는 목록을 가져와 캐싱
 		List<Follow> followList = followService.getFollowListByTargetUserId(article.getWriterId());
-		
+		for (Follow follow : followList) {
+			// 팔로어들의 타임라인에도 뜨게
+			cache.addIndex(getTimelineIndexKey(follow.getFollowerId()), article.getId(), key);
+		}
 	};
 	
 }

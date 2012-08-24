@@ -30,6 +30,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @org.springframework.stereotype.Controller
 @RequestMapping()
@@ -254,17 +255,34 @@ public class Controller {
 	// 타임라인
 	// 인증 필요
 	@RequestMapping(value = "user/timeline", method = RequestMethod.GET)
-	public void timeline(Model model) {
+	public void timeline(String secureKey, @RequestParam(defaultValue = "0") long beforeArticleId, @RequestParam(defaultValue = "10") int count, Model model) {
+		Result result = new Result();
+		
+		if (count < 1 || count > 100) { // 최대 100개
+			count = 10; // 기본 10개
+		}
+		
+		if (authCheck(secureKey, model)) {
+			UserInfo userInfo = UserInfo.findUserInfo(authManager.getUserId(secureKey));
+			List<Article> articleList = articleService.timelineByWriterId(userInfo.getId(), 0l, count);
+			
+			result.setSuccess(true);
+			
+			ret(result, articleList, model);
+		}
 	}
 	
 	// 글 목록 보기
 	@RequestMapping(value = "{username}", method = RequestMethod.GET)
-	public String home(@PathVariable String username, String secureKey, Model model) {
+	public String home(@PathVariable String username, @RequestParam(defaultValue = "0") long beforeArticleId, @RequestParam(defaultValue = "10") int count, Model model) {
 		Result result = new Result();
 		
+		if (count < 1 || count > 100) { // 최대 100개
+			count = 10; // 기본 10개
+		}
+		
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
-		List<Article> articleList = articleService.findArticlesByWriterId(userInfo.getId(), 0l, 10);
-		System.out.println(articleList.size());
+		List<Article> articleList = articleService.findArticlesByWriterId(userInfo.getId(), beforeArticleId, count);
 		
 		result.setSuccess(true);
 		

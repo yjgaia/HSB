@@ -39,21 +39,41 @@ public class Article extends SecureKeyModel {
 	
 	private int commentCount;
 	
-	public static List<Article> findArticlesByWriterId(Long writerId, Long afterArticleId, int count) {
+	public static List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
 		
 		String query = "SELECT o FROM Article o WHERE 1=1";
 		
 		if (writerId != null)		query += " AND o.writerId = :writerId";
-		if (afterArticleId != null)	query += " AND o.id < :afterArticleId";
+		if (beforeArticleId != null)	query += " AND o.id < :beforeArticleId";
 		
 		query += " ORDER BY o.id DESC";
 		TypedQuery<Article> q = entityManager().createQuery(query, Article.class);
 		
 		if (writerId != null)		q.setParameter("writerId", writerId);
-		if (afterArticleId != null)	q.setParameter("afterArticleId", afterArticleId);
+		if (beforeArticleId != null)	q.setParameter("beforeArticleId", beforeArticleId);
 		
 		return q.setMaxResults(count).getResultList();
     }
+
+	public static List<Article> findArticlesByWriterIds(List<Long> writerIds, Long beforeArticleId, int count) {
+		
+		String query = "SELECT o FROM Article o WHERE (1!=1";
+		
+		for (Long writerId : writerIds) {
+			query += " OR o.writerId = " + writerId;
+		}
+		
+		query += ")";
+		
+		if (beforeArticleId != null)	query += " AND o.id < :beforeArticleId";
+		
+		query += " ORDER BY o.id DESC";
+		TypedQuery<Article> q = entityManager().createQuery(query, Article.class);
+		
+		if (beforeArticleId != null)	q.setParameter("beforeArticleId", beforeArticleId);
+		
+		return q.setMaxResults(count).getResultList();
+	}
 
 	public static List<Article> findArticlesByIds(List<Long> ids) {
 		
