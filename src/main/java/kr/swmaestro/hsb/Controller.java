@@ -291,6 +291,20 @@ public class Controller {
 		return "home";
 	}
 	
+	// 유저 정보 보기
+	@RequestMapping(value = "{username}/info", method = RequestMethod.GET)
+	public String info(@PathVariable String username, Model model) {
+		Result result = new Result();
+		
+		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
+		
+		result.setSuccess(true);
+		
+		ret(result, userInfo, model);
+		
+		return "info";
+	}
+	
 	// 글쓰기
 	@RequestMapping(value = "{username}", method = RequestMethod.POST)
 	public String write(@PathVariable String username, @Valid Article article, BindingResult bindingResult, Model model) {
@@ -312,7 +326,7 @@ public class Controller {
 			ret(result, article, model);
 		}
 		
-		return "home";
+		return "write";
 	}
 
 	// 팔로우하기
@@ -345,7 +359,7 @@ public class Controller {
 			ret(result,follower,model);
 		}
 		
-		return "home";
+		return "follow";
 		
 	}
 	
@@ -371,37 +385,45 @@ public class Controller {
 			}
 			ret(result,follower,model);
 		}
-		return "home";
+		return "unfollow";
 	}
 	
 	// 팔로잉 목록
 	@RequestMapping(value = "{username}/following", method = RequestMethod.GET)
-	public void following(@PathVariable String username, Model model) {
+	public String following(@PathVariable String username, Model model) {
 		Result result= new Result();
 		
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
 		
-		
+		return "following";
 	}
 	
 	// 팔로어 목록
 	@RequestMapping(value = "{username}/followers", method = RequestMethod.GET)
-	public void followers(@PathVariable String username, Model model) {}
+	public String followers(@PathVariable String username, Model model) {
+		return "followers";
+	}
 	
 	// 글삭제
 	// 인증 필요
 	@RequestMapping(value = "article/{id}", method = RequestMethod.DELETE) // 글 제거
-	public void deleteArticle(@PathVariable Long id, Model model) {}
+	public String deleteArticle(@PathVariable Long id, Model model) {
+		return "deleteArticle";
+	}
 	
 	// 댓글 등록
 	// 인증 필요
 	@RequestMapping(value = "article/{articleId}/comment", method = RequestMethod.POST) // 댓글 등록
-	public void comment(@PathVariable Long articleId, Model model) {}
+	public String comment(@PathVariable Long articleId, Model model) {
+		return "comment";
+	}
 	
 	// 댓글 삭제
 	// 인증 필요
 	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
-	public void deleteComment(@PathVariable Long id, Model model) {}
+	public String deleteComment(@PathVariable Long id, Model model) {
+		return "deleteComment";
+	}
 	
 	@RequestMapping(value = "delete/test", method = RequestMethod.DELETE) // DELETE 테스트
 	public void deleteTest(UserInfo userInfo, Model model, HttpServletRequest request) {
