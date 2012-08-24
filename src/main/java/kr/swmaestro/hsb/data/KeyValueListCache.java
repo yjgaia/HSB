@@ -27,7 +27,7 @@ public class KeyValueListCache {
 	@Autowired
 	private Jedis jedis;
 	
-	private final static int COMMON_EXPIRE_SECOND = 60*5; // 테스트용 5분
+	private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
 	//private final static int COMMON_EXPIRE_SECOND = 7 * 24 * 60 * 60; // 1주일 정도 캐시에 저장해둔다.
 	
 	private final static long MAX_LIST_SIZE = 100; // 테스트용 100개
@@ -73,13 +73,13 @@ public class KeyValueListCache {
 		}
 	}
 	
-	public <T> List<T> list(String key, Long score, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap) {
+	public <T> List<T> list(String key, Long beforeScore, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap) {
 		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
 		
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
-		Set<String> keySet = jedis.zrangeByScore(key, "-inf", "(" + Long.toString(score), 0, count);
+		Set<String> keySet = jedis.zrangeByScore(key, "(" + Long.toString(beforeScore), "+inf", 0, count);
 		
 		return getCachedList(keySet,classOfT, emptyValueIndexMap);
 	}

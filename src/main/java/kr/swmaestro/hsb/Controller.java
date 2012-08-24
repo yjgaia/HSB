@@ -12,12 +12,12 @@ import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.auth.AuthUserInfo;
 import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.ErrorInfo;
-import kr.swmaestro.hsb.model.Follower;
+import kr.swmaestro.hsb.model.Follow;
 import kr.swmaestro.hsb.model.Result;
 import kr.swmaestro.hsb.model.SecureKeyModel;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.service.ArticleService;
-import kr.swmaestro.hsb.service.FollowerService;
+import kr.swmaestro.hsb.service.FollowService;
 import kr.swmaestro.hsb.service.UserService;
 import kr.swmaestro.hsb.util.PasswordEncoder;
 import kr.swmaestro.hsb.util.article.ArticleUtil;
@@ -45,7 +45,7 @@ public class Controller {
 	private ArticleService articleService;
 	
 	@Autowired
-	private FollowerService followerService;
+	private FollowService followerService;
 	
 	// 오류 체크
 	private boolean errorCheck(Result result, BindingResult bindingResult) {
@@ -73,6 +73,12 @@ public class Controller {
 			return false;
 		}
 		return true;
+	}
+	
+	// 결과값 반환
+	private void ret(Result result, Model model) {
+		result.setSingle(false);
+		model.addAttribute("result", result);
 	}
 	
 	// 결과값 반환
@@ -191,12 +197,59 @@ public class Controller {
 	// 회원 정보 수정
 	// 인증 필요
 	@RequestMapping(value = "user/account", method = RequestMethod.PUT)
-	public void updateAccount(@PathVariable String username, Model model) {}
+	public void updateAccount(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
+		Result result = new Result();
+		String secureKey = userInfo.getSecureKey();
+		
+		if (authCheck(userInfo, model)) {
+			
+			UserInfo originUserInfo = UserInfo.findUserInfo(authManager.getUserId(secureKey));
+			String password = PasswordEncoder.encodePassword(userInfo.getPassword());
+			
+			if (!bindingResult.hasFieldErrors("password") && !originUserInfo.getPassword().equals(password) && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
+				bindingResult.rejectValue("password", "Equals.userInfo.passwordConfirm", "비밀번호와 비밀번호 확인이 다릅니다.");
+			}
+			if (!bindingResult.hasFieldErrors("username") && !originUserInfo.getUsername().equals(userInfo.getUsername()) && UserInfo.existsUser(userInfo.getUsername())) {
+				bindingResult.rejectValue("username", "Exists.userInfo.username", "이미 존재하는 아이디입니다.");
+			}
+			if (!bindingResult.hasFieldErrors("nickname") && !originUserInfo.getNickname().equals(userInfo.getNickname()) && UserInfo.existsNickname(userInfo.getNickname())) {
+				bindingResult.rejectValue("nickname", "Exists.userInfo.nickname", "이미 존재하는 닉네임입니다.");
+			}
+			
+			if (errorCheck(result, bindingResult)) {
+
+				originUserInfo.setPassword(password);
+				originUserInfo.setUsername(userInfo.getUsername());
+				originUserInfo.setNickname(userInfo.getNickname());
+				
+				userService.saveUserInfo(originUserInfo);
+				
+				// 로그인 정보에 재삽입
+				authManager.setUserInfo(secureKey, originUserInfo);
+				
+				// 성공~!
+				result.setSuccess(true);
+			}
+		}
+		
+		ret(result, userInfo, model);
+	}
 	
 	// 회원 정보 삭제 (탈퇴)
 	// 인증 필요
 	@RequestMapping(value = "user/account", method = RequestMethod.DELETE)
-	public void leave(@PathVariable String username, Model model) {}
+	public void leave(String secureKey, Model model) {
+		Result result = new Result();
+		
+		if (authCheck(secureKey, model)) {
+			UserInfo userInfo = UserInfo.findUserInfo(authManager.getUserId(secureKey));
+			userService.deleteUserInfo(userInfo);
+			
+			result.setSuccess(true);
+		}
+		
+		ret(result, model);
+	}
 	
 	// 타임라인
 	// 인증 필요
@@ -247,7 +300,7 @@ public class Controller {
 	// 팔로우하기
 	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.POST) // 팔로우 생성
-	public String follow(@PathVariable String username, @Valid Follower follower, BindingResult bindingResult, Model model) {
+	public String follow(@PathVariable String username, @Valid Follow follower, BindingResult bindingResult, Model model) {
 		Result result= new Result();
 		
 		if(authCheck(follower,model)){
@@ -258,11 +311,11 @@ public class Controller {
 			if (followingUser.getId().equals(followedUser.getId()) ){
 				bindingResult.rejectValue("userId", "Equals.follower.userid", "본인의 아이디는 팔로우 할 수 없습니다.");
 			}
-			if(Follower.isFollowing(followedUser.getId(),followingUser.getId())){
+			if(Follow.isFollowing(followedUser.getId(),followingUser.getId())){
 				bindingResult.rejectValue("userId", "Exists.follower.userid", "이미 팔로우한 아이디 입니다.");
 			}
 			if (errorCheck(result, bindingResult)) {
-				follower.setUserId(followedUser.getId());
+				follower.setTargetUserId(followedUser.getId());
 				follower.setFollowerId(followingUser.getId());
 				follower.setFollowDate(new Date());
 			
@@ -281,17 +334,17 @@ public class Controller {
 	// 언팔로우
 	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.DELETE) // 팔로우 제거
-	public String unfollow(@PathVariable String username,String secureKey,@Valid Follower follower,BindingResult bindingResult, Model model) {
+	public String unfollow(@PathVariable String username,String secureKey,@Valid Follow follower,BindingResult bindingResult, Model model) {
 		Result result= new Result();
 		System.out.println("secureKey:"+secureKey);
 		if(authCheck(secureKey, model)){
 			UserInfo followingUser=authManager.getUserInfo(follower.getSecureKey());
 			UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
-			if(!Follower.isFollowing(followedUser.getId(),followingUser.getId())){
+			if(!Follow.isFollowing(followedUser.getId(),followingUser.getId())){
 				bindingResult.rejectValue("userId", "NonExists.follower.userid", "팔로우 관계가 아닙니다.");
 			}
 			if(errorCheck(result,bindingResult)){
-				follower.setUserId(followedUser.getId());
+				follower.setTargetUserId(followedUser.getId());
 				follower.setFollowerId(followingUser.getId());
 				followerService.removeFollow(follower);
 				

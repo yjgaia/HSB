@@ -14,99 +14,99 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Version;
-import kr.swmaestro.hsb.model.Follower;
+import kr.swmaestro.hsb.model.Follow;
 import org.springframework.transaction.annotation.Transactional;
 
-privileged aspect Follower_Roo_Entity {
+privileged aspect Follow_Roo_Entity {
     
-    declare @type: Follower: @Entity;
+    declare @type: Follow: @Entity;
     
     @PersistenceContext
-    transient EntityManager Follower.entityManager;
+    transient EntityManager Follow.entityManager;
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long Follower.id;
+    private Long Follow.id;
     
     @Version
     @Column(name = "version")
-    private Integer Follower.version;
+    private Integer Follow.version;
     
-    public Long Follower.getId() {
+    public Long Follow.getId() {
         return this.id;
     }
     
-    public void Follower.setId(Long id) {
+    public void Follow.setId(Long id) {
         this.id = id;
     }
     
-    public Integer Follower.getVersion() {
+    public Integer Follow.getVersion() {
         return this.version;
     }
     
-    public void Follower.setVersion(Integer version) {
+    public void Follow.setVersion(Integer version) {
         this.version = version;
     }
     
     @Transactional
-    public void Follower.persist() {
+    public void Follow.persist() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.persist(this);
     }
     
     @Transactional
-    public void Follower.remove() {
+    public void Follow.remove() {
         if (this.entityManager == null) this.entityManager = entityManager();
         if (this.entityManager.contains(this)) {
             this.entityManager.remove(this);
         } else {
-            Follower attached = Follower.findFollower(this.id);
+            Follow attached = Follow.findFollow(this.id);
             this.entityManager.remove(attached);
         }
     }
     
     @Transactional
-    public void Follower.flush() {
+    public void Follow.flush() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.flush();
     }
     
     @Transactional
-    public void Follower.clear() {
+    public void Follow.clear() {
         if (this.entityManager == null) this.entityManager = entityManager();
         this.entityManager.clear();
     }
     
     @Transactional
-    public Follower Follower.merge() {
+    public Follow Follow.merge() {
         if (this.entityManager == null) this.entityManager = entityManager();
-        Follower merged = this.entityManager.merge(this);
+        Follow merged = this.entityManager.merge(this);
         this.entityManager.flush();
         return merged;
     }
     
-    public static final EntityManager Follower.entityManager() {
-        EntityManager em = new Follower().entityManager;
+    public static final EntityManager Follow.entityManager() {
+        EntityManager em = new Follow().entityManager;
         if (em == null) throw new IllegalStateException("Entity manager has not been injected (is the Spring Aspects JAR configured as an AJC/AJDT aspects library?)");
         return em;
     }
     
-    public static long Follower.countFollowers() {
-        return entityManager().createQuery("SELECT COUNT(o) FROM Follower o", Long.class).getSingleResult();
+    public static long Follow.countFollows() {
+        return entityManager().createQuery("SELECT COUNT(o) FROM Follow o", Long.class).getSingleResult();
     }
     
-    public static List<Follower> Follower.findAllFollowers() {
-        return entityManager().createQuery("SELECT o FROM Follower o", Follower.class).getResultList();
+    public static List<Follow> Follow.findAllFollows() {
+        return entityManager().createQuery("SELECT o FROM Follow o", Follow.class).getResultList();
     }
     
-    public static Follower Follower.findFollower(Long id) {
+    public static Follow Follow.findFollow(Long id) {
         if (id == null) return null;
-        return entityManager().find(Follower.class, id);
+        return entityManager().find(Follow.class, id);
     }
     
-    public static List<Follower> Follower.findFollowerEntries(int firstResult, int maxResults) {
-        return entityManager().createQuery("SELECT o FROM Follower o", Follower.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
+    public static List<Follow> Follow.findFollowEntries(int firstResult, int maxResults) {
+        return entityManager().createQuery("SELECT o FROM Follow o", Follow.class).setFirstResult(firstResult).setMaxResults(maxResults).getResultList();
     }
     
 }

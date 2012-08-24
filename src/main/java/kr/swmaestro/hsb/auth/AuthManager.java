@@ -19,6 +19,10 @@ public class AuthManager {
 		return (UserInfo) keyValueCache.get(secureKey, UserInfo.class);
 	}
 	
+	public void setUserInfo(String secureKey, UserInfo userInfo) {
+		keyValueCache.set(secureKey, userInfo);
+	}
+	
 	public Long getUserId(String secureKey) {
 		UserInfo userInfo = getUserInfo(secureKey);
 		return userInfo == null ? null : userInfo.getId();

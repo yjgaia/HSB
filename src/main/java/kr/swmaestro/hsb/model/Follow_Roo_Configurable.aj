@@ -5,8 +5,8 @@ package kr.swmaestro.hsb.model;
 
 import org.springframework.beans.factory.annotation.Configurable;
 
-privileged aspect Follower_Roo_Configurable {
+privileged aspect Follow_Roo_Configurable {
     
-    declare @type: Follower: @Configurable;
+    declare @type: Follow: @Configurable;
     
 }

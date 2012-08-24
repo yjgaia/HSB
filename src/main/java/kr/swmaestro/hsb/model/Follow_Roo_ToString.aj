@@ -5,15 +5,19 @@ package kr.swmaestro.hsb.model;
 
 import java.lang.String;
 
-privileged aspect Follower_Roo_ToString {
+privileged aspect Follow_Roo_ToString {
     
-    public String Follower.toString() {
+    public String Follow.toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("FollowDate: ").append(getFollowDate()).append(", ");
         sb.append("FollowerId: ").append(getFollowerId()).append(", ");
+        sb.append("FollowerNickname: ").append(getFollowerNickname()).append(", ");
+        sb.append("FollowerUsername: ").append(getFollowerUsername()).append(", ");
         sb.append("Id: ").append(getId()).append(", ");
         sb.append("SecureKey: ").append(getSecureKey()).append(", ");
-        sb.append("UserId: ").append(getUserId()).append(", ");
+        sb.append("TargetUserId: ").append(getTargetUserId()).append(", ");
+        sb.append("TargetUserNickname: ").append(getTargetUserNickname()).append(", ");
+        sb.append("TargetUserUsername: ").append(getTargetUserUsername()).append(", ");
         sb.append("Version: ").append(getVersion());
         return sb.toString();
     }

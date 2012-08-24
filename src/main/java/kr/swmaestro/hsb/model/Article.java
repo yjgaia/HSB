@@ -25,10 +25,13 @@ public class Article extends SecureKeyModel {
 	@Column(length = 3000, nullable = false)
 	private String content;
 
+	@Column(nullable = false)
 	private Long writerId;
 	
+	@Column(nullable = false)
 	private String writerUsername;
 	
+	@Column(nullable = false)
 	private String writerNickname;
 
 	@Column(nullable = false)
@@ -51,5 +54,19 @@ public class Article extends SecureKeyModel {
 		
 		return q.setMaxResults(count).getResultList();
     }
+
+	public static List<Article> findArticlesByIds(List<Long> ids) {
+		
+		String query = "SELECT o FROM Article o WHERE 1!=1";
+		
+		for (Long id : ids) {
+			query += " OR o.id = " + id;
+		}
+		
+		query += " ORDER BY o.id DESC";
+		TypedQuery<Article> q = entityManager().createQuery(query, Article.class);
+		
+		return q.getResultList();
+	}
 
 }
