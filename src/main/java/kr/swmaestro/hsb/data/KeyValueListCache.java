@@ -65,6 +65,12 @@ public class KeyValueListCache {
 		jedis.expire(key,COMMON_EXPIRE_SECOND);
 	}
 	
+	public void removeOrderedSetElement(String key,String targetKey){
+		System.out.println("zrem:"+key+","+targetKey);
+		jedis.zrem(key, targetKey);
+		jedis.expire(key,COMMON_EXPIRE_SECOND);
+	}
+	
 	public void addIndex(String key, Long score, String targetKey) {
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);

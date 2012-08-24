@@ -99,11 +99,11 @@ public class ArticleService {
 		Set<String> keySet = cache.getIndexes(getUserIndexKey(writerId));
 		
 		List<Long> ids = new ArrayList<Long>();
-		
-		for (String key : keySet) {
-			ids.add(getArticleIdFromKey(key));
+		if(keySet!=null){
+			for (String key : keySet) {
+				ids.add(getArticleIdFromKey(key));
+			}
 		}
-		
 		return ids;
 	}
 

@@ -92,7 +92,7 @@ public class FollowService {
 		// 캐시에 저장된 id를 타임라인 캐시에서 제거
 		List<Long> articleIds = articleService.findArticleIdsByWriterId(follow.getTargetUserId());
 		for (Long articleId : articleIds) {
-			cache.removeSetElement(articleService.getTimelineIndexKey(follow.getFollowerId()), articleService.getArticleKey(articleId));
+			cache.removeOrderedSetElement(articleService.getTimelineIndexKey(follow.getFollowerId()), articleService.getArticleKey(articleId));
 		}
 	};
 	
