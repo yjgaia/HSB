@@ -1,9 +1,11 @@
 package kr.swmaestro.hsb.model;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Transient;
+import javax.persistence.TypedQuery;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -115,6 +117,23 @@ public class UserInfo extends SecureKeyModel {
 	public static boolean existsNickname(String nickname) {
 		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
+
+	public static List<UserInfo> findUsersByIds(List<Long> ids) {
+		String query = "SELECT o FROM UserInfo o WHERE 1!=1";
+		
+		for (Long id : ids) {
+			query += " OR o.id = " + id;
+		}
+		
+		//query += " ORDER BY o.id DESC";
+		TypedQuery<UserInfo> q = entityManager().createQuery(query, UserInfo.class);
+		
+		return q.getResultList();
+	}
+
+	public static List<UserInfo> getFollowingListById(Long id) {
+		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE id in(SELECT targetUserId FROM Follow WHERE followerId=:id)",UserInfo.class).setParameter("id", id).getResultList();
+	}
 
 	
 }

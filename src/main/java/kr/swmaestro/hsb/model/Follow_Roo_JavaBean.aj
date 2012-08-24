@@ -41,19 +41,19 @@ privileged aspect Follow_Roo_JavaBean {
         this.followerId = followerId;
     }
     
-    public Long Follow.getFollowerUsername() {
+    public String Follow.getFollowerUsername() {
         return this.followerUsername;
     }
     
-    public void Follow.setFollowerUsername(Long followerUsername) {
+    public void Follow.setFollowerUsername(String followerUsername) {
         this.followerUsername = followerUsername;
     }
     
-    public Long Follow.getFollowerNickname() {
+    public String Follow.getFollowerNickname() {
         return this.followerNickname;
     }
     
-    public void Follow.setFollowerNickname(Long followerNickname) {
+    public void Follow.setFollowerNickname(String followerNickname) {
         this.followerNickname = followerNickname;
     }
     

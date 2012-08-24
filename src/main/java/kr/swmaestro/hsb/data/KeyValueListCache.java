@@ -49,6 +49,9 @@ public class KeyValueListCache {
 			e.printStackTrace();
 		}
 	}
+	public Set<String> getSetByKey(String key){
+		return jedis.smembers(key);
+	}
 	
 	public void addSetElement(String key,String targetKey){
 		System.out.println("sadd:"+key+","+targetKey);
@@ -84,7 +87,7 @@ public class KeyValueListCache {
 		return getCachedList(keySet,classOfT, emptyValueIndexMap);
 	}
 	
-	private <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT, Map<String, Integer> emptyValueIndexMap){
+	public <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT, Map<String, Integer> emptyValueIndexMap){
 		List<T> l = new ArrayList<>();
 		if (keySet.size() > 0) {
 			String[] keySets = keySet.toArray(new String[]{});

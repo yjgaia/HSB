@@ -33,10 +33,10 @@ public class Follow extends SecureKeyModel{
 	private Long followerId;
 	
 	@Column(nullable = false)
-	private Long followerUsername;
+	private String followerUsername;
 	
 	@Column(nullable = false)
-	private Long followerNickname;
+	private String followerNickname;
 	
 	@XStreamConverter(XmlDateToLongConverter.class)
 	@Column(nullable = false)
