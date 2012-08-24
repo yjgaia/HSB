@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.Article;
@@ -21,9 +22,13 @@ public class ArticleService {
 	@Autowired
 	private FollowService followService;
 	
+	public String getArticleKey(Long id) {
+		return "article:" + id;
+	}
+	
 	// 캐시에 저장
 	private String cacheArticle(Article article) {
-		String articleKey = "article:" + article.getId();
+		String articleKey = getArticleKey(article.getId());
 		cache.set(articleKey, article);
 		return articleKey;
 	}
@@ -32,11 +37,16 @@ public class ArticleService {
 		return "user:" + userId + ":articles";
 	}
 	
-	private String getTimelineIndexKey(Long userId) {
+	public String getTimelineIndexKey(Long userId) {
 		return "user:" + userId + ":timeline";
 	}
 	
-public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
+	private Long getArticleIdFromKey(String key) {
+		// article:{id}
+		return Long.parseLong(key.substring(8));
+	}
+	
+	public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
 		
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
 		
@@ -48,8 +58,7 @@ public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId,
 			List<Long> articleIdList = new ArrayList<>();
 			for (String key : emptyValueIndexMap.keySet()) {
 				// article:{id}
-				Long id = Long.parseLong(key.substring(8));
-				articleIdList.add(id);
+				articleIdList.add(getArticleIdFromKey(key));
 			}
 			
 			List<Article> addArticleList = Article.findArticlesByIds(articleIdList);
@@ -83,6 +92,19 @@ public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId,
 		}
 		
 		return articleList;
+	}
+
+	public List<Long> findArticleIdsByWriterId(Long writerId) {
+		
+		Set<String> keySet = cache.getIndexes(getUserIndexKey(writerId));
+		
+		List<Long> ids = new ArrayList<Long>();
+		
+		for (String key : keySet) {
+			ids.add(getArticleIdFromKey(key));
+		}
+		
+		return ids;
 	}
 
 	public List<Article> timelineByWriterId(Long writerId, Long beforeArticleId, int count) {

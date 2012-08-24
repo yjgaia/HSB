@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import kr.swmaestro.hsb.data.KeyValueListCache;
-import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.Follow;
 import kr.swmaestro.hsb.model.UserInfo;
 
@@ -21,6 +20,10 @@ public class FollowService {
 	
 	@Autowired
 	protected UserService userService;
+	
+	@Autowired
+	private ArticleService articleService;
+	
 	public static String getFollowerListKey(Long followedUserId){
 		return generateKeyByUser(followedUserId)+":followers";
 	}
@@ -30,28 +33,32 @@ public class FollowService {
 	public static String generateKeyByUser(Long id){
 		return "user:"+id;
 	}
-	public void saveFollower(Follow follower) {
+	public void saveFollower(Follow follow) {
 		// RDBMS에 저장
-		follower.persist();
+		follow.persist();
 		// 캐시에 저장
-		UserInfo followedUser=UserInfo.findUserInfo(follower.getTargetUserId());
-		UserInfo followingUser=UserInfo.findUserInfo(follower.getFollowerId());
+		UserInfo followedUser=UserInfo.findUserInfo(follow.getTargetUserId());
+		UserInfo followingUser=UserInfo.findUserInfo(follow.getFollowerId());
 		//follower  리스트 
-		String followerListKey = getFollowerListKey(follower.getTargetUserId());
+		String followerListKey = getFollowerListKey(follow.getTargetUserId());
 		//following 리스트
-		String followingListKey = getFollowingListKey(follower.getFollowerId());
+		String followingListKey = getFollowingListKey(follow.getFollowerId());
 		
 		addFollowerFollowingCount(followedUser, followingUser, 1);
 		//following 하는 유저의  following 리스트에 추가
-		cache.addSetElement(followingListKey, generateKeyByUser(follower.getTargetUserId()));
+		cache.addSetElement(followingListKey, generateKeyByUser(follow.getTargetUserId()));
 		//follow 대상이 되는 유저의 리스트에 follower추가  
-		cache.addSetElement(followerListKey, generateKeyByUser(follower.getFollowerId()));
+		cache.addSetElement(followerListKey, generateKeyByUser(follow.getFollowerId()));
 		
+		// 캐시에 저장된 id를 타임라인 캐시에 삽입
+		List<Long> articleIds = articleService.findArticleIdsByWriterId(follow.getTargetUserId());
+		for (Long articleId : articleIds) {
+			cache.addIndex(articleService.getTimelineIndexKey(follow.getFollowerId()), articleId, articleService.getArticleKey(articleId));
+		}
 	}
 	
 	//넘어온 count만큼 팔로우,팔로잉 숫자를 더해주는 함수 
 	public void addFollowerFollowingCount(UserInfo followedUser,UserInfo followingUser,int count){
-		
 				
 		followedUser.addFollowerCount(count);
 		userService.saveUserInfo(followedUser);
@@ -60,27 +67,33 @@ public class FollowService {
 		userService.saveUserInfo(followingUser);
 	}
 
-	public void removeFollow(Follow follower) {
+	public void removeFollow(Follow follow) {
 		//RDBMS에서 찾아오기 
-		Follow foundFollowInfo=Follow.findFollowInfoByFollower(follower.getTargetUserId(), follower.getFollowerId());
+		Follow foundFollowInfo=Follow.findFollowInfoByFollower(follow.getTargetUserId(), follow.getFollowerId());
 		
 		//삭제 
 		foundFollowInfo.remove();
 		
-		UserInfo followedUser=UserInfo.findUserInfo(follower.getTargetUserId());
-		UserInfo followingUser=UserInfo.findUserInfo(follower.getFollowerId());
+		UserInfo followedUser=UserInfo.findUserInfo(follow.getTargetUserId());
+		UserInfo followingUser=UserInfo.findUserInfo(follow.getFollowerId());
 		
 		addFollowerFollowingCount(followedUser, followingUser, -1);
 		
 		//follower  리스트 
-		String followerListKey = getFollowerListKey(follower.getTargetUserId());
+		String followerListKey = getFollowerListKey(follow.getTargetUserId());
 		//following 리스트
-		String followingListKey = getFollowingListKey(follower.getFollowerId());
+		String followingListKey = getFollowingListKey(follow.getFollowerId());
 		
 		//following 하는 유저의  following 리스트에서 follower 제거 
-		cache.removeSetElement(followingListKey, generateKeyByUser(follower.getTargetUserId()));
+		cache.removeSetElement(followingListKey, generateKeyByUser(follow.getTargetUserId()));
 		//follow 대상이 되는 유저의 리스트에서 follower 제거 
-		cache.removeSetElement(followerListKey, generateKeyByUser(follower.getFollowerId()));
+		cache.removeSetElement(followerListKey, generateKeyByUser(follow.getFollowerId()));
+		
+		// 캐시에 저장된 id를 타임라인 캐시에서 제거
+		List<Long> articleIds = articleService.findArticleIdsByWriterId(follow.getTargetUserId());
+		for (Long articleId : articleIds) {
+			cache.removeSetElement(articleService.getTimelineIndexKey(follow.getFollowerId()), articleService.getArticleKey(articleId));
+		}
 	};
 	
 	public List<Follow> getFollowListByTargetUserId(Long targetUserId) {
