@@ -17,7 +17,8 @@ privileged aspect Article_Roo_ToString {
         sb.append("WriteDate: ").append(getWriteDate()).append(", ");
         sb.append("WriterId: ").append(getWriterId()).append(", ");
         sb.append("WriterNickname: ").append(getWriterNickname()).append(", ");
-        sb.append("WriterUsername: ").append(getWriterUsername());
+        sb.append("WriterUsername: ").append(getWriterUsername()).append(", ");
+        sb.append("Enable: ").append(isEnable());
         return sb.toString();
     }
     

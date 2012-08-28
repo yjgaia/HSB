@@ -172,4 +172,21 @@ public class ArticleService {
 		}
 	};
 	
+	public void deleteArticle(Article article) {
+		// RDBMS에서 제거
+		article.delete();
+		
+		// 캐시에서 제거
+		String key = getArticleKey(article.getId());
+		cache.delete(key);
+		cache.removeIndex(getUserIndexKey(article.getWriterId()), key);
+		
+		// 작성자를 팔로우하는 목록에서도 제거
+		List<Follow> followList = followService.getFollowListByTargetUserId(article.getWriterId());
+		for (Follow follow : followList) {
+			// 팔로어들의 타임라인에서 제거
+			cache.removeIndex(getTimelineIndexKey(follow.getFollowerId()), key);
+		}
+	}
+	
 }

@@ -57,4 +57,12 @@ privileged aspect Article_Roo_JavaBean {
         this.commentCount = commentCount;
     }
     
+    public boolean Article.isEnable() {
+        return this.enable;
+    }
+    
+    public void Article.setEnable(boolean enable) {
+        this.enable = enable;
+    }
+    
 }

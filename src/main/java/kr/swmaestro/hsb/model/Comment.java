@@ -8,6 +8,7 @@ import javax.validation.constraints.Size;
 
 import kr.swmaestro.hsb.XmlDateToLongConverter;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -15,6 +16,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * @author 심영재
@@ -45,5 +47,9 @@ public class Comment extends SecureKeyModel {
 	@XStreamConverter(XmlDateToLongConverter.class)
 	@Column(nullable = false)
 	private Date writeDate;
+	
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
+	private boolean enable;
 
 }

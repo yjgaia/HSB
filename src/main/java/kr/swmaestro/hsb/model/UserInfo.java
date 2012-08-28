@@ -107,19 +107,19 @@ public class UserInfo extends SecureKeyModel {
 	private boolean enable;
 	
 	public static UserInfo findUserInfoByUsername(String username) {
-		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE username = :username", UserInfo.class).setParameter("username", username).getSingleResult();
+		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE o.enable = true AND username = :username", UserInfo.class).setParameter("username", username).getSingleResult();
 	}
 
 	public static boolean existsUser(String username) {
-		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE username = :username", Long.class).setParameter("username", username).getSingleResult() > 0l;
+		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.enable = true AND username = :username", Long.class).setParameter("username", username).getSingleResult() > 0l;
 	}
 	
 	public static boolean existsNickname(String nickname) {
-		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
+		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.enable = true AND nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
 
 	public static List<UserInfo> findUsersByIds(List<Long> ids) {
-		String query = "SELECT o FROM UserInfo o WHERE 1!=1";
+		String query = "SELECT o FROM UserInfo o WHERE o.enable = true AND (1!=1";
 		
 		for (Long id : ids) {
 			query += " OR o.id = " + id;
@@ -132,12 +132,16 @@ public class UserInfo extends SecureKeyModel {
 	}
 
 	public static List<UserInfo> getFollowingListById(Long id) {
-		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE id in(SELECT targetUserId FROM Follow WHERE followerId=:id)",UserInfo.class).setParameter("id", id).getResultList();
+		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE o.enable = true AND id in(SELECT targetUserId FROM Follow WHERE followerId=:id)",UserInfo.class).setParameter("id", id).getResultList();
 	}
 
 	public static List<UserInfo> getFollowerListById(Long id) {
-		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE id in(SELECT followerId FROM Follow WHERE targetUserId=:id)",UserInfo.class).setParameter("id", id).getResultList();
+		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE o.enable = true AND id in(SELECT followerId FROM Follow WHERE targetUserId=:id)",UserInfo.class).setParameter("id", id).getResultList();
 	}
 
+	public void delete() {
+		enable = false;
+		merge();
+	}
 	
 }

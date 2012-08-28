@@ -60,5 +60,9 @@ public class KeyValueCache {
 		}
 		return null;
 	}
+	
+	public void del(String key) {
+		client.delete(key);
+	}
 
 }

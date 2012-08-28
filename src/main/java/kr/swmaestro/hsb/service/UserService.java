@@ -22,8 +22,7 @@ public class UserService {
 	
 	// 유저 정보 제거
 	public void deleteUserInfo(UserInfo userInfo) {
-		userInfo.setEnable(false);
-		userInfo.merge();
+		userInfo.delete();
 		cache.delete("user:" + userInfo.getId());
 	}
 

@@ -57,4 +57,12 @@ privileged aspect Comment_Roo_JavaBean {
         this.writeDate = writeDate;
     }
     
+    public boolean Comment.isEnable() {
+        return this.enable;
+    }
+    
+    public void Comment.setEnable(boolean enable) {
+        this.enable = enable;
+    }
+    
 }

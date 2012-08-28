@@ -164,7 +164,12 @@ public class Controller {
 	// 로그아웃
 	// 인증 필요
 	@RequestMapping(value = "user/auth", method = RequestMethod.DELETE) // 인증 제거
-	public void logout(Model model) {}
+	public void logout(String secureKey, Model model) {
+		Result result = new Result();
+		authManager.unauth(secureKey);
+		result.setSuccess(true);
+		ret(result, model);
+	}
 	
 	// 회원가입
 	@RequestMapping(value = "user/account", method = RequestMethod.POST)
@@ -305,7 +310,6 @@ public class Controller {
 	}
 	
 	// 글쓰기
-	// TODO: 유저네임이랑 로그인 유저가 같은지 판단하는 코드 필요.
 	@RequestMapping(value = "{username}", method = RequestMethod.POST)
 	public String write(@PathVariable String username, @Valid Article article, BindingResult bindingResult, Model model) {
 		Result result = new Result();
@@ -317,7 +321,11 @@ public class Controller {
 			article.setWriterNickname(userInfo.getNickname());
 			article.setWriterUsername(userInfo.getUsername());
 			
-			System.out.println(article.getWriterId());
+			// 유저네임이랑 로그인 유저가 같은지 판단하는 코드
+			if (!bindingResult.hasFieldErrors("username") && !userInfo.getUsername().equals(username)) {
+				bindingResult.rejectValue("username", "Equals.userInfo.username", "아이디가 다릅니다.");
+			}
+			
 			if (errorCheck(result, bindingResult)) {
 				article.setWriteDate(new Date());
 				
@@ -425,8 +433,33 @@ public class Controller {
 	// 글삭제
 	// 인증 필요
 	@RequestMapping(value = "article/{id}", method = RequestMethod.DELETE) // 글 제거
-	public String deleteArticle(@PathVariable Long id, Model model) {
+	public String deleteArticle(String secureKey, @PathVariable Long id, BindingResult bindingResult, Model model) {
+		Result result = new Result();
+		
+		if (authCheck(secureKey, model)) {
+			Article article = Article.findArticle(id);
+			
+			// 작성자와 로그인 유저가 같은지 판단하는 코드
+			if (!bindingResult.hasFieldErrors("writerId") && !article.getWriterId().equals(authManager.getUserId(secureKey))) {
+				bindingResult.rejectValue("writerId", "Equals.article.writerId", "작성자가 다릅니다.");
+			}
+			
+			if(errorCheck(result, bindingResult)){
+				articleService.deleteArticle(Article.findArticle(id));
+				
+				// 성공~!
+				result.setSuccess(true);
+			}
+		}
+		
+		ret(result, model);
 		return "deleteArticle";
+	}
+	
+	// 댓글 목록
+	@RequestMapping(value = "article/{articleId}/comments", method = RequestMethod.GET) // 댓글 목록
+	public String comments(@PathVariable Long articleId, Model model) {
+		return "comments";
 	}
 	
 	// 댓글 등록

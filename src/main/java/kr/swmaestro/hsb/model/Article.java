@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 
 import kr.swmaestro.hsb.XmlDateToLongConverter;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.roo.addon.entity.RooEntity;
 import org.springframework.roo.addon.javabean.RooJavaBean;
@@ -16,6 +17,7 @@ import org.springframework.roo.addon.tostring.RooToString;
 
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamConverter;
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 /**
  * @author 심영재
@@ -46,9 +48,13 @@ public class Article extends SecureKeyModel {
 	
 	private int commentCount;
 	
+	@JsonIgnore // JSON으로 출력하지 않음
+	@XStreamOmitField // XML로 출력하지 않음
+	private boolean enable;
+	
 	public static List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
 		
-		String query = "SELECT o FROM Article o WHERE 1=1";
+		String query = "SELECT o FROM Article o WHERE o.enable = true";
 		
 		if (writerId != null)		query += " AND o.writerId = :writerId";
 		if (beforeArticleId != null)	query += " AND o.id < :beforeArticleId";
@@ -64,7 +70,7 @@ public class Article extends SecureKeyModel {
 
 	public static List<Article> findArticlesByWriterIds(List<Long> writerIds, Long beforeArticleId, int count) {
 		
-		String query = "SELECT o FROM Article o WHERE (1!=1";
+		String query = "SELECT o FROM Article o WHERE o.enable = true AND (1!=1";
 		
 		for (Long writerId : writerIds) {
 			query += " OR o.writerId = " + writerId;
@@ -84,16 +90,22 @@ public class Article extends SecureKeyModel {
 
 	public static List<Article> findArticlesByIds(List<Long> ids) {
 		
-		String query = "SELECT o FROM Article o WHERE 1!=1";
+		String query = "SELECT o FROM Article o WHERE o.enable = true AND (1!=1";
 		
 		for (Long id : ids) {
 			query += " OR o.id = " + id;
 		}
 		
+		query += ")";
 		query += " ORDER BY o.id DESC";
 		TypedQuery<Article> q = entityManager().createQuery(query, Article.class);
 		
 		return q.getResultList();
+	}
+	
+	public void delete() {
+		enable = false;
+		merge();
 	}
 
 }

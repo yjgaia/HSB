@@ -34,6 +34,10 @@ public class AuthManager {
 		return secureKey;
 	}
 	
+	public void unauth(String secureKey) {
+		keyValueCache.del(secureKey);
+	}
+	
 	public boolean isAnonymous(String secureKey) {
 		return getUserInfo(secureKey) == null;
 	}

@@ -82,6 +82,10 @@ public class KeyValueListCache {
 		}
 	}
 	
+	public void removeIndex(String key, String targetKey) {
+		jedis.zrem(key, targetKey);
+	}
+	
 	public Set<String> getIndexes(String key) {
 		
 		// 읽어오는 순간 expire 시간 재생성
