@@ -325,6 +325,7 @@ public class Controller {
 			article.setWriterId(userInfo.getId());
 			article.setWriterNickname(userInfo.getNickname());
 			article.setWriterUsername(userInfo.getUsername());
+			article.setEnable(true);
 			
 			// 유저네임이랑 로그인 유저가 같은지 판단하는 코드
 			if (!bindingResult.hasFieldErrors("username") && !userInfo.getUsername().equals(username)) {
@@ -487,7 +488,7 @@ public class Controller {
 			comment.setWriterUsername(userInfo.getUsername());
 			comment.setWriterNickname(userInfo.getNickname());
 			comment.setTargetArticleId(articleId);
-			
+			comment.setEnable(true);
 			
 			if (errorCheck(result, bindingResult)) {
 				comment.setWriteDate(new Date());
