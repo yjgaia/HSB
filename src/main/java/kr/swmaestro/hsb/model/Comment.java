@@ -27,7 +27,7 @@ import com.thoughtworks.xstream.annotations.XStreamOmitField;
 @RooEntity
 public class Comment extends SecureKeyModel {
 	
-	@NotNull
+	@Column(nullable = false)
 	private Long targetArticleId;
 	
 	@NotEmpty
@@ -35,13 +35,13 @@ public class Comment extends SecureKeyModel {
 	@Column(length = 500, nullable = false)
 	private String content;
 
-	@NotNull
+	@Column(nullable = false)
 	private Long writerId;
 	
-	@NotNull
-	private Long writerUsername;
+	@Column(nullable = false)
+	private String writerUsername;
 	
-	@NotNull
+	@Column(nullable = false)
 	private String writerNickname;
 
 	@XStreamConverter(XmlDateToLongConverter.class)

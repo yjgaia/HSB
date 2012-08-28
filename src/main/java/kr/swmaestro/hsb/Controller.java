@@ -11,12 +11,14 @@ import javax.validation.Valid;
 import kr.swmaestro.hsb.auth.AuthManager;
 import kr.swmaestro.hsb.auth.AuthUserInfo;
 import kr.swmaestro.hsb.model.Article;
+import kr.swmaestro.hsb.model.Comment;
 import kr.swmaestro.hsb.model.ErrorInfo;
 import kr.swmaestro.hsb.model.Follow;
 import kr.swmaestro.hsb.model.Result;
 import kr.swmaestro.hsb.model.SecureKeyModel;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.service.ArticleService;
+import kr.swmaestro.hsb.service.CommentService;
 import kr.swmaestro.hsb.service.FollowService;
 import kr.swmaestro.hsb.service.UserService;
 import kr.swmaestro.hsb.util.PasswordEncoder;
@@ -46,6 +48,9 @@ public class Controller {
 	
 	@Autowired
 	private FollowService followerService;
+	
+	@Autowired
+	private CommentService commentService;
 	
 	// 오류 체크
 	private boolean errorCheck(Result result, BindingResult bindingResult) {
@@ -458,14 +463,36 @@ public class Controller {
 	
 	// 댓글 목록
 	@RequestMapping(value = "article/{articleId}/comments", method = RequestMethod.GET) // 댓글 목록
-	public String comments(@PathVariable Long articleId, Model model) {
+	public String comments(@PathVariable Long articleId, Model model) {	
 		return "comments";
 	}
 	
 	// 댓글 등록
 	// 인증 필요
 	@RequestMapping(value = "article/{articleId}/comment", method = RequestMethod.POST) // 댓글 등록
-	public String comment(@PathVariable Long articleId, Model model) {
+	public String comment(@PathVariable Long articleId,@Valid Comment comment,BindingResult bindingResult, Model model) {
+		Result result = new Result();
+		
+		if (authCheck(comment, model)) {
+			UserInfo userInfo = authManager.getUserInfo(comment.getSecureKey());
+
+			comment.setWriterId(userInfo.getId());
+			comment.setWriterUsername(userInfo.getUsername());
+			comment.setWriterNickname(userInfo.getNickname());
+			comment.setTargetArticleId(articleId);
+			
+			
+			if (errorCheck(result, bindingResult)) {
+				comment.setWriteDate(new Date());
+				
+				// 저장
+				commentService.saveComment(comment);
+				
+				// 성공~!
+				result.setSuccess(true);
+			}
+			ret(result, comment, model);
+		}
 		return "comment";
 	}
 	

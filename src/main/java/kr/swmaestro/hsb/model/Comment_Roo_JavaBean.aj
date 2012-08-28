@@ -33,11 +33,11 @@ privileged aspect Comment_Roo_JavaBean {
         this.writerId = writerId;
     }
     
-    public Long Comment.getWriterUsername() {
+    public String Comment.getWriterUsername() {
         return this.writerUsername;
     }
     
-    public void Comment.setWriterUsername(Long writerUsername) {
+    public void Comment.setWriterUsername(String writerUsername) {
         this.writerUsername = writerUsername;
     }
     
