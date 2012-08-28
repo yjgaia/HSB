@@ -439,11 +439,11 @@ public class Controller {
 	// 글삭제
 	// 인증 필요
 	@RequestMapping(value = "article/{id}", method = RequestMethod.DELETE) // 글 제거
-	public String deleteArticle(String secureKey, @PathVariable Long id, BindingResult bindingResult, Model model) {
+	public String deleteArticle(String secureKey, @PathVariable Long id, Model model,Article article, BindingResult bindingResult) {
 		Result result = new Result();
 		
 		if (authCheck(secureKey, model)) {
-			Article article = Article.findArticle(id);
+			 article = Article.findArticle(id);
 			
 			// 작성자와 로그인 유저가 같은지 판단하는 코드
 			if (!bindingResult.hasFieldErrors("writerId") && !article.getWriterId().equals(authManager.getUserId(secureKey))) {
@@ -451,7 +451,7 @@ public class Controller {
 			}
 			
 			if(errorCheck(result, bindingResult)){
-				articleService.deleteArticle(Article.findArticle(id));
+				articleService.deleteArticle(article);
 				
 				// 성공~!
 				result.setSuccess(true);
@@ -478,7 +478,7 @@ public class Controller {
 	// 댓글 등록
 	// 인증 필요
 	@RequestMapping(value = "article/{articleId}/comment", method = RequestMethod.POST) // 댓글 등록
-	public String comment(@PathVariable Long articleId,@Valid Comment comment,BindingResult bindingResult, Model model) {
+	public String comment(@PathVariable Long articleId,Comment comment,BindingResult bindingResult, Model model) {
 		Result result = new Result();
 		
 		if (authCheck(comment, model)) {
@@ -507,7 +507,26 @@ public class Controller {
 	// 댓글 삭제
 	// 인증 필요
 	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
-	public String deleteComment(@PathVariable Long id, Model model) {
+	public String deleteComment(String secureKey, @PathVariable Long id, Model model,@Valid Comment comment, BindingResult bindingResult) {
+		Result result = new Result();
+		
+		if (authCheck(secureKey, model)) {
+			comment=Comment.findComment(id);
+			
+			// 작성자와 로그인 유저가 같은지 판단하는 코드
+			if (!bindingResult.hasFieldErrors("writerId") && !comment.getWriterId().equals(authManager.getUserId(secureKey))) {
+				bindingResult.rejectValue("writerId", "Equals.comment.writerId", "작성자가 다릅니다.");
+			}
+			
+			if(errorCheck(result, bindingResult)){
+				commentService.deleteComment(comment);
+				
+				// 성공~!
+				result.setSuccess(true);
+			}
+		}
+		
+		ret(result, model);
 		return "deleteComment";
 	}
 	

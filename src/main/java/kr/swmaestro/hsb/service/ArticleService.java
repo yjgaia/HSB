@@ -176,6 +176,8 @@ public class ArticleService {
 		// RDBMS에서 제거
 		article.delete();
 		
+		//TODO 댓글 목록도 전부 제거해줌 + 캐싱된 것도 제거 
+		
 		// 캐시에서 제거
 		String key = getArticleKey(article.getId());
 		cache.delete(key);

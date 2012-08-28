@@ -90,4 +90,14 @@ public class CommentService {
 		
 		return cachedCommentList;
 	}
+
+	public void deleteComment(Comment comment) {
+		// RDBMS에서 제거
+		comment.delete();
+				
+		// 캐시에서 제거
+		String key = getCommentKey(comment.getId());
+		cache.delete(key);
+		cache.removeIndex(getCommentListKey(comment.getTargetArticleId()), key);
+	}
 }

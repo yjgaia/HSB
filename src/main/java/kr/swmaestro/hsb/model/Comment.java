@@ -71,4 +71,9 @@ public class Comment extends SecureKeyModel {
 		return entityManager().createQuery("SELECT o FROM Comment o WHERE o.enable = true AND targetArticleId=:targetArticleId ORDER BY id",Comment.class).setParameter("targetArticleId", targetArticleId).getResultList();
 	}
 
+	public void delete() {
+		enable = false;
+		merge();
+	}
+
 }
