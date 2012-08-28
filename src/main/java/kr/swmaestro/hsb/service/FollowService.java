@@ -110,7 +110,7 @@ public class FollowService {
 					
 			List<Long> userIdList = new ArrayList<>();
 			for (String key : emptyValueIndexMap.keySet()) {
-			// article:{id}
+			// user:{id}
 				Long id = Long.parseLong(key.substring(5));
 				userIdList.add(id);
 			}

@@ -464,6 +464,13 @@ public class Controller {
 	// 댓글 목록
 	@RequestMapping(value = "article/{articleId}/comments", method = RequestMethod.GET) // 댓글 목록
 	public String comments(@PathVariable Long articleId, Model model) {	
+		Result result=new Result();
+		
+		List<Comment> commentList=commentService.getCommentList(articleId);
+		result.setSuccess(true);
+		
+		ret(result,commentList,model);
+		
 		return "comments";
 	}
 	

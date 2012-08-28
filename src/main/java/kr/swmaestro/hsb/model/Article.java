@@ -47,6 +47,9 @@ public class Article extends SecureKeyModel {
 	private Date writeDate;
 	
 	private int commentCount;
+	public void addcommentCount(int i){
+		commentCount=commentCount+i;
+	}
 	
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
