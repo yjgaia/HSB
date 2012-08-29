@@ -184,10 +184,10 @@ public class Controller {
 		if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
 			bindingResult.rejectValue("password", "Equals.userInfo.passwordConfirm", "비밀번호와 비밀번호 확인이 다릅니다.");
 		}
-		if (!bindingResult.hasFieldErrors("username") && UserInfo.existsUser(userInfo.getUsername())) {
+		if (!bindingResult.hasFieldErrors("username") && UserInfo.realExistsUser(userInfo.getUsername())) {
 			bindingResult.rejectValue("username", "Exists.userInfo.username", "이미 존재하는 아이디입니다.");
 		}
-		if (!bindingResult.hasFieldErrors("nickname") && UserInfo.existsNickname(userInfo.getNickname())) {
+		if (!bindingResult.hasFieldErrors("nickname") && UserInfo.realExistsNickname(userInfo.getNickname())) {
 			bindingResult.rejectValue("nickname", "Exists.userInfo.nickname", "이미 존재하는 닉네임입니다.");
 		}
 		
@@ -219,10 +219,10 @@ public class Controller {
 			if (!bindingResult.hasFieldErrors("password") && !originUserInfo.getPassword().equals(password) && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
 				bindingResult.rejectValue("password", "Equals.userInfo.passwordConfirm", "비밀번호와 비밀번호 확인이 다릅니다.");
 			}
-			if (!bindingResult.hasFieldErrors("username") && !originUserInfo.getUsername().equals(userInfo.getUsername()) && UserInfo.existsUser(userInfo.getUsername())) {
+			if (!bindingResult.hasFieldErrors("username") && !originUserInfo.getUsername().equals(userInfo.getUsername()) && UserInfo.realExistsUser(userInfo.getUsername())) {
 				bindingResult.rejectValue("username", "Exists.userInfo.username", "이미 존재하는 아이디입니다.");
 			}
-			if (!bindingResult.hasFieldErrors("nickname") && !originUserInfo.getNickname().equals(userInfo.getNickname()) && UserInfo.existsNickname(userInfo.getNickname())) {
+			if (!bindingResult.hasFieldErrors("nickname") && !originUserInfo.getNickname().equals(userInfo.getNickname()) && UserInfo.realExistsNickname(userInfo.getNickname())) {
 				bindingResult.rejectValue("nickname", "Exists.userInfo.nickname", "이미 존재하는 닉네임입니다.");
 			}
 			

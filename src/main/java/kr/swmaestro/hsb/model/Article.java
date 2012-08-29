@@ -53,7 +53,7 @@ public class Article extends SecureKeyModel {
 	
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
-	private boolean enable;
+	private boolean enable = true;
 	
 	public static List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
 		

@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.TypedQuery;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import kr.swmaestro.hsb.XmlDateToLongConverter;
@@ -52,7 +51,7 @@ public class Comment extends SecureKeyModel {
 	
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
-	private boolean enable;
+	private boolean enable = true;
 
 	public static List<Comment> findCommentByIds(List<Long> commentList) {
 		String query = "SELECT o FROM Comment o WHERE o.enable = true AND (1!=1";

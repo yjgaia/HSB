@@ -104,18 +104,22 @@ public class UserInfo extends SecureKeyModel {
 	
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
-	private boolean enable;
+	private boolean enable = true;
 	
 	public static UserInfo findUserInfoByUsername(String username) {
-		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE o.enable = true AND username = :username", UserInfo.class).setParameter("username", username).getSingleResult();
+		return entityManager().createQuery("SELECT o FROM UserInfo o WHERE o.enable = true AND o.username = :username", UserInfo.class).setParameter("username", username).getSingleResult();
 	}
 
 	public static boolean existsUser(String username) {
-		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.enable = true AND username = :username", Long.class).setParameter("username", username).getSingleResult() > 0l;
+		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.enable = true AND o.username = :username", Long.class).setParameter("username", username).getSingleResult() > 0l;
 	}
 	
-	public static boolean existsNickname(String nickname) {
-		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.enable = true AND nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
+	public static boolean realExistsUser(String username) {
+		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.username = :username", Long.class).setParameter("username", username).getSingleResult() > 0l;
+	}
+	
+	public static boolean realExistsNickname(String nickname) {
+		return entityManager().createQuery("SELECT COUNT(o) FROM UserInfo o WHERE o.nickname = :nickname", Long.class).setParameter("nickname", nickname).getSingleResult() > 0l;
     }
 
 	public static List<UserInfo> findUsersByIds(List<Long> ids) {
