@@ -25,11 +25,11 @@ public class KeyValueListCacheImpl implements KeyValueListCache {
 	@Autowired
 	private Jedis jedis;
 	
-	private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
-	//private final static int COMMON_EXPIRE_SECOND = 7 * 24 * 60 * 60; // 1주일 정도 캐시에 저장해둔다.
+	//private final static int COMMON_EXPIRE_SECOND = 60; // 테스트용 1분
+	private final static int COMMON_EXPIRE_SECOND = 7 * 24 * 60 * 60; // 1주일 정도 캐시에 저장해둔다.
 	
-	private final static long MAX_LIST_SIZE = 100; // 테스트용 100개
-	//private final static long MAX_LIST_SIZE = 300; // 한 목록에 최대로 저장할 수 있는 갯수
+	//private final static long MAX_LIST_SIZE = 100; // 테스트용 100개
+	private final static long MAX_LIST_SIZE = 3000; // 한 목록에 최대로 저장할 수 있는 갯수
 	
 	public void set(String key, Object object) {
 		

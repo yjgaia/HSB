@@ -97,7 +97,7 @@
    	</bean>
    	
     
-    <!-- <bean class="kr.swmaestro.hsb.data.KeyValueListCacheImpl" /> -->
-    <bean class="kr.swmaestro.hsb.data.KeyValueListCacheNone" />
+    <bean class="kr.swmaestro.hsb.data.KeyValueListCacheImpl" />
+    <!--<bean class="kr.swmaestro.hsb.data.KeyValueListCacheNone" />-->
     
 </beans>
