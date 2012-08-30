@@ -101,6 +101,10 @@ public class Controller {
 		model.addAttribute("result", result);
 	}
 	
+	private String toJson() {
+		return null;
+	}
+	
 	// 인증처리
 	private boolean authCheck(String secureKey, Model model) {
 		if (authManager.isAuthenticated(secureKey)) {
