@@ -1,11 +1,13 @@
 package kr.swmaestro.hsb.auth;
 
+import java.io.IOException;
 import java.util.UUID;
 
 import kr.swmaestro.hsb.data.KeyValueCache;
 import kr.swmaestro.hsb.model.UserInfo;
 import kr.swmaestro.hsb.util.PasswordEncoder;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +18,13 @@ public class AuthManager {
 	private KeyValueCache keyValueCache;
 	
 	public UserInfo getUserInfo(String secureKey) {
-		return (UserInfo) keyValueCache.get(secureKey, UserInfo.class);
+		ObjectMapper om = new ObjectMapper();
+		try {
+			return om.readValue(keyValueCache.get(secureKey), UserInfo.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void setUserInfo(String secureKey, UserInfo userInfo) {

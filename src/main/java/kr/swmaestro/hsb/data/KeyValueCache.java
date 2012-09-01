@@ -32,8 +32,6 @@ public class KeyValueCache {
 			// 필요없는 property 제외
 			om.getSerializationConfig().addMixInAnnotations(object.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
 			
-			// 깔끔하게 캐시에 저장!!
-			//System.out.println(om.writeValueAsString(object));
 			// 저장하는 순간 expire 시간 재생성
 			client.set(key, COMMON_EXPIRE_SECOND, om.writeValueAsString(object));
 			
@@ -42,7 +40,8 @@ public class KeyValueCache {
 		}
 	}
 	
-	public <T> Object get(String key, Class<T> classOfT) {
+	// JSON 반환
+	public String get(String key) {
 		if (key == null) {
 			return null;
 		}
@@ -52,13 +51,7 @@ public class KeyValueCache {
 			return null;
 		}
 		
-		ObjectMapper om = new ObjectMapper();
-		try {
-			return om.readValue(v.getValue().toString(), classOfT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		return v.getValue().toString();
 	}
 	
 	public void del(String key) {

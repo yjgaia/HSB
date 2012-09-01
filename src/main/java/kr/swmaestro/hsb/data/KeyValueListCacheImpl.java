@@ -1,7 +1,6 @@
 package kr.swmaestro.hsb.data;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -93,7 +92,8 @@ public class KeyValueListCacheImpl implements KeyValueListCache {
 		return jedis.zrange(key, 0, -1); 
 	}
 
-	public <T> List<T> list(String key, Long beforeScore, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap) {
+	// JSON 반환
+	public List<String> list(String key, Long beforeScore, int count, Map<String, Integer> emptyValueIndexMap) {
 		
 		// 읽어오는 순간 expire 시간 재생성
 		jedis.expire(key, COMMON_EXPIRE_SECOND);
@@ -101,57 +101,30 @@ public class KeyValueListCacheImpl implements KeyValueListCache {
 		//class java.util.LinkedHashSet 이기 때문에 순서대로 가져온다.
 		Set<String> keySet = jedis.zrangeByScore(key, "(" + Long.toString(beforeScore), "+inf", 0, count);
 		
-		return getCachedList(keySet,classOfT, emptyValueIndexMap);
+		return getCachedList(keySet, emptyValueIndexMap);
 	}
 	
-	public <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT, Map<String, Integer> emptyValueIndexMap){
-		List<T> l = new ArrayList<>();
+	// JSON 반환
+	public List<String> getCachedList(Set<String> keySet, Map<String, Integer> emptyValueIndexMap){
 		if (keySet.size() > 0) {
 			String[] keySets = keySet.toArray(new String[]{});
 			List<String> jsonList = jedis.mget(keySets);
 			
 			// 순서 반대로.
 			Collections.reverse(jsonList);
-			
-			ObjectMapper om = new ObjectMapper();
-			
-			int size = jsonList.size();
-			for (int i = 0 ; i < size ; i++) {
-				String json = jsonList.get(i);
-				
-				if (json != null) {
-					try {
-						l.add(om.readValue(json, classOfT));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} else {
-					// 비어있는 값인 경우 key와 index를 저장
-					emptyValueIndexMap.put(keySets[size - i - 1], i);
-					
-					l.add(null);
-				}
-				
-			}
-			
+			return jsonList;
 		}
-		
-		return l;
+		return null;
 	}
 	
-	public <T> Object get(String key, Class<T> classOfT) {
+	// JSON 반환
+	public String get(String key) {
 		if (key == null) {
 			return null;
 		}
-		ObjectMapper om = new ObjectMapper();
-		try {
-			// 읽어오는 순간 expire 시간 재생성
-			jedis.expire(key, COMMON_EXPIRE_SECOND);
-			return om.readValue(jedis.get(key), classOfT);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		// 읽어오는 순간 expire 시간 재생성
+		jedis.expire(key, COMMON_EXPIRE_SECOND);
+		return jedis.get(key);
 	}
 	
 	public void delete(String key) {

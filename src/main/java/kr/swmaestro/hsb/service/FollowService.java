@@ -1,15 +1,19 @@
 package kr.swmaestro.hsb.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import kr.swmaestro.hsb.data.JsonIgnoreResultModelPropertyesMixIn;
 import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.Follow;
 import kr.swmaestro.hsb.model.UserInfo;
+import kr.swmaestro.hsb.util.JsonXmlUtil;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -99,11 +103,15 @@ public class FollowService {
 	public List<Follow> getFollowListByTargetUserId(Long targetUserId) {
 		return Follow.findFollowsByTargetUserId(targetUserId);
 	}
-	public List<UserInfo> getFollowingListByUserInfo(UserInfo userInfo) {
+	
+	public List<String> getFollowingListByUserInfoXml(UserInfo userInfo) {
+		return JsonXmlUtil.jsonListToXmlList(getFollowingListByUserInfoJson(userInfo));
+	}
+	public List<String> getFollowingListByUserInfoJson(UserInfo userInfo) {
 		String followingListKey=getFollowingListKey(userInfo.getId());
 		Set<String> followingSet=cache.getSetByKey(followingListKey);
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
-		List<UserInfo> cachedUserList=cache.getCachedList(followingSet,UserInfo.class, emptyValueIndexMap);
+		List<String> cachedUserJsonList=cache.getCachedList(followingSet, emptyValueIndexMap);
 		
 		// 비어있는 값들이 있을때...
 		if (emptyValueIndexMap.size() > 0) {
@@ -119,35 +127,59 @@ public class FollowService {
 			// 가져온 값들도 캐시에 넣어줍니다.
 			for (UserInfo user : addUserInfoList) {
 				String key = cacheUserInfo(user);
-				// 그리고 원래 글 목록에 삽입.
-				cachedUserList.set(emptyValueIndexMap.get(key), user);
+								
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(user.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					cachedUserJsonList.set(emptyValueIndexMap.get(key), om.writeValueAsString(user));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		//캐싱된 값과 followingCount가 다름 
-		if(userInfo.getFollowingCount()>cachedUserList.size()){
+		if(userInfo.getFollowingCount()>cachedUserJsonList.size()){
 			System.out.println("캐싱 된것 없음");
 			List<UserInfo> followingListInDB= UserInfo.getFollowingListById(userInfo.getId());
+			List<String> followerJsonListInDB = new ArrayList<>();
 			for(UserInfo user: followingListInDB){
 				String key=cacheUserInfo(user);
 				cache.addSetElement(followingListKey, key);
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(user.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					followerJsonListInDB.add(om.writeValueAsString(user));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			
-			return followingListInDB;
+			return followerJsonListInDB;
 		}
 		
-		return cachedUserList;
+		return cachedUserJsonList;
 	}
 	private String cacheUserInfo(UserInfo user) {
 		String key=generateKeyByUser(user.getId());
 		cache.set(key,user);
 		return key;
 	}
-	public List<UserInfo> getFollowerListByUserInfo(UserInfo userInfo) {
+	
+	public List<String> getFollowerListByUserInfoXml(UserInfo userInfo) {
+		return JsonXmlUtil.jsonListToXmlList(getFollowerListByUserInfoJson(userInfo));
+	}
+	
+	public List<String> getFollowerListByUserInfoJson(UserInfo userInfo) {
 		String followerListKey=getFollowerListKey(userInfo.getId());
 		Set<String> followerSet=cache.getSetByKey(followerListKey);
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
-		List<UserInfo> cachedUserList=cache.getCachedList(followerSet,UserInfo.class, emptyValueIndexMap);
+		List<String> cachedUserJsonList = cache.getCachedList(followerSet, emptyValueIndexMap);
 		
 		// 비어있는 값들이 있을때...
 		if (emptyValueIndexMap.size() > 0) {
@@ -163,23 +195,41 @@ public class FollowService {
 			// 가져온 값들도 캐시에 넣어줍니다.
 			for (UserInfo user : addUserInfoList) {
 				String key = cacheUserInfo(user);
-				// 그리고 원래 글 목록에 삽입.
-				cachedUserList.set(emptyValueIndexMap.get(key), user);
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(user.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					cachedUserJsonList.set(emptyValueIndexMap.get(key), om.writeValueAsString(user));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		//캐싱된 값과 followingCount가 다름 
-		if(userInfo.getFollowerCount()>cachedUserList.size()){
+		if(userInfo.getFollowerCount()>cachedUserJsonList.size()){
 			System.out.println("캐싱 된것 없음");
 			List<UserInfo> followerListInDB= UserInfo.getFollowerListById(userInfo.getId());
+			List<String> followerJsonListInDB = new ArrayList<>();
 			for(UserInfo user: followerListInDB){
 				String key=cacheUserInfo(user);
 				cache.addSetElement(followerListKey, key);
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(user.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					followerJsonListInDB.add(om.writeValueAsString(user));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-			
-			return followerListInDB;
+			return followerJsonListInDB;
 		}
 		
-		return cachedUserList;
+		return cachedUserJsonList;
 	}
 }

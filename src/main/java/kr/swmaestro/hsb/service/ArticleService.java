@@ -1,15 +1,19 @@
 package kr.swmaestro.hsb.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import kr.swmaestro.hsb.data.JsonIgnoreResultModelPropertyesMixIn;
 import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.Follow;
+import kr.swmaestro.hsb.util.JsonXmlUtil;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -46,11 +50,15 @@ public class ArticleService {
 		return Long.parseLong(key.substring(8));
 	}
 	
-	public List<Article> findArticlesByWriterId(Long writerId, Long beforeArticleId, int count) {
+	public List<String> findArticleXmlsByWriterId(Long writerId, Long beforeArticleId, int count) {
+		return JsonXmlUtil.jsonListToXmlList(findArticleJsonsByWriterId(writerId, beforeArticleId, count));
+	}
+	
+	public List<String> findArticleJsonsByWriterId(Long writerId, Long beforeArticleId, int count) {
 		
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
 		
-		List<Article> articleList = cache.list(getUserIndexKey(writerId), beforeArticleId, count, Article.class, emptyValueIndexMap);
+		List<String> articleJsonList = cache.list(getUserIndexKey(writerId), beforeArticleId, count, emptyValueIndexMap);
 		
 		// 비어있는 값들이 있을때...
 		if (emptyValueIndexMap.size() > 0) {
@@ -67,31 +75,53 @@ public class ArticleService {
 			for (Article article : addArticleList) {
 				String key = cacheArticle(article);
 				
-				// 그리고 원래 글 목록에 삽입.
-				articleList.set(emptyValueIndexMap.get(key), article);
-			}
-		}
-		
-		// 캐시에서 불러온 글 목록 수가 예상보다 적을때...
-		if (articleList.size() < count) {
-			
-			Long addBeforeArticleId = null;
-			if (articleList.size() > 0) {
-				addBeforeArticleId = articleList.get(articleList.size() - 1).getId();
-			}
-			
-			if (addBeforeArticleId == null || addBeforeArticleId > 1) { // 마지막 글 id가 1보다 클때만 가져옴. 그 이하는 의미없음.
-				List<Article> addArticleList = Article.findArticlesByWriterId(writerId, addBeforeArticleId, count - articleList.size());
-				articleList.addAll(addArticleList);
-				
-				// 가져온 값들도 캐시에 넣어줍니다.
-				for (Article article : addArticleList) {
-					cacheArticle(article);
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(article.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					articleJsonList.set(emptyValueIndexMap.get(key), om.writeValueAsString(article));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
 		
-		return articleList;
+		// 캐시에서 불러온 글 목록 수가 예상보다 적을때...
+		if (articleJsonList.size() < count) {
+			
+			Long addBeforeArticleId = null;
+			if (articleJsonList.size() > 0) {
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					addBeforeArticleId = om.readValue(articleJsonList.get(articleJsonList.size() - 1), Article.class).getId();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (addBeforeArticleId == null || addBeforeArticleId > 1) { // 마지막 글 id가 1보다 클때만 가져옴. 그 이하는 의미없음.
+				List<Article> addArticleList = Article.findArticlesByWriterId(writerId, addBeforeArticleId, count - articleJsonList.size());
+				
+				// 가져온 값들도 캐시에 넣어줍니다.
+				for (Article article : addArticleList) {
+					cacheArticle(article);
+					
+					ObjectMapper om = new ObjectMapper();
+					try {
+						// 필요없는 property 제외
+						om.getSerializationConfig().addMixInAnnotations(article.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+						// 그리고 원래 글 목록에 삽입.
+						articleJsonList.add(om.writeValueAsString(article));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		return articleJsonList;
 	}
 
 	public List<Long> findArticleIdsByWriterId(Long writerId) {
@@ -107,11 +137,15 @@ public class ArticleService {
 		return ids;
 	}
 
-	public List<Article> timelineByWriterId(Long writerId, Long beforeArticleId, int count) {
+	public List<String> timelineXmlByWriterId(Long writerId, Long beforeArticleId, int count) {
+		return JsonXmlUtil.jsonListToXmlList(timelineJsonByWriterId(writerId, beforeArticleId, count));
+	}
+	
+	public List<String> timelineJsonByWriterId(Long writerId, Long beforeArticleId, int count) {
 		
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
 		
-		List<Article> articleList = cache.list(getTimelineIndexKey(writerId), beforeArticleId, count, Article.class, emptyValueIndexMap);
+		List<String> articleJsonList = cache.list(getTimelineIndexKey(writerId), beforeArticleId, count, emptyValueIndexMap);
 		
 		// 비어있는 값들이 있을때...
 		if (emptyValueIndexMap.size() > 0) {
@@ -129,31 +163,53 @@ public class ArticleService {
 			for (Article article : addArticleList) {
 				String key = cacheArticle(article);
 				
-				// 그리고 원래 글 목록에 삽입.
-				articleList.set(emptyValueIndexMap.get(key), article);
-			}
-		}
-		
-		// 캐시에서 불러온 글 목록 수가 예상보다 적을때...
-		if (articleList.size() < count) {
-			
-			Long addBeforeArticleId = null;
-			if (articleList.size() > 0) {
-				addBeforeArticleId = articleList.get(articleList.size() - 1).getId();
-			}
-			
-			if (addBeforeArticleId == null || addBeforeArticleId > 1) { // 마지막 글 id가 1보다 클때만 가져옴. 그 이하는 의미없음.
-				List<Article> addArticleList = Article.findArticlesByWriterId(writerId, addBeforeArticleId, count - articleList.size());
-				articleList.addAll(addArticleList);
-				
-				// 가져온 값들도 캐시에 넣어줍니다.
-				for (Article article : addArticleList) {
-					cacheArticle(article);
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(article.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					articleJsonList.set(emptyValueIndexMap.get(key), om.writeValueAsString(article));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
 		
-		return articleList;
+		// 캐시에서 불러온 글 목록 수가 예상보다 적을때...
+		if (articleJsonList.size() < count) {
+			
+			Long addBeforeArticleId = null;
+			if (articleJsonList.size() > 0) {
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					addBeforeArticleId = om.readValue(articleJsonList.get(articleJsonList.size() - 1), Article.class).getId();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			if (addBeforeArticleId == null || addBeforeArticleId > 1) { // 마지막 글 id가 1보다 클때만 가져옴. 그 이하는 의미없음.
+				List<Article> addArticleList = Article.findArticlesByWriterId(writerId, addBeforeArticleId, count - articleJsonList.size());
+				
+				// 가져온 값들도 캐시에 넣어줍니다.
+				for (Article article : addArticleList) {
+					cacheArticle(article);
+					
+					ObjectMapper om = new ObjectMapper();
+					try {
+						// 필요없는 property 제외
+						om.getSerializationConfig().addMixInAnnotations(article.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+						// 그리고 원래 글 목록에 삽입.
+						articleJsonList.add(om.writeValueAsString(article));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		
+		return articleJsonList;
 	}
 	
 	public void saveArticle(Article article) {

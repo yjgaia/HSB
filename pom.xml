@@ -108,6 +108,12 @@
 			<version>5.1.13</version>
 			<classifier />
 		</dependency>
+        <dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+	        <classifier>jdk15</classifier>
+		</dependency>
         <!-- General dependencies for standard applications -->
         <dependency>
             <groupId>junit</groupId>

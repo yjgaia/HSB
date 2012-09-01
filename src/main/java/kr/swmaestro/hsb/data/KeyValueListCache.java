@@ -22,9 +22,9 @@ public interface KeyValueListCache {
 	public void addIndex(String key, Long score, String targetKey);
 	public void removeIndex(String key, String targetKey);
 	public Set<String> getIndexes(String key);
-	public <T> List<T> list(String key, Long beforeScore, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap);
-	public <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT, Map<String, Integer> emptyValueIndexMap);
-	public <T> Object get(String key, Class<T> classOfT);
+	public List<String> list(String key, Long beforeScore, int count, Map<String, Integer> emptyValueIndexMap);
+	public List<String> getCachedList(Set<String> keySet, Map<String, Integer> emptyValueIndexMap);
+	public String get(String key);
 	public void delete(String key);
 	
 }

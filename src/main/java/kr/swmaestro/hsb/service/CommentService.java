@@ -1,16 +1,19 @@
 package kr.swmaestro.hsb.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import kr.swmaestro.hsb.data.JsonIgnoreResultModelPropertyesMixIn;
 import kr.swmaestro.hsb.data.KeyValueListCache;
 import kr.swmaestro.hsb.model.Article;
 import kr.swmaestro.hsb.model.Comment;
-import kr.swmaestro.hsb.model.UserInfo;
+import kr.swmaestro.hsb.util.JsonXmlUtil;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +21,6 @@ import org.springframework.stereotype.Service;
 public class CommentService {
 	@Autowired
 	private KeyValueListCache cache;
-	
-	@Autowired
-	private ArticleService articleService;
 	
 	public String getCommentKey(Long id){
 		return "comment:"+id;
@@ -51,12 +51,16 @@ public class CommentService {
 		String commentKey=cacheComment(comment);
 		cache.addIndex(getCommentListKey(comment.getTargetArticleId()), comment.getId(), commentKey);
 	}
+	
+	public List<String> getCommentXmlList(Long articleId) {
+		return JsonXmlUtil.jsonListToXmlList(getCommentJsonList(articleId));
+	}
 
-	public List<Comment> getCommentList(Long articleId) {
+	public List<String> getCommentJsonList(Long articleId) {
 		String commentListKey=getCommentListKey(articleId);
 		Set<String> commentSet=cache.getIndexes(commentListKey);
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
-		List<Comment> cachedCommentList=cache.getCachedList(commentSet,Comment.class, emptyValueIndexMap);
+		List<String> cachedCommentJsonList = cache.getCachedList(commentSet, emptyValueIndexMap);
 		Article targetArticle =Article.findArticle(articleId);
 		if (emptyValueIndexMap.size() > 0) {
 			
@@ -71,24 +75,43 @@ public class CommentService {
 			// 가져온 값들도 캐시에 넣어줍니다.
 			for (Comment comment : addUserInfoList) {
 				String key = cacheComment(comment);
-				// 그리고 원래 글 목록에 삽입.
-				cachedCommentList.set(emptyValueIndexMap.get(key), comment);
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(comment.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					cachedCommentJsonList.set(emptyValueIndexMap.get(key), om.writeValueAsString(comment));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
 		//캐싱된 값과 followingCount가 다름 
-		if(targetArticle.getCommentCount()>cachedCommentList.size()){
+		if(targetArticle.getCommentCount()>cachedCommentJsonList.size()){
 			System.out.println("댓글 캐싱 된것 없음");
 			List<Comment> commentListInDB= Comment.getCommentListById(targetArticle.getId());
+			List<String> commentJsonListInDB = new ArrayList<>();
 			for(Comment comment: commentListInDB){
 				String commentKey=cacheComment(comment);
 				cache.addIndex(getCommentListKey(comment.getTargetArticleId()), comment.getId(), commentKey);
+				
+				ObjectMapper om = new ObjectMapper();
+				try {
+					// 필요없는 property 제외
+					om.getSerializationConfig().addMixInAnnotations(comment.getClass(), JsonIgnoreResultModelPropertyesMixIn.class);
+					// 그리고 원래 글 목록에 삽입.
+					commentJsonListInDB.add(om.writeValueAsString(comment));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 					
-			return commentListInDB;
+			return commentJsonListInDB;
 		}
 		
-		return cachedCommentList;
+		return cachedCommentJsonList;
 	}
 
 	public void deleteComment(Comment comment) {

@@ -22,9 +22,9 @@ public class KeyValueListCacheNone implements KeyValueListCache {
 	public void addIndex(String key, Long score, String targetKey){}
 	public void removeIndex(String key, String targetKey){}
 	public Set<String> getIndexes(String key){ return new HashSet<>(); }
-	public <T> List<T> list(String key, Long beforeScore, int count, Class<T> classOfT, Map<String, Integer> emptyValueIndexMap){ return new ArrayList<>(); }
-	public <T> List<T> getCachedList(Set<String> keySet,Class<T> classOfT, Map<String, Integer> emptyValueIndexMap){ return new ArrayList<>(); }
-	public <T> Object get(String key, Class<T> classOfT){ return null; }
+	public List<String> list(String key, Long beforeScore, int count, Map<String, Integer> emptyValueIndexMap){ return new ArrayList<>(); }
+	public List<String> getCachedList(Set<String> keySet, Map<String, Integer> emptyValueIndexMap){ return new ArrayList<>(); }
+	public String get(String key){ return null; }
 	public void delete(String key){}
 
 }
