@@ -22,7 +22,7 @@ public class Result {
 	// 데이터가 1개인지 여부
 	private boolean single;
 	
-	private Object data;
-	private List<?> list;
+	private String data;
+	private List<String> list;
 	
 }

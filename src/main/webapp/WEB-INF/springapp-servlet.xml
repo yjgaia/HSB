@@ -24,7 +24,8 @@
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
 		p:basenames="WEB-INF/i18n/errors" />
-		
+	
+	<!-- 
 	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver" p:order="1">
 		<property name="mediaTypes">
 			<map>
@@ -46,5 +47,6 @@
 			</list>
 		</property>
 	</bean>
+	 -->
 
 </beans>

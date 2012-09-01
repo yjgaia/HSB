@@ -3,7 +3,7 @@
 
 package kr.swmaestro.hsb.model;
 
-import java.lang.Object;
+import java.lang.String;
 import java.util.List;
 import java.util.Set;
 import kr.swmaestro.hsb.model.ErrorInfo;
@@ -34,19 +34,19 @@ privileged aspect Result_Roo_JavaBean {
         this.single = single;
     }
     
-    public Object Result.getData() {
+    public String Result.getData() {
         return this.data;
     }
     
-    public void Result.setData(Object data) {
+    public void Result.setData(String data) {
         this.data = data;
     }
     
-    public List<?> Result.getList() {
+    public List<String> Result.getList() {
         return this.list;
     }
     
-    public void Result.setList(List<?> list) {
+    public void Result.setList(List<String> list) {
         this.list = list;
     }
     

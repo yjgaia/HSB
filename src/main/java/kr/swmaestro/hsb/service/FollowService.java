@@ -104,10 +104,10 @@ public class FollowService {
 		return Follow.findFollowsByTargetUserId(targetUserId);
 	}
 	
-	public List<String> getFollowingListByUserInfoXml(UserInfo userInfo) {
-		return JsonXmlUtil.jsonListToXmlList(getFollowingListByUserInfoJson(userInfo));
+	public List<String> getFollowingXmlListByUserInfo(UserInfo userInfo) {
+		return JsonXmlUtil.jsonListToXmlList(getFollowingJsonListByUserInfo(userInfo));
 	}
-	public List<String> getFollowingListByUserInfoJson(UserInfo userInfo) {
+	public List<String> getFollowingJsonListByUserInfo(UserInfo userInfo) {
 		String followingListKey=getFollowingListKey(userInfo.getId());
 		Set<String> followingSet=cache.getSetByKey(followingListKey);
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
@@ -171,11 +171,11 @@ public class FollowService {
 		return key;
 	}
 	
-	public List<String> getFollowerListByUserInfoXml(UserInfo userInfo) {
-		return JsonXmlUtil.jsonListToXmlList(getFollowerListByUserInfoJson(userInfo));
+	public List<String> getFollowerXmlListByUserInfo(UserInfo userInfo) {
+		return JsonXmlUtil.jsonListToXmlList(getFollowerJsonListByUserInfo(userInfo));
 	}
 	
-	public List<String> getFollowerListByUserInfoJson(UserInfo userInfo) {
+	public List<String> getFollowerJsonListByUserInfo(UserInfo userInfo) {
 		String followerListKey=getFollowerListKey(userInfo.getId());
 		Set<String> followerSet=cache.getSetByKey(followerListKey);
 		Map<String, Integer> emptyValueIndexMap = new HashMap<>();
