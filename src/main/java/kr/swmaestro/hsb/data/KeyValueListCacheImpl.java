@@ -1,6 +1,7 @@
 package kr.swmaestro.hsb.data;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +115,7 @@ public class KeyValueListCacheImpl implements KeyValueListCache {
 			Collections.reverse(jsonList);
 			return jsonList;
 		}
-		return null;
+		return new ArrayList<>();
 	}
 	
 	// JSON 반환

@@ -68,6 +68,7 @@
 					method = 'POST';
 				}*/
 				
+				/*
 				$.ajax({
 					url: o.url.indexOf('?') === -1 ? o.url + '.json' : o.url.substring(0, o.url.indexOf('?')) + '.json' + o.url.substring(o.url.indexOf('?'))
 					, type: method
@@ -85,6 +86,17 @@
 							}
 						});
 						
+					}
+				});
+				*/
+				
+				$.ajax({
+					url: o.url
+					, type: method
+					, data: p
+					, dataType: 'json'
+					, success: function(json) {
+						$('#json').text(JSON.stringify(json, null, 4));
 					}
 				});
 				
@@ -117,11 +129,13 @@
 					<h3>JSON</h3>
 					<pre id="json"></pre>
 				</td>
+				<!-- 
 				<td width="50"></td>
 				<td valign="top">
 					<h3>XML</h3>
 					<pre id="xml"></pre>
 				</td>
+				 -->
 			</tr>
 		</table>
 	</body>

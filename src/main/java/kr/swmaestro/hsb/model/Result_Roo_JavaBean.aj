@@ -26,14 +26,6 @@ privileged aspect Result_Roo_JavaBean {
         this.errors = errors;
     }
     
-    public boolean Result.isSingle() {
-        return this.single;
-    }
-    
-    public void Result.setSingle(boolean single) {
-        this.single = single;
-    }
-    
     public String Result.getData() {
         return this.data;
     }

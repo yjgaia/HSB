@@ -12,7 +12,6 @@ privileged aspect Result_Roo_ToString {
         sb.append("Data: ").append(getData()).append(", ");
         sb.append("Errors: ").append(getErrors() == null ? "null" : getErrors().size()).append(", ");
         sb.append("List: ").append(getList() == null ? "null" : getList().size()).append(", ");
-        sb.append("Single: ").append(isSingle()).append(", ");
         sb.append("Success: ").append(isSuccess());
         return sb.toString();
     }

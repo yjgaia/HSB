@@ -20,7 +20,7 @@ public class Result {
 	private Set<ErrorInfo> errors;
 	
 	// 데이터가 1개인지 여부
-	private boolean single;
+	// private boolean single;
 	
 	private String data;
 	private List<String> list;

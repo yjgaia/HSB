@@ -27,6 +27,9 @@ import kr.swmaestro.hsb.util.PasswordEncoder;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -35,7 +38,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @org.springframework.stereotype.Controller
 @RequestMapping()
@@ -84,26 +86,74 @@ public class Controller {
 		return true;
 	}
 	
-	private String resultToJson(Result result) {
-		if (result.isSingle()) {
-			return result.getData();
-		} else {
-			String ret = "";
-			for (String data : result.getList()) {
-				ret += data;
+	private ResponseEntity<String> resultToJson(Result result) {
+
+		String errors = null;
+		if (result.getErrors() != null) {
+			ObjectMapper om = new ObjectMapper();
+			try {
+				// 필요없는 property 제외
+				om.getSerializationConfig().addMixInAnnotations(ErrorInfo.class, JsonIgnoreResultModelPropertyesMixIn.class);
+				errors = om.writeValueAsString(result.getErrors());
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-			return ret;
 		}
+		
+		String ret = "";
+		if (result.getData() != null) {
+			ret += "{";
+			if (!result.isSuccess() ||  errors != null) {
+				ret += "\"success\":false,";
+				ret += "\"errors\":" + errors + ",";
+			} else {
+				ret += "\"success\":true,";
+			}
+			ret += "\"single\":true,";
+			ret += "\"data\":";
+			ret += result.getData();
+			ret += "}";
+		} else if (result.getList() != null) {
+			ret += "{";
+			if (!result.isSuccess() ||  errors != null) {
+				ret += "\"success\":false,";
+				ret += "\"errors\":" + errors + ",";
+			} else {
+				ret += "\"success\":true,";
+			}
+			ret += "\"single\":false,";
+			ret += "\"list\":[";
+			for (int i = 0 ; i < result.getList().size() ; i++) {
+				ret += result.getList().get(i);
+				if (i != result.getList().size() - 1) {
+					ret += ',';
+				}
+			}
+			ret += "]}";
+		} else { // 오류
+			ret += "{";
+			if (!result.isSuccess() ||  errors != null) {
+				ret += "\"success\":false,";
+				ret += "\"errors\":" + errors + ",";
+			} else {
+				ret += "\"success\":true,";
+			}
+			ret += "\"single\":false";
+			ret += "}";
+		}
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/plain; charset=UTF-8");
+		return new ResponseEntity<String>(ret, responseHeaders, HttpStatus.CREATED);
 	}
 	
 	// 결과값 반환
-	private String returnJson(Result result, Model model) {
-		result.setSingle(false);
+	private ResponseEntity<String> returnJson(Result result, Model model) {
 		return resultToJson(result);
 	}
 	
 	// 결과값 반환
-	private String returnJson(Result result, SecureKeyModel data, Model model) {
+	private ResponseEntity<String> returnJson(Result result, SecureKeyModel data, Model model) {
 		
 		data.setSecureKey(null);
 		
@@ -123,15 +173,13 @@ public class Controller {
 	}
 	
 	// 결과값 반환
-	private String returnJson(Result result, String data, Model model) {
-		result.setSingle(true);
+	private ResponseEntity<String> returnJson(Result result, String data, Model model) {
 		result.setData(data);
 		return resultToJson(result);
 	}
 	
 	// 결과값 반환
-	private String returnJson(Result result, List<String> list, Model model) {
-		result.setSingle(false);
+	private ResponseEntity<String> returnJson(Result result, List<String> list, Model model) {
 		result.setList(list);
 		return resultToJson(result);
 	}
@@ -158,15 +206,17 @@ public class Controller {
 		return authCheck(secureKeyModel.getSecureKey(), model);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping()
 	public String main(Model model) {
 		return "main";
 	}
 	
+	@RequestMapping("admin/test")
+	public void test(Model model) {}
+	
 	// 로그인
 	@RequestMapping(value = "user/auth", method = RequestMethod.POST) // 인증 생성
-	@ResponseBody
-	public String login(@Valid AuthUserInfo authUserInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
+	public ResponseEntity<String> login(@Valid AuthUserInfo authUserInfo, BindingResult bindingResult, Model model, HttpServletRequest request) {
 		Result result = new Result();
 		
 		UserInfo userInfo = null;
@@ -198,8 +248,7 @@ public class Controller {
 	// 로그아웃
 	// 인증 필요
 	@RequestMapping(value = "user/auth", method = RequestMethod.DELETE) // 인증 제거
-	@ResponseBody
-	public String logout(String secureKey, Model model) {
+	public ResponseEntity<String> logout(String secureKey, Model model) {
 		Result result = new Result();
 		authManager.unauth(secureKey);
 		result.setSuccess(true);
@@ -208,8 +257,7 @@ public class Controller {
 	
 	// 회원가입
 	@RequestMapping(value = "user/account", method = RequestMethod.POST)
-	@ResponseBody
-	public String join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
+	public ResponseEntity<String> join(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
 		Result result = new Result();
 		
 		if (!bindingResult.hasFieldErrors("password") && !userInfo.getPassword().equals(userInfo.getPasswordConfirm())) {
@@ -238,8 +286,7 @@ public class Controller {
 	// 회원 정보 수정
 	// 인증 필요
 	@RequestMapping(value = "user/account", method = RequestMethod.PUT)
-	@ResponseBody
-	public String updateAccount(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
+	public ResponseEntity<String> updateAccount(@Valid UserInfo userInfo, BindingResult bindingResult, Model model) {
 		Result result = new Result();
 		String secureKey = userInfo.getSecureKey();
 		
@@ -282,8 +329,7 @@ public class Controller {
 	// 회원 정보 삭제 (탈퇴)
 	// 인증 필요
 	@RequestMapping(value = "user/account", method = RequestMethod.DELETE)
-	@ResponseBody
-	public String leave(String secureKey, Model model) {
+	public ResponseEntity<String> leave(String secureKey, Model model) {
 		Result result = new Result();
 		
 		Result authResult = authCheck(secureKey, model);
@@ -302,8 +348,7 @@ public class Controller {
 	// 타임라인
 	// 인증 필요
 	@RequestMapping(value = "user/timeline", method = RequestMethod.GET)
-	@ResponseBody
-	public String  timeline(String secureKey, @RequestParam(defaultValue = "0") long beforeArticleId, @RequestParam(defaultValue = "10") int count, Model model) {
+	public ResponseEntity<String>  timeline(String secureKey, @RequestParam(defaultValue = "0") long beforeArticleId, @RequestParam(defaultValue = "10") int count, Model model) {
 		Result result = new Result();
 		
 		if (count < 1 || count > 100) { // 최대 100개
@@ -325,8 +370,7 @@ public class Controller {
 	
 	// 글 목록 보기
 	@RequestMapping(value = "{username}", method = RequestMethod.GET)
-	@ResponseBody
-	public String home(@PathVariable String username, @RequestParam(defaultValue = "0") long beforeArticleId, @RequestParam(defaultValue = "10") int count, Model model) {
+	public ResponseEntity<String> home(@PathVariable String username, @RequestParam(defaultValue = "0") long beforeArticleId, @RequestParam(defaultValue = "10") int count, Model model) {
 		Result result = new Result();
 		
 		if (count < 1 || count > 100) { // 최대 100개
@@ -343,8 +387,7 @@ public class Controller {
 	
 	// 유저 정보 보기
 	@RequestMapping(value = "{username}/info", method = RequestMethod.GET)
-	@ResponseBody
-	public String info(@PathVariable String username, Model model) {
+	public ResponseEntity<String> info(@PathVariable String username, Model model) {
 		Result result = new Result();
 		
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
@@ -356,8 +399,7 @@ public class Controller {
 	
 	// 글쓰기
 	@RequestMapping(value = "{username}", method = RequestMethod.POST)
-	@ResponseBody
-	public String write(@PathVariable String username, @Valid Article article, BindingResult bindingResult, Model model) {
+	public ResponseEntity<String> write(@PathVariable String username, @Valid Article article, BindingResult bindingResult, Model model) {
 		Result result = new Result();
 		
 		Result authResult = authCheck(article, model);
@@ -392,8 +434,7 @@ public class Controller {
 	// 팔로우하기
 	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.POST) // 팔로우 생성
-	@ResponseBody
-	public String follow(@PathVariable String username, @Valid Follow follower, BindingResult bindingResult, Model model) {
+	public ResponseEntity<String> follow(@PathVariable String username, @Valid Follow follower, BindingResult bindingResult, Model model) {
 		Result result= new Result();
 		
 		Result authResult = authCheck(follower, model);
@@ -431,8 +472,7 @@ public class Controller {
 	// 언팔로우
 	// 인증 필요
 	@RequestMapping(value = "{username}/follow", method = RequestMethod.DELETE) // 팔로우 제거
-	@ResponseBody
-	public String unfollow(@PathVariable String username,String secureKey,@Valid Follow follower,BindingResult bindingResult, Model model) {
+	public ResponseEntity<String> unfollow(@PathVariable String username,String secureKey,@Valid Follow follower,BindingResult bindingResult, Model model) {
 		Result result= new Result();
 		
 		Result authResult = authCheck(secureKey, model);
@@ -458,8 +498,7 @@ public class Controller {
 	
 	// 팔로잉 목록
 	@RequestMapping(value = "{username}/following", method = RequestMethod.GET)
-	@ResponseBody
-	public String following(@PathVariable String username, Model model) {
+	public ResponseEntity<String> following(@PathVariable String username, Model model) {
 		Result result= new Result();
 		
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
@@ -471,8 +510,7 @@ public class Controller {
 	
 	// 팔로어 목록
 	@RequestMapping(value = "{username}/followers", method = RequestMethod.GET)
-	@ResponseBody
-	public String followers(@PathVariable String username, Model model) {
+	public ResponseEntity<String> followers(@PathVariable String username, Model model) {
 		Result result= new Result();
 		
 		UserInfo userInfo = UserInfo.findUserInfoByUsername(username);
@@ -485,8 +523,7 @@ public class Controller {
 	// 글삭제
 	// 인증 필요
 	@RequestMapping(value = "article/{id}", method = RequestMethod.DELETE) // 글 제거
-	@ResponseBody
-	public String deleteArticle(String secureKey, @PathVariable Long id, Model model,Article article, BindingResult bindingResult) {
+	public ResponseEntity<String> deleteArticle(String secureKey, @PathVariable Long id, Model model,Article article, BindingResult bindingResult) {
 		Result result = new Result();
 		
 		Result authResult = authCheck(secureKey, model);
@@ -513,8 +550,7 @@ public class Controller {
 	
 	// 댓글 목록
 	@RequestMapping(value = "article/{articleId}/comments", method = RequestMethod.GET) // 댓글 목록
-	@ResponseBody
-	public String comments(@PathVariable Long articleId, Model model) {	
+	public ResponseEntity<String> comments(@PathVariable Long articleId, Model model) {	
 		Result result=new Result();
 		
 		List<String> commentJsonList=commentService.getCommentJsonList(articleId);
@@ -526,8 +562,7 @@ public class Controller {
 	// 댓글 등록
 	// 인증 필요
 	@RequestMapping(value = "article/{articleId}/comment", method = RequestMethod.POST) // 댓글 등록
-	@ResponseBody
-	public String comment(@PathVariable Long articleId,Comment comment,BindingResult bindingResult, Model model) {
+	public ResponseEntity<String> comment(@PathVariable Long articleId,Comment comment,BindingResult bindingResult, Model model) {
 		Result result = new Result();
 		
 		Result authResult = authCheck(comment, model);
@@ -558,8 +593,7 @@ public class Controller {
 	// 댓글 삭제
 	// 인증 필요
 	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
-	@ResponseBody
-	public String deleteComment(String secureKey, @PathVariable Long id, Model model,@Valid Comment comment, BindingResult bindingResult) {
+	public ResponseEntity<String> deleteComment(String secureKey, @PathVariable Long id, Model model,@Valid Comment comment, BindingResult bindingResult) {
 		Result result = new Result();
 		
 		Result authResult = authCheck(secureKey, model);

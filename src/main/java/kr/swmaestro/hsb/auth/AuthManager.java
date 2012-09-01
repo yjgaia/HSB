@@ -18,6 +18,9 @@ public class AuthManager {
 	private KeyValueCache keyValueCache;
 	
 	public UserInfo getUserInfo(String secureKey) {
+		if (secureKey == null) {
+			return null;
+		}
 		ObjectMapper om = new ObjectMapper();
 		try {
 			return om.readValue(keyValueCache.get(secureKey), UserInfo.class);
