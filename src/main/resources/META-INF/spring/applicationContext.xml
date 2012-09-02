@@ -96,7 +96,7 @@
     
     <!-- Redis Server 세팅 -->
     <bean class="redis.clients.jedis.Jedis">
-    	<constructor-arg value="hanul.co" />
+    	<constructor-arg value="hsb1.anak.kr" />
    	</bean>
    	
     
