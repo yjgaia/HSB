@@ -71,13 +71,16 @@
     <!-- Couchbase server connector 세팅  -->
   	
 
-    <bean class="java.net.URI" id="mainServerURI">
-    	<constructor-arg index="0" value="http://hanul.co:8091/pools"/>
-    </bean>
+    
     <bean id="baseURIs" class="java.util.ArrayList">
     	<constructor-arg>
         <list>
-            <ref bean="mainServerURI" />
+            <bean class="java.net.URI">
+    			<constructor-arg index="0" value="http://hsb1.anak.kr:8091/pools"/>
+    		</bean>
+    		<bean class="java.net.URI">
+    			<constructor-arg index="0" value="http://hsb2.anak.kr:8091/pools"/>
+    		</bean>
         </list>
     </constructor-arg>
     </bean>
