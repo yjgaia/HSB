@@ -8,8 +8,8 @@ HSB 프로젝트는 SW 마에스트로 3기 연수생인 심영재, 이한솔, �
 ### 기반 시스템
 
 ### 기반 프레임워크
-Spring Framework 3.1.1.RELEASE
-Hibernate 3.6.4.Final
+- Spring Framework 3.1.1.RELEASE
+- Hibernate 3.6.4.Final
 
 ### 라이센스
 
