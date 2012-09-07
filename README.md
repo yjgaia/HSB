@@ -9,6 +9,13 @@ HSB 프로젝트는 SW 마에스트로 3기 연수생인 심영재, 이한솔, �
 
 기반 시스템
 -----------
+- CentOS 6.2
+- jdk1.7.0_04
+- Spring ROO 1.1.5.RELEASE
+- 서버는 j2ee 기반의 모든 서버에서 작동합니다.
+- RDBMS는 MySql, Oracle Database 등 Hibernate가 제공하는 대다수의 시스템에서 작동합니다.
+- Redis 2.4.17
+- Couchbase 1.8.1
 
 기반 프레임워크
 ---------------
@@ -33,3 +40,7 @@ HSB 프로젝트는 SW 마에스트로 3기 연수생인 심영재, 이한솔, �
 
 관련 링크
 ---------
+- https://github.com/Hanul/HSB
+- http://redis.io
+- http://www.couchbase.com
+- http://swmaestro.kr
