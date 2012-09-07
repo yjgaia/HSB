@@ -49,8 +49,8 @@ REST URL
 - /user/auth (POST) 로그인
 
 > 필요한 파라미터 목록
-> - username : 아이디
-> - password : 비밀번호
+> - username (필수) : 아이디
+> - password (필수) : 비밀번호
 >
 > 반환되는 JSON (예제)
 
@@ -66,7 +66,7 @@ REST URL
 - /user/auth (DELETE, 인증필요) : 로그아웃
 
 > 필요한 파라미터 목록
-> - secureKey : 보안 키
+> - secureKey (필수) : 보안 키
 >
 > 반환되는 JSON (예제)
 
@@ -78,11 +78,11 @@ REST URL
 - /user/account (POST) : 회원가입
 
 > 필요한 파라미터 목록
-> - username : 아이디
-> - password : 비밀번호
-> - passwordConfirm : 비밀번호 확인
-> - nickname : 닉네임
-> - email : 이메일
+> - username (필수) : 아이디
+> - password (필수) : 비밀번호
+> - passwordConfirm (필수) : 비밀번호 확인
+> - nickname (필수) : 닉네임
+> - email (필수) : 이메일
 >
 > 반환되는 JSON (예제)
 
@@ -102,12 +102,12 @@ REST URL
 - /user/account (PUT, 인증필요) : 회원 정보 수정
 
 > 필요한 파라미터 목록
-> - secureKey : 보안 키
-> - username : 아이디
-> - password : 비밀번호
-> - passwordConfirm : 비밀번호 확인
-> - nickname : 닉네임
-> - email : 이메일
+> - secureKey (필수) : 보안 키
+> - username (필수) : 아이디
+> - password (필수) : 비밀번호
+> - passwordConfirm (필수) : 비밀번호 확인
+> - nickname (필수) : 닉네임
+> - email (필수) : 이메일
 >
 > 반환되는 JSON (예제)
 
@@ -127,27 +127,278 @@ REST URL
 - /user/account (DELET, 인증필요) : 회원 정보 삭제 (탈퇴)
 
 > 필요한 파라미터 목록
-> - secureKey : 보안 키
+> - secureKey (필수) : 보안 키
 >
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false
+	}
+
+- /user/timeline (GET, 인증필요) : 타임라인
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+> - beforeArticleId : 이전 글 ID
+> - count : 글 개수 (최대 100개, 기본 10개)
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false,
+	    "list": [
+	        {
+	            "content": "내용1",
+	            "writerId": 1,
+	            "writerUsername": "test",
+	            "writerNickname": "test",
+	            "writeDate": 1346777582337,
+	            "commentCount": 0,
+	            "id": 2,
+	            "version": 0
+	        },
+	        {
+	            "content": "내용2",
+	            "writerId": 1,
+	            "writerUsername": "test",
+	            "writerNickname": "test",
+	            "writeDate": 1346777568223,
+	            "commentCount": 0,
+	            "id": 1,
+	            "version": 0
+	        }
+	    ]
+	}
+
+- /{username} (GET) : 유저의 글 목록 보기
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+> - beforeArticleId : 이전 글 ID
+> - count : 글 개수 (최대 100개, 기본 10개)
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false,
+	    "list": [
+	        {
+	            "content": "내용1",
+	            "writerId": 1,
+	            "writerUsername": "test",
+	            "writerNickname": "test",
+	            "writeDate": 1346777582337,
+	            "commentCount": 0,
+	            "id": 2,
+	            "version": 0
+	        },
+	        {
+	            "content": "내용2",
+	            "writerId": 1,
+	            "writerUsername": "test",
+	            "writerNickname": "test",
+	            "writeDate": 1346777568223,
+	            "commentCount": 0,
+	            "id": 1,
+	            "version": 0
+	        }
+	    ]
+	}
+
+- /{username}/info (GET) : 유저 정보 보기
+
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "username": "test",
+	        "nickname": "test",
+	        "followerCount": 0,
+	        "followingCount": 0,
+	        "id": 1,
+	        "version": 1
+	    }
+	}
+
+- /{username} (POST, 인증필요) : 글쓰기
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+> - content (필수) : 글 내용
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "content": "test",
+	        "writerId": 1,
+	        "writerUsername": "test",
+	        "writerNickname": "test",
+	        "writeDate": 1347027092346,
+	        "commentCount": 0,
+	        "id": 2,
+	        "version": 0
+	    }
+	}
+
+- /{username}/follow (POST, 인증필요) : 팔로우하기
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "targetUserId": 1,
+	        "targetUserUsername": "test",
+	        "targetUserNickname": "test",
+	        "followerId": 2,
+	        "followerUsername": "test2",
+	        "followerNickname": "test2",
+	        "followDate": 1347027242471,
+	        "id": 1,
+	        "version": 0
+	    }
+	}
+
+- ‎/{username}/follow (DELETE, 인증필요) : 언팔로우
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "targetUserId": 1,
+	        "targetUserUsername": null,
+	        "targetUserNickname": null,
+	        "followerId": 2,
+	        "followerUsername": null,
+	        "followerNickname": null,
+	        "followDate": null,
+	        "id": null,
+	        "version": null
+	    }
+	}
+
+- /{username}/following (GET) : 팔로잉 목록 보기
+
 > 반환되는 JSON (예제)
 
 {
     "success": true,
-    "single": false
+    "single": false,
+    "list": [
+        {
+            "username": "test2",
+            "nickname": "test2",
+            "followerCount": 1,
+            "followingCount": 0,
+            "id": 2,
+            "version": 1
+        }
+    ]
 }
 
-- /user/timeline (GET, 인증필요) : 타임라인
-- /{username} (GET) : 유저의 글 목록 보기
-- /{username}/info (GET) : 유저 정보 보기
-- /{username} (POST, 인증필요) : 글쓰기
-- /{username}/follow (POST, 인증필요) : 팔로우하기
-- ‎/{username}/follow (DELETE, 인증필요) : 언팔로우
-- /{username}/following (GET) : 팔로잉 목록 보기
 - /{username}/followers (GET) : 팔로우 하는 사람 목록 보기
+
+> 반환되는 JSON (예제)
+
+{
+    "success": true,
+    "single": false,
+    "list": [
+        {
+            "username": "test",
+            "nickname": "test",
+            "followerCount": 0,
+            "followingCount": 1,
+            "id": 1,
+            "version": 1
+        }
+    ]
+}
+
 - /article/{id} (DELETE, 인증필요) : 글삭제
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false
+	}
+
 - /article/{id}/comments (GET) : 댓글 목록
+
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false,
+	    "list": [
+	        {
+	            "targetArticleId": 1,
+	            "content": "test",
+	            "writerId": 1,
+	            "writerUsername": "test",
+	            "writerNickname": "test",
+	            "writeDate": 1347027645596,
+	            "id": 1,
+	            "version": 0
+	        }
+	    ]
+	}
+
 - /article/{id}/comment (POST, 인증필요) : 댓글달기
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+> - content (필수) : 내용
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "targetArticleId": 1,
+	        "content": "test",
+	        "writerId": 1,
+	        "writerUsername": "test",
+	        "writerNickname": "test",
+	        "writeDate": 1347027645596,
+	        "id": 1,
+	        "version": 0
+	    }
+	}
+
 - /comment/{id} (DELETE, 인증필요) : 댓글삭제
+
+> 필요한 파라미터 목록
+> - secureKey (필수) : 보안 키
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false
+	}
 
 관련 링크
 ---------

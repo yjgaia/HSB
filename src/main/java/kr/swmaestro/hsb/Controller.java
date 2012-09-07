@@ -593,7 +593,7 @@ public class Controller {
 	// 댓글 삭제
 	// 인증 필요
 	@RequestMapping(value = "comment/{id}", method = RequestMethod.DELETE) // 댓글 삭제
-	public ResponseEntity<String> deleteComment(String secureKey, @PathVariable Long id, Model model,@Valid Comment comment, BindingResult bindingResult) {
+	public ResponseEntity<String> deleteComment(String secureKey, @PathVariable Long id, Model model, Comment comment, BindingResult bindingResult) {
 		Result result = new Result();
 		
 		Result authResult = authCheck(secureKey, model);
@@ -601,7 +601,7 @@ public class Controller {
 			return returnJson(authResult, model);
 		}
 		
-		comment=Comment.findComment(id);
+		comment = Comment.findComment(id);
 		
 		// 작성자와 로그인 유저가 같은지 판단하는 코드
 		if (!bindingResult.hasFieldErrors("writerId") && !comment.getWriterId().equals(authManager.getUserId(secureKey))) {
