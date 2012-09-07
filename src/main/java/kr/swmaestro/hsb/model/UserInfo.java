@@ -40,7 +40,7 @@ public class UserInfo extends SecureKeyModel {
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
 	@NotEmpty(message = "비밀번호를 입력해 주세요.")
-	@Size(min = 4, max = 20, message = "비밀번호는 {2}글자 이상, {1}글자 이하로 입력해주세요.")
+	@Size(min = 4, max = 20, message = "비밀번호는 4글자 이상, 20글자 이하로 입력해주세요.")
 	@Column(length = 40)
 	// 암호화 하면 암호의 길이 증가
 	private String password;
@@ -48,13 +48,13 @@ public class UserInfo extends SecureKeyModel {
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
 	@NotEmpty(message = "비밀번호 확인을 입력해주세요.")
-	@Size(min = 4, max = 20, message = "비밀번호 확인은 {2}글자 이상, {1}글자 이하로 입력해주세요.")
+	@Size(min = 4, max = 20, message = "비밀번호 확인은 4글자 이상, 20글자 이하로 입력해주세요.")
 	@Transient
 	// 비밀번호 확인은 저장하지 않음
 	private String passwordConfirm;
 
 	@NotEmpty(message = "닉네임을 입력해주세요.")
-	@Size(min = 4, max = 20, message = "닉네임은 {2}글자 이상, {1}글자 이하로 입력해주세요.")
+	@Size(min = 2, max = 20, message = "닉네임은 2글자 이상, 20글자 이하로 입력해주세요.")
 	@Column(length = 20, unique = true)
 	private String nickname;
 	
@@ -71,7 +71,7 @@ public class UserInfo extends SecureKeyModel {
 	@JsonIgnore // JSON으로 출력하지 않음
 	@XStreamOmitField // XML로 출력하지 않음
 	@NotEmpty(message = "이메일을 입력해주세요.")
-	@Size(max = 320, message = "이메일은 {1}글자 이하로 입력해주세요.")
+	@Size(max = 320, message = "이메일은 320글자 이하로 입력해주세요.")
 	@Email(message = "이메일은 이메일 형식에 맞추어 주세요.")
 	@Column(length = 320, nullable = false)
 	private String email;
