@@ -51,8 +51,8 @@ REST URL
 > 필요한 파라미터 목록
 > - username
 > - password
-> 반환되는 JSON (예제)
 >
+> 반환되는 JSON (예제)
     {
         "success": true,
         "single": true,
