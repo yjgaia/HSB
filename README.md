@@ -34,9 +34,38 @@ HSB 프로젝트는 SW 마에스트로 3기 연수생인 심영재, 이한솔, �
 
 설치방법
 --------
+1. github 주소(https://github.com/Hanul/HSB.git)를 이용하여 이클립스에서 프로젝트를 checkout 합니다.
+* src/main/resources/META-INF/spring/applicationContext.xml의 Couchbase server connector 세팅을 본인의 설정에 맞게 변경합니다.
+* src/main/resources/META-INF/spring/applicationContext.xml의Redis Server 세팅을 본인의 설정에 맞게 변경합니다.
+* src/main/resources/META-INF/spring/database.properties를 본인의 설정에 맞게 변경합니다.
+* 기반 시스템을 갖추고 실행합니다.
 
 사용법
 ------
+- 아래 REST URL을 사용하여 Method와 필요한 파라미터를 전송한 뒤 JSON 형식의 데이터를 반환받아 사용합니다.
+
+REST URL
+--------
+- /user/auth (POST) 로그인
+> 필요한 파라미터 목록
+> - username
+> - password
+- /user/auth (DELETE, 인증필요) 로그아웃
+- /user/account (POST) 회원가입
+- /user/account (PUT, 인증필요) 회원 정보 수정
+- /user/account (DELET, 인증필요) 회원 정보 삭제 (탈퇴)
+- /user/timeline (GET, 인증필요) 타임라인
+- /{username} (GET) 유저의 글 목록 보기
+- /{username}/info (GET) 유저 정보 보기
+- /{username} (POST, 인증필요) 글쓰기
+- /{username}/follow (POST, 인증필요) 팔로우하기
+- ‎/{username}/follow (DELETE, 인증필요) 언팔로우
+- /{username}/following (GET) 팔로잉 목록 보기
+- /{username}/followers (GET) 팔로우 하는 사람 목록 보기
+- /article/{id} (DELETE, 인증필요) 글삭제
+- /article/{id}/comments (GET) 댓글 목록
+- /article/{id}/comment (POST, 인증필요) 댓글달기
+- /comment/{id} (DELETE, 인증필요) 댓글삭제
 
 관련 링크
 ---------
