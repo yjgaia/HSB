@@ -49,8 +49,8 @@ REST URL
 - /user/auth (POST) 로그인
 
 > 필요한 파라미터 목록
-> - username
-> - password
+> - username : 아이디
+> - password : 비밀번호
 >
 > 반환되는 JSON (예제)
 
@@ -63,22 +63,91 @@ REST URL
 	    }
 	}
 
-- /user/auth (DELETE, 인증필요) 로그아웃
-- /user/account (POST) 회원가입
-- /user/account (PUT, 인증필요) 회원 정보 수정
-- /user/account (DELET, 인증필요) 회원 정보 삭제 (탈퇴)
-- /user/timeline (GET, 인증필요) 타임라인
-- /{username} (GET) 유저의 글 목록 보기
-- /{username}/info (GET) 유저 정보 보기
-- /{username} (POST, 인증필요) 글쓰기
-- /{username}/follow (POST, 인증필요) 팔로우하기
-- ‎/{username}/follow (DELETE, 인증필요) 언팔로우
-- /{username}/following (GET) 팔로잉 목록 보기
-- /{username}/followers (GET) 팔로우 하는 사람 목록 보기
-- /article/{id} (DELETE, 인증필요) 글삭제
-- /article/{id}/comments (GET) 댓글 목록
-- /article/{id}/comment (POST, 인증필요) 댓글달기
-- /comment/{id} (DELETE, 인증필요) 댓글삭제
+- /user/auth (DELETE, 인증필요) : 로그아웃
+
+> 필요한 파라미터 목록
+> - secureKey : 보안 키
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": false
+	}
+
+- /user/account (POST) : 회원가입
+
+> 필요한 파라미터 목록
+> - username : 아이디
+> - password : 비밀번호
+> - passwordConfirm : 비밀번호 확인
+> - nickname : 닉네임
+> - email : 이메일
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "username": "test",
+	        "nickname": "test",
+	        "followerCount": 0,
+	        "followingCount": 0,
+	        "id": null,
+	        "version": null
+	    }
+	}
+
+- /user/account (PUT, 인증필요) : 회원 정보 수정
+
+> 필요한 파라미터 목록
+> - secureKey : 보안 키
+> - username : 아이디
+> - password : 비밀번호
+> - passwordConfirm : 비밀번호 확인
+> - nickname : 닉네임
+> - email : 이메일
+>
+> 반환되는 JSON (예제)
+
+	{
+	    "success": true,
+	    "single": true,
+	    "data": {
+	        "username": "test",
+	        "nickname": "test",
+	        "followerCount": 0,
+	        "followingCount": 0,
+	        "id": null,
+	        "version": null
+	    }
+	}
+
+- /user/account (DELET, 인증필요) : 회원 정보 삭제 (탈퇴)
+
+> 필요한 파라미터 목록
+> - secureKey : 보안 키
+>
+> 반환되는 JSON (예제)
+
+{
+    "success": true,
+    "single": false
+}
+
+- /user/timeline (GET, 인증필요) : 타임라인
+- /{username} (GET) : 유저의 글 목록 보기
+- /{username}/info (GET) : 유저 정보 보기
+- /{username} (POST, 인증필요) : 글쓰기
+- /{username}/follow (POST, 인증필요) : 팔로우하기
+- ‎/{username}/follow (DELETE, 인증필요) : 언팔로우
+- /{username}/following (GET) : 팔로잉 목록 보기
+- /{username}/followers (GET) : 팔로우 하는 사람 목록 보기
+- /article/{id} (DELETE, 인증필요) : 글삭제
+- /article/{id}/comments (GET) : 댓글 목록
+- /article/{id}/comment (POST, 인증필요) : 댓글달기
+- /comment/{id} (DELETE, 인증필요) : 댓글삭제
 
 관련 링크
 ---------
