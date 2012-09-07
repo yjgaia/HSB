@@ -298,39 +298,39 @@ REST URL
 
 > 반환되는 JSON (예제)
 
-{
-    "success": true,
-    "single": false,
-    "list": [
-        {
-            "username": "test2",
-            "nickname": "test2",
-            "followerCount": 1,
-            "followingCount": 0,
-            "id": 2,
-            "version": 1
-        }
-    ]
-}
+	{
+	    "success": true,
+	    "single": false,
+	    "list": [
+	        {
+	            "username": "test2",
+	            "nickname": "test2",
+	            "followerCount": 1,
+	            "followingCount": 0,
+	            "id": 2,
+	            "version": 1
+	        }
+	    ]
+	}
 
 - /{username}/followers (GET) : 팔로우 하는 사람 목록 보기
 
 > 반환되는 JSON (예제)
 
-{
-    "success": true,
-    "single": false,
-    "list": [
-        {
-            "username": "test",
-            "nickname": "test",
-            "followerCount": 0,
-            "followingCount": 1,
-            "id": 1,
-            "version": 1
-        }
-    ]
-}
+	{
+	    "success": true,
+	    "single": false,
+	    "list": [
+	        {
+	            "username": "test",
+	            "nickname": "test",
+	            "followerCount": 0,
+	            "followingCount": 1,
+	            "id": 1,
+	            "version": 1
+	        }
+	    ]
+	}
 
 - /article/{id} (DELETE, 인증필요) : 글삭제
 
