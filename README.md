@@ -51,6 +51,17 @@ REST URL
 > 필요한 파라미터 목록
 > - username
 > - password
+> 반환되는 JSON (예제)
+> "`
+{
+    "success": true,
+    "single": true,
+    "data": {
+        "username": "test",
+        "generatedSecureKey": "1f507f23c0d7c4c5dac3ad8b74f66d43c33084a6"
+    }
+}
+"`
 
 - /user/auth (DELETE, 인증필요) 로그아웃
 - /user/account (POST) 회원가입
