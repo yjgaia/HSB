@@ -90,7 +90,6 @@ public class CommentService {
 		
 		//캐싱된 값과 followingCount가 다름 
 		if(targetArticle.getCommentCount()>cachedCommentJsonList.size()){
-			System.out.println("댓글 캐싱 된것 없음");
 			List<Comment> commentListInDB= Comment.getCommentListById(targetArticle.getId());
 			List<String> commentJsonListInDB = new ArrayList<>();
 			for(Comment comment: commentListInDB){

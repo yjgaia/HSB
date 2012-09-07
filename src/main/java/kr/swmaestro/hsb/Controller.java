@@ -1,6 +1,7 @@
 package kr.swmaestro.hsb;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -554,6 +555,7 @@ public class Controller {
 		Result result=new Result();
 		
 		List<String> commentJsonList=commentService.getCommentJsonList(articleId);
+		Collections.reverse(commentJsonList);
 		result.setSuccess(true);
 		
 		return returnJson(result,commentJsonList,model);
