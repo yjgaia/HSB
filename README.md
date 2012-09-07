@@ -36,7 +36,7 @@ HSB 프로젝트는 SW 마에스트로 3기 연수생인 심영재, 이한솔, �
 --------
 1. github 주소( https://github.com/Hanul/HSB.git )를 이용하여 이클립스에서 프로젝트를 checkout 합니다.
 * src/main/resources/META-INF/spring/applicationContext.xml의 Couchbase server connector 세팅을 본인의 설정에 맞게 변경합니다.
-* src/main/resources/META-INF/spring/applicationContext.xml의Redis Server 세팅을 본인의 설정에 맞게 변경합니다.
+* src/main/resources/META-INF/spring/applicationContext.xml의 Redis Server 세팅을 본인의 설정에 맞게 변경합니다.
 * src/main/resources/META-INF/spring/database.properties를 본인의 설정에 맞게 변경합니다.
 * 기반 시스템을 갖추고 실행합니다.
 
