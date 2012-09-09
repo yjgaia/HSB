@@ -26,7 +26,7 @@ public class ArticleService {
 	@Autowired
 	private FollowService followService;
 	
-	public String getArticleKey(Long id) {
+	public static String getArticleKey(Long id) {
 		return "article:" + id;
 	}
 	
