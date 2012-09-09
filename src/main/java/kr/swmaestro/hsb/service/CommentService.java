@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CommentService {
+	
+	@Autowired
+	private ArticleService articleService;
+	
 	@Autowired
 	private KeyValueListCache cache;
 	
@@ -46,6 +50,7 @@ public class CommentService {
 		Article targetArticle=Article.findArticle(comment.getTargetArticleId());
 		targetArticle.addcommentCount(1);
 		targetArticle.merge();
+		cache.set(articleService.getArticleKey(targetArticle.getId()), targetArticle);
 		
 		// 캐시에 저장
 		String commentKey=cacheComment(comment);
