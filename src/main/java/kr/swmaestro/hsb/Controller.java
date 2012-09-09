@@ -431,6 +431,24 @@ public class Controller {
 		}
 		return returnJson(result, article, model);
 	}
+	
+	//팔로우 관계인지 체크 하는 모듈
+	//인증 필요
+	@RequestMapping(value="{username}/follow",method=RequestMethod.GET)
+	public ResponseEntity<String> isFollow(@PathVariable String username,String secureKey,Model model){
+		Result result= new Result();
+		
+		Result authResult = authCheck(secureKey, model);
+		if (authResult != null) {
+			return returnJson(authResult, model);
+		}
+		UserInfo loginUserInfo=authManager.getUserInfo(secureKey);
+		UserInfo followedUser = UserInfo.findUserInfoByUsername(username);
+		result.setSuccess(Follow.isFollowing(followedUser.getId(), loginUserInfo.getId()));
+		
+		return returnJson(result, model);
+		
+	}
 
 	// 팔로우하기
 	// 인증 필요
