@@ -3,6 +3,8 @@ HSB - Han Sol Board (high scalability bulletin board system)
 
 HSB 프로젝트는 SW 마에스트로 3기 연수생인 심영재, 이한솔, 김민환 군이 팀을 이루어 오우택 멘토님의 도움을 받아 진행하는 NoSQL 솔루션을 활용한 대용량 커뮤니티 시스템 개발 프로젝트 입니다.
 
+http://sm3hsb.blogspot.kr
+
 개발 목적
 ---------
 대표적인 NoSQL 솔루션인 Redis와 Couchbase를 활용하여 트위터와 같은 대용량 커뮤니티(SNS) 시스템을 개발하고, Open API 형태로 서비스를 제공합니다. 추가적으로, 개발된 API를 가지고 하나의 예시로써 하이브리드 앱을 제작해 봅니다.
@@ -403,6 +405,7 @@ REST URL
 관련 링크
 ---------
 - https://github.com/Hanul/HSB
+- http://sm3hsb.blogspot.kr
 - http://redis.io
 - http://www.couchbase.com
 - http://swmaestro.kr
